@@ -8,6 +8,6 @@
 
 ### Terraria/TShock version
 
-### .Net/Mono version 
+### .NET/Mono version 
 
 ### Operating system
