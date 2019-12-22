@@ -20,140 +20,141 @@
 
 using Discord;
 using System;
+using System.IO;
 using Terraria;
 using TerrariaApi.Server;
 using TShockAPI;
 
-namespace Terracord 
+namespace Terracord
 {
-  [ApiVersion(2, 1)]
-  public class Terracord:TerrariaPlugin
-  {
-    ///<summary>
-    /// Plugin name
-    /// </summary>
-    public override string Name => "Terracord";
-
-    /// <summary>
-    /// Plugin version
-    /// </summary>
-    public override Version Version => new Version(0, 1, 0);
-
-    /// <summary>
-    /// Plugin author(s)
-    /// </summary>
-    public override string Author => "Lloyd Dilley";
-
-    /// <summary>
-    /// Plugin description
-    /// </summary>
-    public override string Description => "A Discord <-> Terraria bridge plugin for TShock";
-
-    public static string configFile = Path.Combine(TShock.SavePath, "terracord", "terracord.cfg");
-
-    public Terracord(Main game):base(game)
+    [ApiVersion(2, 1)]
+    public class Terracord : TerrariaPlugin
     {
-      // ToDo: Construct stuff here if needed.
-    }
+        ///<summary>
+        /// Plugin name
+        /// </summary>
+        public override string Name => "Terracord";
 
-    /// <summary>
-    /// Plugin initialization
-    /// </summary>
-    public override void Initialize()
-    {
-      ServerApi.Hooks.GameInitialize.Register(this, onInitialize);
-      ServerApi.Hooks.GamePostInitialize.Register(this, onPostInitialize);
-      ServerApi.Hooks.NetGreetPlayer.Register(this, onGreet);
-      ServerApi.Hooks.ServerJoin.Register(this, onJoin);
-      ServerApi.Hooks.ServerBroadcast.Register(this, onBroadcast);
-      ServerApi.Hooks.ServerChat.Register(this, onChat);
-      ServerApi.Hooks.ServerLeave.Register(this, onLeave);
-    }
+        /// <summary>
+        /// Plugin version
+        /// </summary>
+        public override Version Version => new Version(0, 1, 0);
 
-    /// <summary>
-    /// Plugin destruction 
-    /// </summary>
-    protected override void Dispose(bool disposing)
-    {
-      if(disposing)
-      {
-        ServerApi.Hooks.GameInitialize.Deregister(this, onInitialize);
-        ServerApi.Hooks.GamePostInitialize.Deregister(this, onPostInitialize);
-        ServerApi.Hooks.NetGreetPlayer.Deregister(this, onGreet);
-        ServerApi.Hooks.ServerJoin.Deregister(this, onJoin);
-        ServerApi.Hooks.ServerBroadcast.Deregister(this, onBroadcast);
-        ServerApi.Hooks.ServerChat.Deregister(this, onChat);
-        ServerApi.Hooks.ServerLeave.Deregister(this, onLeave);
-      }
-      base.Dispose(disposing);
-      Console.WriteLine("Server is shutting down.");
-    }
+        /// <summary>
+        /// Plugin author(s)
+        /// </summary>
+        public override string Author => "Lloyd Dilley";
 
-    // The output for the methods below will eventually go to a configurable Discord channel. -ldilley
+        /// <summary>
+        /// Plugin description
+        /// </summary>
+        public override string Description => "A Discord <-> Terraria bridge plugin for TShock";
 
-    /// <summary>
-    /// Called when TShock is initialized
-    /// </summary>
-    /// <param name="args">event arguments passed by hook</param>
-    private void onInitialize(EventArgs args)
-    {
-      // ToDo: Parse configuration.
-      Console.WriteLine("Server started.");
-    }
+        public static string configFile = Path.Combine(TShock.SavePath, "terracord", "terracord.cfg");
 
-    /// <summary>
-    /// Called after TShock is initialized
-    /// </summary>
-    /// <param name="args">event arguments passed by hook</param>
-    private void onPostInitialize(EventArgs args)
-    {
-      // ToDo: Connect to Discord.
-      Console.WriteLine("This is when we should connect to Discord.");
-    }
+        public Terracord(Main game) : base(game)
+        {
+            // ToDo: Construct stuff here if needed.
+        }
 
-    /// <summary>
-    /// Called when a player joins the server
-    /// </summary>
-    /// <param name="args">event arguments passed by hook</param>
-    private void onGreet(GreetPlayerEventArgs args)
-    {
-      Console.WriteLine($"{TShock.Players[args.Who].Name} has joined the server.");
-    }
+        /// <summary>
+        /// Plugin initialization
+        /// </summary>
+        public override void Initialize()
+        {
+            ServerApi.Hooks.GameInitialize.Register(this, OnInitialize);
+            ServerApi.Hooks.GamePostInitialize.Register(this, OnPostInitialize);
+            ServerApi.Hooks.NetGreetPlayer.Register(this, OnGreet);
+            ServerApi.Hooks.ServerJoin.Register(this, OnJoin);
+            ServerApi.Hooks.ServerBroadcast.Register(this, OnBroadcast);
+            ServerApi.Hooks.ServerChat.Register(this, OnChat);
+            ServerApi.Hooks.ServerLeave.Register(this, OnLeave);
+        }
 
-    /// <summary>
-    /// Called when a player joins the server
-    /// </summary>
-    /// <param name="args">event arguments passed by hook</param>
-    private void onJoin(JoinEventArgs args)
-    {
-      Console.WriteLine($"{TShock.Players[args.Who].Name} has joined the server.");
-    }
+        /// <summary>
+        /// Plugin destruction 
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                ServerApi.Hooks.GameInitialize.Deregister(this, OnInitialize);
+                ServerApi.Hooks.GamePostInitialize.Deregister(this, OnPostInitialize);
+                ServerApi.Hooks.NetGreetPlayer.Deregister(this, OnGreet);
+                ServerApi.Hooks.ServerJoin.Deregister(this, OnJoin);
+                ServerApi.Hooks.ServerBroadcast.Deregister(this, OnBroadcast);
+                ServerApi.Hooks.ServerChat.Deregister(this, OnChat);
+                ServerApi.Hooks.ServerLeave.Deregister(this, OnLeave);
+            }
+            base.Dispose(disposing);
+            Console.WriteLine("Server is shutting down.");
+        }
 
-    /// <summary>
-    /// Called when a broadcast message is intercepted
-    /// </summary>
-    /// <param name="args">event arguments passed by hook</param>
-    private void onBroadcast(ServerBroadcastEventArgs args)
-    {
-      Console.WriteLine($"Server broadcast: {args.Message}");
-    }
+        // The output for the methods below will eventually go to a configurable Discord channel. -ldilley
 
-    /// <summary>
-    /// Called when a chat message is intercepted
-    /// </summary>
-    /// <param name="args">event arguments passed by hook</param>
-    private void onChat(ServerChatEventArgs args)
-    {
-      Console.WriteLine($"{TShock.Players[args.Who].Name} said: {args.Text}");     
-    }
+        /// <summary>
+        /// Called when TShock is initialized
+        /// </summary>
+        /// <param name="args">event arguments passed by hook</param>
+        private void OnInitialize(EventArgs args)
+        {
+            // ToDo: Parse configuration.
+            Console.WriteLine("Server started.");
+        }
 
-    /// <summary>
-    /// Called when a player leaves the server
-    /// </summary>
-    /// <param name="args">event arguments passed by hook</param>
-    private void onLeave(LeaveEventArgs args)
-    {
-      Console.WriteLine($"{TShock.Players[args.Who].Name} has left the server.");
+        /// <summary>
+        /// Called after TShock is initialized
+        /// </summary>
+        /// <param name="args">event arguments passed by hook</param>
+        private void OnPostInitialize(EventArgs args)
+        {
+            // ToDo: Connect to Discord.
+            Console.WriteLine("This is when we should connect to Discord.");
+        }
+
+        /// <summary>
+        /// Called when a player joins the server
+        /// </summary>
+        /// <param name="args">event arguments passed by hook</param>
+        private void OnGreet(GreetPlayerEventArgs args)
+        {
+            Console.WriteLine($"{TShock.Players[args.Who].Name} has joined the server.");
+        }
+
+        /// <summary>
+        /// Called when a player joins the server
+        /// </summary>
+        /// <param name="args">event arguments passed by hook</param>
+        private void OnJoin(JoinEventArgs args)
+        {
+            Console.WriteLine($"{TShock.Players[args.Who].Name} has joined the server.");
+        }
+
+        /// <summary>
+        /// Called when a broadcast message is intercepted
+        /// </summary>
+        /// <param name="args">event arguments passed by hook</param>
+        private void OnBroadcast(ServerBroadcastEventArgs args)
+        {
+            Console.WriteLine($"Server broadcast: {args.Message}");
+        }
+
+        /// <summary>
+        /// Called when a chat message is intercepted
+        /// </summary>
+        /// <param name="args">event arguments passed by hook</param>
+        private void OnChat(ServerChatEventArgs args)
+        {
+            Console.WriteLine($"{TShock.Players[args.Who].Name} said: {args.Text}");
+        }
+
+        /// <summary>
+        /// Called when a player leaves the server
+        /// </summary>
+        /// <param name="args">event arguments passed by hook</param>
+        private void OnLeave(LeaveEventArgs args)
+        {
+            Console.WriteLine($"{TShock.Players[args.Who].Name} has left the server.");
+        }
     }
-  }
 }
