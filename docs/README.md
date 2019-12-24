@@ -24,5 +24,10 @@ to obtain a bot token, you will need to create a Discord bot application. The pr
 
 3. Restart your TShock server to load the plugin.
 
+:warning: Unfortunately, Terracord may not work with [Mono](https://www.mono-project.com/). This is due to Discord.Net
+not supporting Mono.
+
+### Support
+
 Feel free to [submit an issue](https://github.com/FragLand/terracord/issues/new) if you require assistance. You are also
 welcome to join our Discord server at https://discord.frag.land/. Any contributions are appreciated.
