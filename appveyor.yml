@@ -5,11 +5,10 @@ configuration: Debug
 before_build:
   - nuget restore
   - SET TEMPDIR=temp
-  - SET ZIPLINK=https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip
   - SET ZIPFILE=tshock_4.3.26.zip
   - md %TEMPDIR%
   - cd %TEMPDIR%
-  - curl -fsS -o %ZIPFILE% %ZIPLINK%
+  - curl -fsS -o %ZIPFILE% https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip
   - echo %cd%
   - dir
   - 7z e %ZIPFILE%
