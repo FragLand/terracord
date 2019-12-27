@@ -27,7 +27,36 @@ to obtain a bot token, you will need to create a Discord bot application. The pr
 :warning: Unfortunately, Terracord may not work with [Mono](https://www.mono-project.com/). This is due to Discord.Net
 not supporting Mono.
 
-### Support
+### Building
+1. Download and install [Visual Studio](https://visualstudio.microsoft.com/) if you do not have the software. The community
+edition is free and contains the essentials to build Terracord. In particular, you want the ".NET desktop development" workload. The "NuGet package manager" is also required to pull in the Discord.Net dependencies. Other individual components such as
+debuggers, profilers, "Git for Windows", and the "GitHub extension for Visual Studio" may be useful.
 
-Feel free to [submit an issue](https://github.com/FragLand/terracord/issues/new) if you require assistance. You are also
-welcome to join our Discord server at https://discord.frag.land/. Any contributions are appreciated.
+2. Obtain a copy of the Terracord source code if you have not already. This can be performed with
+`git clone https://github.com/FragLand/terracord.git`. You may alternatively
+[download a zip archive of the source](https://github.com/FragLand/terracord/archive/master.zip) and extract the contents
+to an arbitrary location.
+
+3. Download the [release archive of TShock](https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip).
+
+4. Create a directory named `lib` at the same path where `Terracord.sln` resides.
+
+5. Extract `OTAPI.dll`, `TerrariaServer.exe`, and `TShockAPI.dll` from the TShock zip archive and then place these 3 files
+under the `lib` directory you recently created during step 4.
+
+6. Open `Terracord.sln` using Visual Studio.
+
+7. NuGet should automatically download Discord.Net and its dependencies based on `Terracord.csproj`. If not, you can manually
+install `Discord.Net.Core` and `Discord.Net.WebSocket` via NuGet. You may also attempt to right-click the solution in the
+"Solution Explorer" of Visual Studio and then left-click "Restore NuGet Packages".
+
+8. Use `Build->Build Solution` or `ctrl+shift+b` to build Terracord.
+
+9. If all goes well, you should have a shiny new `Terracord.dll` at the path referenced in the build output. Enjoy!
+
+### Contributing and Support
+Feel free to [submit an issue](https://github.com/FragLand/terracord/issues/new) if you require assistance or would like to
+make a feature request. You are also welcome to join our Discord server at https://discord.frag.land/. Any contributions such
+as plugin testing and pull requests are appreciated. Please see the
+[fork and pull guide](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork)
+for direction if you are not certain how to submit a pull request.
