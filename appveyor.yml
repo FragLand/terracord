@@ -8,7 +8,7 @@ before_build:
   - SET ZIPFILE=tshock_4.3.26.zip
   - md %TEMPDIR%
   - cd %TEMPDIR%
-  - curl -fsS -o %ZIPFILE% https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip
+  - curl -O https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip
   - echo %cd%
   - dir
   - 7z e %ZIPFILE%
