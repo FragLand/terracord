@@ -10,4 +10,4 @@ before_build:
   - md %TEMPDIR%
   - cd %TEMPDIR%
   - curl -fsS -o %ZIPFILE% %ZIPLINK%
-  - 7z e %ZIPFILE% -o..\lib\ OTAPI.dll Terraria.exe TShockAPI.dll -r
+  - 7z e %ZIPFILE%
