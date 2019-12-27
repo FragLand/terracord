@@ -1,0 +1,17 @@
+*.cache
+*.dll
+*.exe
+*.lock
+*.log
+*.nupkg
+*.pdb
+*.suo
+.vs/
+bin/
+log/
+obj/
+packages/
+x64/
+x86/
+Debug/
+Release/
