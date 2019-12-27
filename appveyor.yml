@@ -4,7 +4,7 @@ platform: x86
 configuration: Debug
 before_build:
   - nuget restore
-  - $src = "https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip"
-  - $dest = "temp\tshock_4.3.26.zip"
-  - Invoke-WebRequest $src -OutFile $dest
-  - 7z e temp\tshock_4.3.26.zip -olib\ OTAPI.dll Terraria.exe TShockAPI.dll -r
+  - SET ZIPLINK=https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip
+  - SET ZIPFILE=temp\tshock_4.3.26.zip
+  - Invoke-WebRequest %ZIPLINK% -OutFile %ZIPFILE%
+  - 7z e %ZIPFILE% -olib\ OTAPI.dll Terraria.exe TShockAPI.dll -r
