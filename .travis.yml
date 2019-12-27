@@ -8,10 +8,10 @@ jobs:
       install:
         - nuget restore Terracord.sln
       script:
-        - msbuild /p:Configuration=Release Terracord.sln
+        - msbuild /p:Configuration=Debug Terracord.sln
     - dotnet: latest
       mono: none
       install:
         - dotnet restore
       script:
-        - dotnet build -c Release
+        - dotnet build -c Debug
