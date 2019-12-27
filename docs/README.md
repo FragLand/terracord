@@ -1,3 +1,5 @@
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/FragLand/terracord?svg=true)](https://ci.appveyor.com/project/ldilley/terracord)
+
 Terracord
 =========
 Terracord is a [Discord](http://discordapp.com/) <-> [Terraria](http://terraria.org/) bridge plugin for
