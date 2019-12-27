@@ -12,8 +12,13 @@ before_build:
   - 7z e %ZIPFILE% -o..\lib\ OTAPI.dll TerrariaServer.exe TShockAPI.dll -r
 build:
   verbosity: minimal
+environment:
+  WEBHOOK_URL:
+    secure: UQztrPeyNp03Fj4sCiEqbdhrqYtNvZgUN1iGXHysi1NF6Lxeq40VT4CLW6Cc/Tr6AhvmezuXhTjNd3w39rQRY6FicJMRj5BWB9wMfY//dLldXdv3DltPiJxtXz3i6C3H0VSsfVLtM2ZFZy6Tca+2ZzVm90ZQHHmnl7Ev6Rh987A=
 notifications:
-  - provider: GitHubPullRequest
+  - provider: Webhook
+    url: WEBHOOK_URL
+    method: POST
     on_build_success: true
     on_build_failure: true
     on_build_status_changed: true
