@@ -61,37 +61,37 @@ Discord.Net does not support this. Therefore, the following steps should be cons
 
 1. Install Mono. Under [Debian](http://www.debian.org/), this can be achieved via:
 
-`apt-get install mono-complete`
+   `apt-get install mono-complete`
 
 2. Obtain a copy of the Terracord source code:
 
-`git clone https://github.com/FragLand/terracord.git`
+   `git clone https://github.com/FragLand/terracord.git`
 
-or
+   Or:
 
-`wget https://github.com/FragLand/terracord/archive/master.zip && unzip master.zip`
+   `wget https://github.com/FragLand/terracord/archive/master.zip && unzip master.zip`
 
 3. Download and extract TShock:
 
-`wget https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip && unzip tshock_4.3.26.zip`
+   `wget https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip && unzip tshock_4.3.26.zip`
 
 4. Create a directory named `lib` at the same path where `Terracord.sln` resides:
 
-`mkdir terracord/lib`
+   `mkdir terracord/lib`
 
 5. Copy `OTAPI.dll`, `TerrariaServer.exe`, and `TShockAPI.dll` to `lib`:
 
-`cp OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll terracord/lib`
+   `cp OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll terracord/lib`
 
 6. Install dependencies:
 
-`cd terracord`
+   `cd terracord`
 
-`nuget restore Terracord.sln`
+   `nuget restore Terracord.sln`
 
 7. Begin build:
 
-`xbuild`
+   `xbuild`
 
 8. With luck, a wild `Terracord.dll` will appear.
 
