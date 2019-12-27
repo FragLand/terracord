@@ -2,3 +2,5 @@ version: 0.1.{build}
 image: Visual Studio 2019
 platform: x86
 configuration: Debug
+before_build:
+  - nuget restore
