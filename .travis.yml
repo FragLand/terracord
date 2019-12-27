@@ -1,0 +1,17 @@
+language: csharp
+solution: Terracord.sln
+
+jobs:
+  include:
+    - dotnet: none
+      mono: latest
+      install:
+        - nuget restore Terracord.sln
+      script:
+        - msbuild /p:Configuration=Release Terracord.sln
+    - dotnet: latest
+      mono: none
+      install:
+        - dotnet restore
+      script:
+        - dotnet build -c Release
