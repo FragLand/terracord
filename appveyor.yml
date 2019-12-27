@@ -6,5 +6,5 @@ before_build:
   - nuget restore
   - SET ZIPLINK=https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip
   - SET ZIPFILE=temp\tshock_4.3.26.zip
-  - Invoke-WebRequest %ZIPLINK% -OutFile %ZIPFILE%
+  - curl -fsS -o %ZIPFILE% %ZIPLINK%
   - 7z e %ZIPFILE% -olib\ OTAPI.dll Terraria.exe TShockAPI.dll -r
