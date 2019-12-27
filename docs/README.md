@@ -28,6 +28,7 @@ to obtain a bot token, you will need to create a Discord bot application. The pr
 not supporting Mono.
 
 ### Building
+#### Visual Studio
 1. Download and install [Visual Studio](https://visualstudio.microsoft.com/) if you do not have the software. The community
 edition is free and contains the essentials to build Terracord. In particular, you want the ".NET desktop development" workload. The "NuGet package manager" is also required to pull in the Discord.Net dependencies. Other individual components such as
 debuggers, profilers, "Git for Windows", and the "GitHub extension for Visual Studio" may be useful.
@@ -53,6 +54,46 @@ install `Discord.Net.Core` and `Discord.Net.WebSocket` via NuGet. You may also a
 8. Use `Build->Build Solution` or `ctrl+shift+b` to build Terracord.
 
 9. If all goes well, you should have a shiny new `Terracord.dll` at the path referenced in the build output. Enjoy!
+
+#### Mono
+:warning: As mentioned previously, building Terracord or loading `Terracord.dll` with Mono may not work considering
+Discord.Net does not support this. Therefore, the following steps should be considered experimental.
+
+1. Install Mono. Under [Debian](http://www.debian.org/), this can be achieved via:
+
+`apt-get install mono-complete`
+
+2. Obtain a copy of the Terracord source code:
+
+`git clone https://github.com/FragLand/terracord.git`
+
+or
+
+`wget https://github.com/FragLand/terracord/archive/master.zip && unzip master.zip`
+
+3. Download and extract TShock:
+
+`wget https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip && unzip tshock_4.3.26.zip`
+
+4. Create a directory named `lib` at the same path where `Terracord.sln` resides:
+
+`mkdir terracord/lib`
+
+5. Copy `OTAPI.dll`, `TerrariaServer.exe`, and `TShockAPI.dll` to `lib`:
+
+`cp OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll terracord/lib`
+
+6. Install dependencies:
+
+`cd terracord`
+
+`nuget restore Terracord.sln`
+
+7. Begin build:
+
+`xbuild`
+
+8. With luck, a wild `Terracord.dll` will appear.
 
 ### Contributing and Support
 Feel free to [submit an issue](https://github.com/FragLand/terracord/issues/new) if you require assistance or would like to
