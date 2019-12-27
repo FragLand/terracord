@@ -10,4 +10,6 @@ before_build:
   - md %TEMPDIR%
   - cd %TEMPDIR%
   - curl -fsS -o %ZIPFILE% %ZIPLINK%
+  - echo %cd%
+  - dir
   - 7z e %ZIPFILE%
