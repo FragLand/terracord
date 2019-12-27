@@ -8,7 +8,5 @@ before_build:
   - SET ZIPFILE=tshock_4.3.26.zip
   - md %TEMPDIR%
   - cd %TEMPDIR%
-  - curl -O https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip
-  - echo %cd%
-  - dir
-  - 7z e %ZIPFILE%
+  - curl -fsSLJo %ZIPFILE% https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip
+  - 7z e %ZIPFILE% -o..\lib\ OTAPI.dll Terraria.exe TShockAPI.dll -r
