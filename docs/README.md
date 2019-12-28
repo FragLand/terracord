@@ -61,13 +61,20 @@ install `Discord.Net.Core` and `Discord.Net.WebSocket` via NuGet. You may also a
 
 9. If all goes well, you should have a shiny new `Terracord.dll` at the path referenced in the build output. Enjoy!
 
+#### .NET Core
+1. Install [.NET Core SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1). .NET Core SDK 3.1.100 is known to
+successfully build Terracord. You can also [configure various Linux package managers](https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-debian10) to install .NET core. This has the
+added benefit of being able to easily update the software.
+
+2. ToDo: Finish this section! (I got pulled away in the middle of updating this section.)
+
 #### Mono
-:warning: As mentioned previously, building Terracord or loading `Terracord.dll` with Mono may not work considering
-Discord.Net does not support this. Therefore, the following steps should be considered experimental.
+:warning: As mentioned previously, loading `Terracord.dll` with Mono may not work considering Discord.Net does not
+support this. Therefore, the following steps should be considered experimental.
 
-1. Install Mono. Under [Debian](http://www.debian.org/), this can be achieved via:
+1. Install Mono and NuGet. Under [Debian](http://www.debian.org/), this can be achieved via:
 
-   `apt-get install mono-complete`
+   `apt-get install mono-complete nuget`
 
 2. Obtain a copy of the Terracord source code:
 
