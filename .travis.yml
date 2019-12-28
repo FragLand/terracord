@@ -7,11 +7,27 @@ jobs:
       mono: latest
       install:
         - nuget restore Terracord.sln
+        - TMPDIR=tmp
+        - mkdir $TMPDIR
+        - ZIPFILE=tshock_4.3.26.zip
+        - cd $TMPDIR
+        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip
+        - unzip -q $ZIPFILE OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll
+        - mkdir -p ../terracord/lib
+        - mv OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll ../lib
       script:
         - msbuild /p:Configuration=Debug Terracord.sln
     - dotnet: latest
       mono: none
       install:
         - dotnet restore
+        - TMPDIR=tmp
+        - mkdir $TMPDIR
+        - ZIPFILE=tshock_4.3.26.zip
+        - cd $TMPDIR
+        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip
+        - unzip -q $ZIPFILE OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll
+        - mkdir -p ../terracord/lib
+        - mv OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll ../lib
       script:
         - dotnet build -c Debug
