@@ -6,6 +6,7 @@ jobs:
     - dotnet: none
       mono: latest
       install:
+        - pwd
         - nuget restore Terracord.sln
         - TMPDIR=tmp
         - mkdir $TMPDIR
@@ -17,9 +18,10 @@ jobs:
         - mv OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll ../lib
       script:
         - msbuild /p:Configuration=Debug Terracord.sln
-    - dotnet: latest
+    - dotnet: 3.1.100
       mono: none
       install:
+        - pwd
         - dotnet restore
         - TMPDIR=tmp
         - mkdir $TMPDIR
