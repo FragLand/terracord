@@ -1,6 +1,8 @@
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/FragLand/terracord?svg=true)](https://ci.appveyor.com/project/ldilley/terracord)
-[![Travis build status](https://travis-ci.com/FragLand/terracord.svg?branch=master)](https://travis-ci.com/FragLand/terracord)
-[![Discord](https://img.shields.io/discord/540333638479380487)](https://discord.frag.land/)
+[![AppVeyor build status](https://img.shields.io/appveyor/ci/ldilley/terracord?label=AppVeyor%20build%20status)](https://ci.appveyor.com/project/ldilley/terracord)
+[![Travis CI build status](https://img.shields.io/travis/com/FragLand/terracord?label=Travis%20CI%20build%20status)](https://travis-ci.com/FragLand/terracord)
+[![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/FragLand/terracord?label=Code%20Climate%20maintainability)](https://codeclimate.com/github/FragLand/terracord/maintainability)
+[![CodeFactor grade](https://img.shields.io/codefactor/grade/github/FragLand/terracord?label=CodeFactor%20quality)](https://www.codefactor.io/repository/github/fragland/terracord)
+[![Discord](https://img.shields.io/discord/540333638479380487?label=Discord)](https://discord.frag.land/)
 
 Terracord
 =========
