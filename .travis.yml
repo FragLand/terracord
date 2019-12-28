@@ -15,6 +15,7 @@ jobs:
         - unzip -q $ZIPFILE OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll
         - mkdir -p ../lib
         - mv OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll ../lib
+        - cd ..
       script:
         - msbuild /p:Configuration=Debug Terracord.sln
     - dotnet: 3.1.100
@@ -29,5 +30,6 @@ jobs:
         - unzip -q $ZIPFILE OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll
         - mkdir -p ../lib
         - mv OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll ../lib
+        - cd ..
       script:
         - dotnet build -c Debug
