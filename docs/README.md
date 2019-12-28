@@ -1,4 +1,5 @@
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/FragLand/terracord?svg=true)](https://ci.appveyor.com/project/ldilley/terracord)
+[![Travis build status](https://travis-ci.com/FragLand/terracord.svg?branch=master)](https://travis-ci.com/FragLand/terracord)
 
 Terracord
 =========
