@@ -158,6 +158,9 @@ namespace Terracord
     /// <param name="args">event arguments passed by hook</param>
     private void OnChat(ServerChatEventArgs args)
     {
+      // Do not relay commands
+      if(args.Text.StartsWith("/"))
+        return;
       Console.WriteLine($"Terracord: {TShock.Players[args.Who].Name} said: {args.Text}");
       channel.SendMessageAsync($"**<{TShock.Players[args.Who].Name}>** {args.Text}");
     }
