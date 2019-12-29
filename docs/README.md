@@ -66,7 +66,37 @@ install `Discord.Net.Core` and `Discord.Net.WebSocket` via NuGet. You may also a
 successfully build Terracord. You can also [configure various Linux package managers](https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-debian10) to install .NET core. This has the
 added benefit of being able to easily update the software.
 
-2. ToDo: Finish this section! (I got pulled away in the middle of updating this section.)
+2. Obtain a copy of the Terracord source code:
+
+   `git clone https://github.com/FragLand/terracord.git`
+
+   Or:
+
+   `wget https://github.com/FragLand/terracord/archive/master.zip && unzip master.zip`
+
+3. Download and extract TShock:
+
+   `wget https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip && unzip tshock_4.3.26.zip`
+
+4. Create a directory named `lib` at the same path where `Terracord.sln` resides:
+
+   `mkdir terracord/lib`
+
+5. Copy `OTAPI.dll`, `TerrariaServer.exe`, and `TShockAPI.dll` to `lib`:
+
+   `cp OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll terracord/lib`
+
+6. Install dependencies:
+
+   `cd terracord`
+
+   `dotnet restore`
+
+7. Begin build:
+
+   `dotnet build -c <Debug|Release>`
+
+8. You should now have a `Terracord.dll`.
 
 #### Mono
 :warning: As mentioned previously, loading `Terracord.dll` with Mono may not work considering Discord.Net does not
@@ -104,7 +134,11 @@ support this. Therefore, the following steps should be considered experimental.
 
 7. Begin build:
 
-   `xbuild`
+   `xbuild /p:Configuration=<Debug|Release> Terracord.sln`
+   
+   Or:
+   
+   `msbuild /p:Configuration=<Debug|Release> Terracord.sln`
 
 8. With luck, a wild `Terracord.dll` will appear.
 
