@@ -23,6 +23,7 @@ using Discord.WebSocket;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Terraria;
 using TerrariaApi.Server;
 using TShockAPI;
@@ -53,18 +54,21 @@ namespace Terracord
     public override string Description => "A Discord <-> Terraria bridge plugin for TShock";
 
     private DiscordSocketClient botClient;
-    //private static readonly string channelName = "terraria";
-    // Set bot token, channel ID, and game here until config parsing is implemented...
-    private static readonly string botToken = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    //private static string botToken = JsonConvert.DeserializeObject<AConfigurationClass>(File.ReadAllText("config.json")).Token;
-    private static readonly ulong channelId = 000000000000000000;
-    private static readonly string botGame = "Terraria";
+    private static readonly XDocument configFile = XDocument.Load($"tshock{Path.DirectorySeparatorChar}terracord.xml");
+    private static readonly XElement configOptions = configFile.Element("configuration");
+    private static readonly string botToken = configOptions.Element("bot").Attribute("token").Value.ToString();
+    private static readonly ulong channelId = UInt64.Parse(configOptions.Element("channel").Attribute("id").Value.ToString());
+    private static readonly char commandPrefix = Char.Parse(configOptions.Element("command").Attribute("prefix").Value.ToString());
+    private static readonly string botGame = configOptions.Element("game").Attribute("status").Value.ToString();
+    private static readonly byte[] broadcastColor = new byte[3] {0, 0, 0};
     private static IMessageChannel channel = null;
-    public static string configFile = Path.Combine(TShock.SavePath, "terracord", "terracord.cfg");
 
     public Terracord(Main game):base(game)
     {
-      // ToDo: Construct stuff here if needed.
+      broadcastColor[0] = Byte.Parse(configOptions.Element("broadcast").Attribute("red").Value.ToString());
+      broadcastColor[1] = Byte.Parse(configOptions.Element("broadcast").Attribute("green").Value.ToString());
+      broadcastColor[2] = Byte.Parse(configOptions.Element("broadcast").Attribute("blue").Value.ToString());
+      //Console.WriteLine($"{botToken} {channelId} {commandPrefix} {botGame} {broadcastColor[0]} {broadcastColor[1]} {broadcastColor[2]}");
     }
 
     /// <summary>
@@ -221,8 +225,8 @@ namespace Terracord
       if(message.Author.Id == botClient.CurrentUser.Id)
         return;
 
-      // Relay Discord message to Terraria players (RGB 255, 215, 0 is gold)
-      TShock.Utils.Broadcast($"<{message.Author.Username}@Discord> {message.Content}", 255, 215, 0);
+      // Relay Discord message to Terraria players
+      TShock.Utils.Broadcast($"<{message.Author.Username}@Discord> {message.Content}", broadcastColor[0], broadcastColor[1], broadcastColor[2]);
 
       await Task.CompletedTask;
     }
