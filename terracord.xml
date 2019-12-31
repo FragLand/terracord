@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Terracord configuration -->
+<configuration>
+  <!-- Discord bot token -->
+  <bot token="ABC" />
+  <!-- Discord channel ID -->
+  <channel id="123" />
+  <!-- Bot command prefix -->
+  <command prefix="!" />
+  <!-- Discord bot game for "playing" status -->
+  <game status="Terraria" />
+  <!-- Terraria broadcast color in RGB -->
+  <broadcast red="255" green="215" blue="0" />
+</configuration>
