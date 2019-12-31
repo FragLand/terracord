@@ -175,14 +175,19 @@ namespace Terracord
       channel.SendMessageAsync($"**:heavy_minus_sign: {TShock.Players[args.Who].Name} has left the server.**");
     }
 
+    /// <summary>
+    /// Initializes the Discord bot
+    /// </summary>
+    /// <returns></returns>
     public async Task BotConnect()
     {
       botClient = new DiscordSocketClient();
-      //botClient.Log += Log;
+      //botClient.Log += BotLog;
 
       await botClient.LoginAsync(TokenType.Bot, botToken);
       await botClient.StartAsync();
       botClient.Ready += BotReady;
+      botClient.MessageReceived += BotMessageReceived;
 
       // Set game/playing status
       await botClient.SetGameAsync(botGame);
@@ -191,10 +196,35 @@ namespace Terracord
       await Task.Delay(-1);
     }
 
+    /// <summary>
+    /// Called after the bot establishes the connection to Discord
+    /// </summary>
+    /// <returns></returns>
     private async Task BotReady()
     {
       channel = botClient.GetChannel(channelId) as IMessageChannel;
       await channel.SendMessageAsync("**:white_check_mark: Server has started.**");
+    }
+
+    /// <summary>
+    /// Called when a new message is received by the Discord bot
+    /// </summary>
+    /// <param name="message">message received by Discord bot</param>
+    /// <returns></returns>
+    private async Task BotMessageReceived(SocketMessage message)
+    {
+      // Only accept messages from configured Discord text channel
+      if(message.Channel.Id != channelId)
+        return;
+
+      // Do not send duplicates messages from Discord bot to Terraria players
+      if(message.Author.Id == botClient.CurrentUser.Id)
+        return;
+
+      // Relay Discord message to Terraria players (RGB 255, 215, 0 is gold)
+      TShock.Utils.Broadcast($"<{message.Author.Username}@Discord> {message.Content}", 255, 215, 0);
+
+      await Task.CompletedTask;
     }
   }
 }
