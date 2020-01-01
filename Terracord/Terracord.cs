@@ -69,7 +69,8 @@ namespace Terracord
       broadcastColor[0] = Byte.Parse(configOptions.Element("broadcast").Attribute("red").Value.ToString());
       broadcastColor[1] = Byte.Parse(configOptions.Element("broadcast").Attribute("green").Value.ToString());
       broadcastColor[2] = Byte.Parse(configOptions.Element("broadcast").Attribute("blue").Value.ToString());
-      Console.WriteLine($"{botToken} {channelId} {commandPrefix} {botGame} {broadcastColor[0]} {broadcastColor[1]} {broadcastColor[2]}");
+      Log("terracord.xml parsed.");
+      //Console.WriteLine($"{botToken} {channelId} {commandPrefix} {botGame} {broadcastColor[0]} {broadcastColor[1]} {broadcastColor[2]}");
     }
 
     /// <summary>
