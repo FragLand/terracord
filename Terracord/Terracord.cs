@@ -61,6 +61,7 @@ namespace Terracord
     private static readonly char commandPrefix = Char.Parse(configOptions.Element("command").Attribute("prefix").Value.ToString());
     private static readonly string botGame = configOptions.Element("game").Attribute("status").Value.ToString();
     private static readonly byte[] broadcastColor = new byte[3] {0, 0, 0};
+    private static readonly bool logChat = Boolean.Parse(configOptions.Element("log").Attribute("chat").Value.ToString());
     private static IMessageChannel channel = null;
 
     public Terracord(Main game):base(game)
@@ -68,6 +69,7 @@ namespace Terracord
       broadcastColor[0] = Byte.Parse(configOptions.Element("broadcast").Attribute("red").Value.ToString());
       broadcastColor[1] = Byte.Parse(configOptions.Element("broadcast").Attribute("green").Value.ToString());
       broadcastColor[2] = Byte.Parse(configOptions.Element("broadcast").Attribute("blue").Value.ToString());
+      Log("terracord.xml parsed.");
       //Console.WriteLine($"{botToken} {channelId} {commandPrefix} {botGame} {broadcastColor[0]} {broadcastColor[1]} {broadcastColor[2]}");
     }
 
@@ -93,6 +95,7 @@ namespace Terracord
       if(disposing)
       {
         channel.SendMessageAsync("**:octagonal_sign: Server is shutting down.**");
+        Log("Server is shutting down.");
         ServerApi.Hooks.GameInitialize.Deregister(this, OnInitialize);
         ServerApi.Hooks.GamePostInitialize.Deregister(this, OnPostInitialize);
         //ServerApi.Hooks.NetGreetPlayer.Deregister(this, OnGreet);
@@ -100,9 +103,21 @@ namespace Terracord
         ServerApi.Hooks.ServerBroadcast.Deregister(this, OnBroadcast);
         ServerApi.Hooks.ServerChat.Deregister(this, OnChat);
         ServerApi.Hooks.ServerLeave.Deregister(this, OnLeave);
+        botClient.Dispose();
       }
       base.Dispose(disposing);
-      Console.WriteLine("Terracord: Server is shutting down.");
+    }
+
+    /// <summary>
+    /// Called when a log message needs to be written
+    /// </summary>
+    /// <param name="logText">the text to log</param>
+    public static void Log(string logText)
+    {
+      StreamWriter logFile = new StreamWriter($"tshock{Path.DirectorySeparatorChar}terracord.log", true);
+      logFile.WriteLine($"[{DateTime.Now.ToString()}] {logText.ToString()}");
+      Console.WriteLine($"Terracord: [{DateTime.Now.ToString()}] {logText.ToString()}");
+      logFile.Close();
     }
 
     /// <summary>
@@ -111,8 +126,7 @@ namespace Terracord
     /// <param name="args">event arguments passed by hook</param>
     private void OnInitialize(EventArgs args)
     {
-      // ToDo: Parse configuration.
-      Console.WriteLine("Terracord: Server has started.");
+      Log("Server has started.");
     }
 
     /// <summary>
@@ -121,7 +135,7 @@ namespace Terracord
     /// <param name="args">event arguments passed by hook</param>
     private void OnPostInitialize(EventArgs args)
     {
-      Console.WriteLine("Terracord: Connecting to Discord...");
+      Log("Connecting to Discord...");
       _ = BotConnect(); // suppress await warning via discard
     }
 
@@ -132,7 +146,7 @@ namespace Terracord
     // OnGreet is redundant with OnJoin.
     //private void OnGreet(GreetPlayerEventArgs args)
     //{
-    //  Console.WriteLine($"Terracord: {TShock.Players[args.Who].Name} joined the server.");
+    //  Log($"{TShock.Players[args.Who].Name} has joined the server.");
     //  channel.SendMessageAsync($"**:heavy_plus_sign: {TShock.Players[args.Who].Name} has joined the server.**");
     //}
 
@@ -142,7 +156,7 @@ namespace Terracord
     /// <param name="args">event arguments passed by hook</param>
     private void OnJoin(JoinEventArgs args)
     {
-      Console.WriteLine($"Terracord: {TShock.Players[args.Who].Name} has joined the server.");
+      Log($"{TShock.Players[args.Who].Name} has joined the server.");
       channel.SendMessageAsync($"**:heavy_plus_sign: {TShock.Players[args.Who].Name} has joined the server.**");
     }
 
@@ -152,7 +166,7 @@ namespace Terracord
     /// <param name="args">event arguments passed by hook</param>
     private void OnBroadcast(ServerBroadcastEventArgs args)
     {
-      Console.WriteLine($"Terracord: Server broadcast: {args.Message}");
+      Log($"Server broadcast: {args.Message}");
       channel.SendMessageAsync($"**:mega: Broadcast:** {args.Message}");
     }
 
@@ -165,7 +179,8 @@ namespace Terracord
       // Do not relay commands
       if(args.Text.StartsWith("/"))
         return;
-      Console.WriteLine($"Terracord: {TShock.Players[args.Who].Name} said: {args.Text}");
+      if(logChat)
+        Log($"{TShock.Players[args.Who].Name} said: {args.Text}");
       channel.SendMessageAsync($"**<{TShock.Players[args.Who].Name}>** {args.Text}");
     }
 
@@ -175,7 +190,7 @@ namespace Terracord
     /// <param name="args">event arguments passed by hook</param>
     private void OnLeave(LeaveEventArgs args)
     {
-      Console.WriteLine($"Terracord: {TShock.Players[args.Who].Name} has left the server.");
+      Log($"{TShock.Players[args.Who].Name} has left the server.");
       channel.SendMessageAsync($"**:heavy_minus_sign: {TShock.Players[args.Who].Name} has left the server.**");
     }
 
@@ -186,7 +201,7 @@ namespace Terracord
     public async Task BotConnect()
     {
       botClient = new DiscordSocketClient();
-      //botClient.Log += BotLog;
+      botClient.Log += BotLog;
 
       await botClient.LoginAsync(TokenType.Bot, botToken);
       await botClient.StartAsync();
@@ -198,6 +213,16 @@ namespace Terracord
 
       // Block task until program termination
       await Task.Delay(-1);
+    }
+
+    /// <summary>
+    /// Called when a Discord.Net message requires logging
+    /// </summary>
+    /// <returns></returns>
+    private async Task BotLog(LogMessage message)
+    {
+      Log(message.ToString());
+      await Task.CompletedTask;
     }
 
     /// <summary>
@@ -226,6 +251,8 @@ namespace Terracord
         return;
 
       // Relay Discord message to Terraria players
+      if(logChat)
+        Log($"<{message.Author.Username}@Discord> {message.Content}");
       TShock.Utils.Broadcast($"<{message.Author.Username}@Discord> {message.Content}", broadcastColor[0], broadcastColor[1], broadcastColor[2]);
 
       await Task.CompletedTask;
