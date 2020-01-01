@@ -11,4 +11,6 @@
   <game status="Terraria" />
   <!-- Terraria broadcast color in RGB -->
   <broadcast red="255" green="215" blue="0" />
+  <!-- Log all chat messages -->
+  <log chat="true" />
 </configuration>
