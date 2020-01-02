@@ -13,4 +13,6 @@
   <broadcast red="255" green="215" blue="0" />
   <!-- Log all chat messages -->
   <log chat="true" />
+  <!-- Debug mode -->
+  <debug mode="false" />
 </configuration>
