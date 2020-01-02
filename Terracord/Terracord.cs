@@ -62,6 +62,7 @@ namespace Terracord
     private static readonly string botGame = configOptions.Element("game").Attribute("status").Value.ToString();
     private static readonly byte[] broadcastColor = new byte[3] {0, 0, 0};
     private static readonly bool logChat = Boolean.Parse(configOptions.Element("log").Attribute("chat").Value.ToString());
+    private static readonly bool debugMode = Boolean.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString());
     private static IMessageChannel channel = null;
 
     public Terracord(Main game):base(game)
@@ -200,7 +201,20 @@ namespace Terracord
     /// <returns></returns>
     public async Task BotConnect()
     {
-      botClient = new DiscordSocketClient();
+      if(debugMode)
+      {
+        botClient = new DiscordSocketClient(new DiscordSocketConfig
+        {
+          LogLevel = LogSeverity.Debug
+        });
+      }
+      else
+      {
+        botClient = new DiscordSocketClient(new DiscordSocketConfig
+        {
+          LogLevel = LogSeverity.Info
+        });
+      }
       botClient.Log += BotLog;
 
       await botClient.LoginAsync(TokenType.Bot, botToken);
