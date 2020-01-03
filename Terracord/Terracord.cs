@@ -53,9 +53,15 @@ namespace Terracord
     /// </summary>
     public override string Description => "A Discord <-> Terraria bridge plugin for TShock";
 
-    private DiscordSocketClient botClient;
+    // Discord bot client
+    private readonly DiscordSocketClient botClient;
+    // Discord relay channel
+    private static IMessageChannel channel = null;
+    // terracord.xml configuration file
     private static readonly XDocument configFile = XDocument.Load($"tshock{Path.DirectorySeparatorChar}terracord.xml");
+    // XML root element
     private static readonly XElement configOptions = configFile.Element("configuration");
+    // terracord.xml options
     private static readonly string botToken = configOptions.Element("bot").Attribute("token").Value.ToString();
     private static readonly ulong channelId = UInt64.Parse(configOptions.Element("channel").Attribute("id").Value.ToString());
     private static readonly char commandPrefix = Char.Parse(configOptions.Element("command").Attribute("prefix").Value.ToString());
@@ -63,15 +69,40 @@ namespace Terracord
     private static readonly byte[] broadcastColor = new byte[3] {0, 0, 0};
     private static readonly bool logChat = Boolean.Parse(configOptions.Element("log").Attribute("chat").Value.ToString());
     private static readonly bool debugMode = Boolean.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString());
-    private static IMessageChannel channel = null;
 
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="game">TShock game</param>
     public Terracord(Main game):base(game)
     {
+      // Populate broadcast RGB array values
       broadcastColor[0] = Byte.Parse(configOptions.Element("broadcast").Attribute("red").Value.ToString());
       broadcastColor[1] = Byte.Parse(configOptions.Element("broadcast").Attribute("green").Value.ToString());
       broadcastColor[2] = Byte.Parse(configOptions.Element("broadcast").Attribute("blue").Value.ToString());
-      Log("terracord.xml parsed.");
-      //Console.WriteLine($"{botToken} {channelId} {commandPrefix} {botGame} {broadcastColor[0]} {broadcastColor[1]} {broadcastColor[2]}");
+
+      // Initialize Discord bot
+      // Set AlwaysDownloadUsers to update Discord server member list for servers containing >=100 members
+      // This is required to properly support mentions in more populated servers
+      if(debugMode)
+      {
+        botClient = new DiscordSocketClient(new DiscordSocketConfig
+        {
+          AlwaysDownloadUsers = true,
+          LogLevel = LogSeverity.Debug
+        });
+      }
+      else
+      {
+        botClient = new DiscordSocketClient(new DiscordSocketConfig
+        {
+          AlwaysDownloadUsers = true,
+          LogLevel = LogSeverity.Info
+        });
+      }
+      botClient.Log += BotLog;
+      botClient.Ready += BotReady;
+      botClient.MessageReceived += BotMessageReceived;
     }
 
     /// <summary>
@@ -95,8 +126,8 @@ namespace Terracord
     {
       if(disposing)
       {
-        channel.SendMessageAsync("**:octagonal_sign: Server is shutting down.**");
-        Log("Server is shutting down.");
+        channel.SendMessageAsync("**:octagonal_sign: Relay shutting down.**");
+        Log("Relay shutting down.");
         ServerApi.Hooks.GameInitialize.Deregister(this, OnInitialize);
         ServerApi.Hooks.GamePostInitialize.Deregister(this, OnPostInitialize);
         //ServerApi.Hooks.NetGreetPlayer.Deregister(this, OnGreet);
@@ -116,8 +147,8 @@ namespace Terracord
     public static void Log(string logText)
     {
       StreamWriter logFile = new StreamWriter($"tshock{Path.DirectorySeparatorChar}terracord.log", true);
-      logFile.WriteLine($"[{DateTime.Now.ToString()}] {logText.ToString()}");
-      Console.WriteLine($"Terracord: [{DateTime.Now.ToString()}] {logText.ToString()}");
+      logFile.WriteLine($"[{DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss zzz")}] {logText.ToString()}");
+      Console.WriteLine($"Terracord: [{DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss zzz")}] {logText.ToString()}");
       logFile.Close();
     }
 
@@ -136,8 +167,27 @@ namespace Terracord
     /// <param name="args">event arguments passed by hook</param>
     private void OnPostInitialize(EventArgs args)
     {
+      Log("terracord.xml parsed.");
+
+      // Log configuration values
+      if(debugMode)
+      {
+        Log("Configuration Values\n--------------------");
+        Log($"Bot Token: {botToken}");
+        Log($"Channel ID: {channelId}");
+        Log($"Command Prefix: {commandPrefix}");
+        Log($"Bot Game: {botGame}");
+        Log($"Broadcast Color (RGB): {broadcastColor[0]}, {broadcastColor[1]}, {broadcastColor[2]}");
+        Log($"Log Chat: {logChat}");
+        Log($"Debug Mode: {debugMode}");
+      }
+
       Log("Connecting to Discord...");
-      _ = BotConnect(); // suppress await warning via discard
+      // Launch Discord bot in an asynchronous context
+      // The line below blocks and prevents TShock console input when await Task.Delay(-1) is used in the called method
+      new Terracord(Game).BotConnect().GetAwaiter().GetResult();
+      // Execute synchronously instead and use discard to suppress await warning
+      //_ = BotConnect();
     }
 
     /// <summary>
@@ -180,6 +230,24 @@ namespace Terracord
       // Do not relay commands
       if(args.Text.StartsWith("/"))
         return;
+
+      /* Initial work on Discord mentions from Terraria
+       * Sequence:
+       * 1. Check args.Text for regex match of a tag.
+       * 2. If 1 or more instances found, iterate through Discord server members to find potential username matches.
+       * 3. Replace @user tags in args.Text with user.Mention and send the message
+      var guilds = botClient.Guilds;
+      foreach(var guild in guilds)
+      {
+        var members = guild.Users;
+        foreach(var member in members)
+        {
+          if("test".Equals(member.Username, StringComparison.OrdinalIgnoreCase))
+            Console.WriteLine($"{member.Mention}");
+        }
+      }
+      */
+
       if(logChat)
         Log($"{TShock.Players[args.Who].Name} said: {args.Text}");
       channel.SendMessageAsync($"**<{TShock.Players[args.Who].Name}>** {args.Text}");
@@ -191,62 +259,59 @@ namespace Terracord
     /// <param name="args">event arguments passed by hook</param>
     private void OnLeave(LeaveEventArgs args)
     {
-      Log($"{TShock.Players[args.Who].Name} has left the server.");
-      channel.SendMessageAsync($"**:heavy_minus_sign: {TShock.Players[args.Who].Name} has left the server.**");
+      try
+      {
+        string player = TShock.Players[args.Who].Name;
+        Log($"{player} has left the server.");
+        channel.SendMessageAsync($"**:heavy_minus_sign: {player} has left the server.**");
+      }
+      catch(NullReferenceException nre)
+      {
+        Log($"Exception caught: {nre.Message}");
+      }
     }
 
     /// <summary>
-    /// Initializes the Discord bot
+    /// Connects the bot to the Discord network
     /// </summary>
     /// <returns></returns>
     public async Task BotConnect()
     {
-      if(debugMode)
-      {
-        botClient = new DiscordSocketClient(new DiscordSocketConfig
-        {
-          LogLevel = LogSeverity.Debug
-        });
-      }
-      else
-      {
-        botClient = new DiscordSocketClient(new DiscordSocketConfig
-        {
-          LogLevel = LogSeverity.Info
-        });
-      }
-      botClient.Log += BotLog;
-
+      // Connect to Discord
       await botClient.LoginAsync(TokenType.Bot, botToken);
       await botClient.StartAsync();
-      botClient.Ready += BotReady;
-      botClient.MessageReceived += BotMessageReceived;
 
       // Set game/playing status
       await botClient.SetGameAsync(botGame);
 
       // Block task until program termination
-      await Task.Delay(-1);
+      //await Task.Delay(-1);
+      // Do not block since it prevents TShock console input when this method is called asynchronously
+      await Task.CompletedTask;
     }
 
     /// <summary>
     /// Called when a Discord.Net message requires logging
     /// </summary>
     /// <returns></returns>
-    private async Task BotLog(LogMessage message)
+    private Task BotLog(LogMessage message)
     {
       Log(message.ToString());
-      await Task.CompletedTask;
+      return Task.CompletedTask;
     }
 
     /// <summary>
     /// Called after the bot establishes the connection to Discord
     /// </summary>
     /// <returns></returns>
-    private async Task BotReady()
+    private Task BotReady()
     {
       channel = botClient.GetChannel(channelId) as IMessageChannel;
-      await channel.SendMessageAsync("**:white_check_mark: Server has started.**");
+      // channel? checks if object is null
+      // The message below is sent to Discord every time the bot connects/reconnects
+      channel?.SendMessageAsync("**:white_check_mark: Relay available.**");
+      Log("Relay available.");
+      return Task.CompletedTask;
     }
 
     /// <summary>
@@ -254,22 +319,21 @@ namespace Terracord
     /// </summary>
     /// <param name="message">message received by Discord bot</param>
     /// <returns></returns>
-    private async Task BotMessageReceived(SocketMessage message)
+    private Task BotMessageReceived(SocketMessage message)
     {
       // Only accept messages from configured Discord text channel
       if(message.Channel.Id != channelId)
-        return;
+        return Task.CompletedTask;
 
       // Do not send duplicates messages from Discord bot to Terraria players
       if(message.Author.Id == botClient.CurrentUser.Id)
-        return;
+        return Task.CompletedTask;
 
       // Relay Discord message to Terraria players
       if(logChat)
         Log($"<{message.Author.Username}@Discord> {message.Content}");
       TShock.Utils.Broadcast($"<{message.Author.Username}@Discord> {message.Content}", broadcastColor[0], broadcastColor[1], broadcastColor[2]);
-
-      await Task.CompletedTask;
+      return Task.CompletedTask;
     }
   }
 }

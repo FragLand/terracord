@@ -22,8 +22,14 @@ assignees: ''
 ### Terraria/TShock Version
 *
 
+### Discord.Net Version
+*
+
 ### .NET/Mono Version
 * 
 
 ### Operating System
 *
+
+### Output/Screenshot(s)
+
