@@ -190,6 +190,24 @@ namespace Terracord
       // Do not relay commands
       if(args.Text.StartsWith("/"))
         return;
+
+      /* Initial work on Discord mentions from Terraria
+       * Sequence:
+       * 1. Check args.Text for regex match of a tag.
+       * 2. If 1 or more instances found, iterate through Discord server members to find potential username matches.
+       * 3. Replace @user tags in args.Text with user.Mention and send the message
+      var guilds = botClient.Guilds;
+      foreach(var guild in guilds)
+      {
+        var members = guild.Users;
+        foreach(var member in members)
+        {
+          if ("test".Equals(member.Username, StringComparison.OrdinalIgnoreCase))
+            Console.WriteLine($"{member.Mention}");
+        }
+      }
+      */
+
       if(logChat)
         Log($"{TShock.Players[args.Who].Name} said: {args.Text}");
       channel.SendMessageAsync($"**<{TShock.Players[args.Who].Name}>** {args.Text}");
