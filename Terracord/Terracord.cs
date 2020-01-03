@@ -95,8 +95,8 @@ namespace Terracord
     {
       if(disposing)
       {
-        channel.SendMessageAsync("**:octagonal_sign: Server is shutting down.**");
-        Log("Server is shutting down.");
+        channel.SendMessageAsync("**:octagonal_sign: Relay shutting down.**");
+        Log("Relay shutting down.");
         ServerApi.Hooks.GameInitialize.Deregister(this, OnInitialize);
         ServerApi.Hooks.GamePostInitialize.Deregister(this, OnPostInitialize);
         //ServerApi.Hooks.NetGreetPlayer.Deregister(this, OnGreet);
@@ -254,7 +254,10 @@ namespace Terracord
     private async Task BotReady()
     {
       channel = botClient.GetChannel(channelId) as IMessageChannel;
-      await channel.SendMessageAsync("**:white_check_mark: Server has started.**");
+      // channel? checks if object is null
+      // The message below is sent to Discord every time the bot connects/reconnects
+      await channel?.SendMessageAsync("**:white_check_mark: Relay available.**");
+      Log("Relay available.");
     }
 
     /// <summary>
