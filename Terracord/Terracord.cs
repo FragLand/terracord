@@ -116,8 +116,8 @@ namespace Terracord
     public static void Log(string logText)
     {
       StreamWriter logFile = new StreamWriter($"tshock{Path.DirectorySeparatorChar}terracord.log", true);
-      logFile.WriteLine($"[{DateTime.Now.ToString()}] {logText.ToString()}");
-      Console.WriteLine($"Terracord: [{DateTime.Now.ToString()}] {logText.ToString()}");
+      logFile.WriteLine($"[{DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss zzz")}] {logText.ToString()}");
+      Console.WriteLine($"Terracord: [{DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss zzz")}] {logText.ToString()}");
       logFile.Close();
     }
 
