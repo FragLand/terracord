@@ -54,7 +54,7 @@ namespace Terracord
     public override string Description => "A Discord <-> Terraria bridge plugin for TShock";
 
     // Discord bot client
-    private DiscordSocketClient botClient;
+    private readonly DiscordSocketClient botClient;
     // Discord relay channel
     private static IMessageChannel channel = null;
     // terracord.xml configuration file
@@ -80,8 +80,29 @@ namespace Terracord
       broadcastColor[0] = Byte.Parse(configOptions.Element("broadcast").Attribute("red").Value.ToString());
       broadcastColor[1] = Byte.Parse(configOptions.Element("broadcast").Attribute("green").Value.ToString());
       broadcastColor[2] = Byte.Parse(configOptions.Element("broadcast").Attribute("blue").Value.ToString());
-      Log("terracord.xml parsed.");
-      //Console.WriteLine($"{botToken} {channelId} {commandPrefix} {botGame} {broadcastColor[0]} {broadcastColor[1]} {broadcastColor[2]}");
+
+      // Initialize Discord bot
+      // Set AlwaysDownloadUsers to update Discord server member list for servers containing >=100 members
+      // This is required to properly support mentions in more populated servers
+      if(debugMode)
+      {
+        botClient = new DiscordSocketClient(new DiscordSocketConfig
+        {
+          AlwaysDownloadUsers = true,
+          LogLevel = LogSeverity.Debug
+        });
+      }
+      else
+      {
+        botClient = new DiscordSocketClient(new DiscordSocketConfig
+        {
+          AlwaysDownloadUsers = true,
+          LogLevel = LogSeverity.Info
+        });
+      }
+      botClient.Log += BotLog;
+      botClient.Ready += BotReady;
+      botClient.MessageReceived += BotMessageReceived;
     }
 
     /// <summary>
@@ -146,8 +167,27 @@ namespace Terracord
     /// <param name="args">event arguments passed by hook</param>
     private void OnPostInitialize(EventArgs args)
     {
+      Log("terracord.xml parsed.");
+
+      // Log configuration values
+      if(debugMode)
+      {
+        Log("Configuration Values\n--------------------");
+        Log($"Bot Token: {botToken}");
+        Log($"Channel ID: {channelId}");
+        Log($"Command Prefix: {commandPrefix}");
+        Log($"Bot Game: {botGame}");
+        Log($"Broadcast Color (RGB): {broadcastColor[0]}, {broadcastColor[1]}, {broadcastColor[2]}");
+        Log($"Log Chat: {logChat}");
+        Log($"Debug Mode: {debugMode}");
+      }
+
       Log("Connecting to Discord...");
-      _ = BotConnect(); // suppress await warning via discard
+      // Launch Discord bot in an asynchronous context
+      // The line below blocks and prevents TShock console input when await Task.Delay(-1) is used in the called method
+      new Terracord(Game).BotConnect().GetAwaiter().GetResult();
+      // Execute synchronously instead and use discard to suppress await warning
+      //_ = BotConnect();
     }
 
     /// <summary>
@@ -202,7 +242,7 @@ namespace Terracord
         var members = guild.Users;
         foreach(var member in members)
         {
-          if ("test".Equals(member.Username, StringComparison.OrdinalIgnoreCase))
+          if("test".Equals(member.Username, StringComparison.OrdinalIgnoreCase))
             Console.WriteLine($"{member.Mention}");
         }
       }
@@ -232,60 +272,46 @@ namespace Terracord
     }
 
     /// <summary>
-    /// Initializes the Discord bot
+    /// Connects the bot to the Discord network
     /// </summary>
     /// <returns></returns>
     public async Task BotConnect()
     {
-      if(debugMode)
-      {
-        botClient = new DiscordSocketClient(new DiscordSocketConfig
-        {
-          LogLevel = LogSeverity.Debug
-        });
-      }
-      else
-      {
-        botClient = new DiscordSocketClient(new DiscordSocketConfig
-        {
-          LogLevel = LogSeverity.Info
-        });
-      }
-      botClient.Log += BotLog;
-
+      // Connect to Discord
       await botClient.LoginAsync(TokenType.Bot, botToken);
       await botClient.StartAsync();
-      botClient.Ready += BotReady;
-      botClient.MessageReceived += BotMessageReceived;
 
       // Set game/playing status
       await botClient.SetGameAsync(botGame);
 
       // Block task until program termination
-      await Task.Delay(-1);
+      //await Task.Delay(-1);
+      // Do not block since it prevents TShock console input when this method is called asynchronously
+      await Task.CompletedTask;
     }
 
     /// <summary>
     /// Called when a Discord.Net message requires logging
     /// </summary>
     /// <returns></returns>
-    private async Task BotLog(LogMessage message)
+    private Task BotLog(LogMessage message)
     {
       Log(message.ToString());
-      await Task.CompletedTask;
+      return Task.CompletedTask;
     }
 
     /// <summary>
     /// Called after the bot establishes the connection to Discord
     /// </summary>
     /// <returns></returns>
-    private async Task BotReady()
+    private Task BotReady()
     {
       channel = botClient.GetChannel(channelId) as IMessageChannel;
       // channel? checks if object is null
       // The message below is sent to Discord every time the bot connects/reconnects
-      await channel?.SendMessageAsync("**:white_check_mark: Relay available.**");
+      channel?.SendMessageAsync("**:white_check_mark: Relay available.**");
       Log("Relay available.");
+      return Task.CompletedTask;
     }
 
     /// <summary>
@@ -293,22 +319,21 @@ namespace Terracord
     /// </summary>
     /// <param name="message">message received by Discord bot</param>
     /// <returns></returns>
-    private async Task BotMessageReceived(SocketMessage message)
+    private Task BotMessageReceived(SocketMessage message)
     {
       // Only accept messages from configured Discord text channel
       if(message.Channel.Id != channelId)
-        return;
+        return Task.CompletedTask;
 
       // Do not send duplicates messages from Discord bot to Terraria players
       if(message.Author.Id == botClient.CurrentUser.Id)
-        return;
+        return Task.CompletedTask;
 
       // Relay Discord message to Terraria players
       if(logChat)
         Log($"<{message.Author.Username}@Discord> {message.Content}");
       TShock.Utils.Broadcast($"<{message.Author.Username}@Discord> {message.Content}", broadcastColor[0], broadcastColor[1], broadcastColor[2]);
-
-      await Task.CompletedTask;
+      return Task.CompletedTask;
     }
   }
 }
