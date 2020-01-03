@@ -191,8 +191,16 @@ namespace Terracord
     /// <param name="args">event arguments passed by hook</param>
     private void OnLeave(LeaveEventArgs args)
     {
-      Log($"{TShock.Players[args.Who].Name} has left the server.");
-      channel.SendMessageAsync($"**:heavy_minus_sign: {TShock.Players[args.Who].Name} has left the server.**");
+      try
+      {
+        string player = TShock.Players[args.Who].Name;
+        Log($"{player} has left the server.");
+        channel.SendMessageAsync($"**:heavy_minus_sign: {player} has left the server.**");
+      }
+      catch(NullReferenceException nre)
+      {
+        Log($"Exception caught: {nre.Message}");
+      }
     }
 
     /// <summary>
