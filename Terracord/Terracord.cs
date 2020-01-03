@@ -53,9 +53,15 @@ namespace Terracord
     /// </summary>
     public override string Description => "A Discord <-> Terraria bridge plugin for TShock";
 
+    // Discord bot client
     private DiscordSocketClient botClient;
+    // Discord relay channel
+    private static IMessageChannel channel = null;
+    // terracord.xml configuration file
     private static readonly XDocument configFile = XDocument.Load($"tshock{Path.DirectorySeparatorChar}terracord.xml");
+    // XML root element
     private static readonly XElement configOptions = configFile.Element("configuration");
+    // terracord.xml options
     private static readonly string botToken = configOptions.Element("bot").Attribute("token").Value.ToString();
     private static readonly ulong channelId = UInt64.Parse(configOptions.Element("channel").Attribute("id").Value.ToString());
     private static readonly char commandPrefix = Char.Parse(configOptions.Element("command").Attribute("prefix").Value.ToString());
@@ -63,10 +69,14 @@ namespace Terracord
     private static readonly byte[] broadcastColor = new byte[3] {0, 0, 0};
     private static readonly bool logChat = Boolean.Parse(configOptions.Element("log").Attribute("chat").Value.ToString());
     private static readonly bool debugMode = Boolean.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString());
-    private static IMessageChannel channel = null;
 
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="game">TShock game</param>
     public Terracord(Main game):base(game)
     {
+      // Populate broadcast RGB array values
       broadcastColor[0] = Byte.Parse(configOptions.Element("broadcast").Attribute("red").Value.ToString());
       broadcastColor[1] = Byte.Parse(configOptions.Element("broadcast").Attribute("green").Value.ToString());
       broadcastColor[2] = Byte.Parse(configOptions.Element("broadcast").Attribute("blue").Value.ToString());
