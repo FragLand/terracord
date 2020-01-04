@@ -15,4 +15,6 @@
   <log chat="true" />
   <!-- Debug mode -->
   <debug mode="false" />
+  <!-- Timestamp format -->
+  <timestamp format="MM/dd/yyyy HH:mm:ss zzz" />
 </configuration>

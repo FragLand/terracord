@@ -69,6 +69,7 @@ namespace Terracord
     private static readonly byte[] broadcastColor = new byte[3] {0, 0, 0};
     private static readonly bool logChat = Boolean.Parse(configOptions.Element("log").Attribute("chat").Value.ToString());
     private static readonly bool debugMode = Boolean.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString());
+    private static readonly string timestampFormat = configOptions.Element("timestamp").Attribute("format").Value.ToString();
 
     /// <summary>
     /// Constructor
@@ -147,8 +148,8 @@ namespace Terracord
     public static void Log(string logText)
     {
       StreamWriter logFile = new StreamWriter($"tshock{Path.DirectorySeparatorChar}terracord.log", true);
-      logFile.WriteLine($"[{DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss zzz")}] {logText.ToString()}");
-      Console.WriteLine($"Terracord: [{DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss zzz")}] {logText.ToString()}");
+      logFile.WriteLine($"[{DateTime.Now.ToString(timestampFormat)}] {logText.ToString()}");
+      Console.WriteLine($"Terracord: [{DateTime.Now.ToString(timestampFormat)}] {logText.ToString()}");
       logFile.Close();
     }
 
