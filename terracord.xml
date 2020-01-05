@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
 <!-- Terracord configuration -->
 <configuration>
+
   <!-- Discord bot token -->
   <bot token="ABC" />
+
   <!-- Discord channel ID -->
   <channel id="123" />
+
   <!-- Bot command prefix -->
   <command prefix="!" />
+
   <!-- Discord bot game for "playing" status -->
   <game status="Terraria" />
+
   <!-- Terraria broadcast color in RGB -->
   <broadcast red="255" green="215" blue="0" />
+
   <!-- Log all chat messages -->
   <log chat="true" />
+
   <!-- Debug mode -->
   <debug mode="false" />
+
+  <!-- Timestamp format -->
+  <timestamp format="MM/dd/yyyy HH:mm:ss zzz" />
+
+  <!-- Terminate TShock when an error is encountered -->
+  <exception abort="false" />
+
 </configuration>

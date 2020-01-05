@@ -20,15 +20,20 @@ the [GPLv3](http://www.gnu.org/licenses/gpl-3.0.en.html). This project makes use
 1. Simply copy `Terracord.dll` and its dependencies into your TShock `ServerPlugins` directory. The dependencies should
 be contained in any release zip archive and includes the following files: `Discord.Net.Core.dll`, `Discord.Net.Rest.dll`,
 `Discord.Net.WebSocket.dll`, `Newtonsoft.Json.dll`, `System.Collections.Immutable.dll`, and `System.Interactive.Async.dll`.
+Ensure that the version of `Newtonsoft.Json.dll` copied to the `ServerPlugins` directory is >=11.0.2. This is a required 
+dependency of Discord.Net. The instance of this DLL included with TShock 4.3.26 is older (10.0.3) and using it results in
+not being able to establish a connection to a Discord server.
 
-2. Edit `terracord.json` to set your bot token, bot prefix (`!` is the default prefix), and Discord channel ID. The
-channel ID can be obtained by enabling developer mode in your Discord application and then copying the ID of the relevant
-text channel you want to relay Terraria messages to. A channel ID appears as a long string of numbers. The process is described
+2. Edit `terracord.xml` to set your bot token and Discord channel ID. This file should be saved to the `tshock` directory.
+Other settings in this configuration file may also be changed to your liking. The channel ID can be obtained by enabling 
+developer mode in your Discord application and then copying the ID of the relevant text channel you want to relay Terraria 
+messages to. A channel ID appears as a long string of numbers. The process is described
 [here](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-). In order
 to obtain a bot token, you will need to create a Discord bot application. The process is described
 [here](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token).
 
-3. Restart your TShock server to load the plugin.
+3. Restart your TShock server to load the plugin. For review or troubleshooting purposes, `terracord.log` can be found in
+the `tshock` directory.
 
 :warning: Unfortunately, Terracord may not work with [Mono](https://www.mono-project.com/). This is due to Discord.Net
 not supporting Mono.
