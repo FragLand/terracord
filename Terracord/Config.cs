@@ -71,15 +71,15 @@ namespace Terracord
       }
       catch(FileNotFoundException fnfe)
       {
-        Util.Log($"Unable to parse terracord.xml: {fnfe.Message}");
+        Util.Log($"Unable to parse terracord.xml: {fnfe.Message}", Util.Severity.Error);
         Generate();
       }
       // This will catch and log anything else such as SecurityException for a permission issue, FormatException during conversion, etc.
       catch(Exception e)
       {
-        Util.Log($"Unable to parse terracord.xml: {e.Message}");
+        Util.Log($"Unable to parse terracord.xml: {e.Message}", Util.Severity.Error);
       }
-      Util.Log("terracord.xml parsed.");
+      Util.Log("terracord.xml parsed.", Util.Severity.Info);
       // Display configuration values
       if(Config.DebugMode)
         Display();
@@ -87,17 +87,17 @@ namespace Terracord
 
     public static void Display()
     {
-      Util.Log("Configuration Values");
-      Util.Log("--------------------");
-      Util.Log($"Bot Token: {BotToken}");
-      Util.Log($"Channel ID: {ChannelId}");
-      Util.Log($"Command Prefix: {CommandPrefix}");
-      Util.Log($"Bot Game: {BotGame}");
-      Util.Log($"Broadcast Color (RGB): {BroadcastColor[0]}, {BroadcastColor[1]}, {BroadcastColor[2]}");
-      Util.Log($"Log Chat: {LogChat}");
-      Util.Log($"Debug Mode: {DebugMode}");
-      Util.Log($"Timestamp Format: {TimestampFormat}");
-      Util.Log($"Exception Abort: {AbortOnError}");
+      Util.Log("Configuration Values", Util.Severity.Debug);
+      Util.Log("--------------------", Util.Severity.Debug);
+      Util.Log($"Bot Token: {BotToken}", Util.Severity.Debug);
+      Util.Log($"Channel ID: {ChannelId}", Util.Severity.Debug);
+      Util.Log($"Command Prefix: {CommandPrefix}", Util.Severity.Debug);
+      Util.Log($"Bot Game: {BotGame}", Util.Severity.Debug);
+      Util.Log($"Broadcast Color (RGB): {BroadcastColor[0]}, {BroadcastColor[1]}, {BroadcastColor[2]}", Util.Severity.Debug);
+      Util.Log($"Log Chat: {LogChat}", Util.Severity.Debug);
+      Util.Log($"Debug Mode: {DebugMode}", Util.Severity.Debug);
+      Util.Log($"Timestamp Format: {TimestampFormat}", Util.Severity.Debug);
+      Util.Log($"Exception Abort: {AbortOnError}", Util.Severity.Debug);
     }
 
     /// <summary>
@@ -105,7 +105,7 @@ namespace Terracord
     /// </summary>
     public static void Generate()
     {
-      Util.Log($"Attempting to generate tshock{Path.DirectorySeparatorChar}terracord.xml since the file did not exist...");
+      Util.Log($"Attempting to generate tshock{Path.DirectorySeparatorChar}terracord.xml since the file did not exist...", Util.Severity.Info);
       try
       {
         StreamWriter newConfigFile = new StreamWriter($"tshock{Path.DirectorySeparatorChar}terracord.xml", false);
@@ -132,14 +132,14 @@ namespace Terracord
         newConfigFile.WriteLine("  <exception abort=\"false\" />\n");
         newConfigFile.WriteLine("</configuration>");
         newConfigFile.Close();
-        Util.Log($"tshock{Path.DirectorySeparatorChar}terracord.xml created successfully.");
-        Util.Log("Please configure your bot token and channel ID before loading the Terracord plugin.");
+        Util.Log($"tshock{Path.DirectorySeparatorChar}terracord.xml created successfully.", Util.Severity.Info);
+        Util.Log("Please configure your bot token and channel ID before loading the Terracord plugin.", Util.Severity.Warning);
         if(AbortOnError)
           Environment.Exit(Util.ExitFailure);
       }
       catch(Exception e)
       {
-        Util.Log($"Unable to create terracord.xml: {e.Message}");
+        Util.Log($"Unable to create terracord.xml: {e.Message}", Util.Severity.Error);
         if(AbortOnError)
           Environment.Exit(Util.ExitFailure);
       }
