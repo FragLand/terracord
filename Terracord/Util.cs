@@ -66,9 +66,9 @@ namespace Terracord
         }
         StreamWriter logFile = new StreamWriter($"tshock{Path.DirectorySeparatorChar}terracord.log", true);
         // Write to console first in case file is unavailable
-        Console.WriteLine($"Terracord: [{DateTime.Now.ToString(Config.TimestampFormat)}] {logText.ToString()}");
+        Console.WriteLine($"Terracord: [{DateTime.Now.ToString(Config.TimestampFormat)}] [severity.ToString()] {logText.ToString()}");
         Console.ResetColor();
-        logFile.WriteLine($"[{DateTime.Now.ToString(Config.TimestampFormat)}] {logText.ToString()}");
+        logFile.WriteLine($"[{DateTime.Now.ToString(Config.TimestampFormat)}] [severity.ToString()] {logText.ToString()}");
         logFile.Close();
       }
       catch(Exception e)
