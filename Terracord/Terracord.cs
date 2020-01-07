@@ -83,8 +83,8 @@ namespace Terracord
     {
       if(disposing)
       {
+        Util.Log("Relay shutting down.", Util.Severity.Info);
         discord.Send("**:octagonal_sign: Relay shutting down.**");
-        Util.Log("Relay shutting down.");
         ServerApi.Hooks.GameInitialize.Deregister(this, OnInitialize);
         ServerApi.Hooks.GamePostInitialize.Deregister(this, OnPostInitialize);
         ServerApi.Hooks.ServerJoin.Deregister(this, OnJoin);
@@ -102,7 +102,7 @@ namespace Terracord
     /// <param name="args">event arguments passed by hook</param>
     private void OnInitialize(EventArgs args)
     {
-      Util.Log("Server has started.");
+      Util.Log("Server has started.", Util.Severity.Info);
     }
 
     /// <summary>
@@ -124,7 +124,7 @@ namespace Terracord
   /// <param name="args">event arguments passed by hook</param>
   private void OnJoin(JoinEventArgs args)
     {
-      Util.Log($"{TShock.Players[args.Who].Name} has joined the server.");
+      Util.Log($"{TShock.Players[args.Who].Name} has joined the server.", Util.Severity.Info);
       discord.Send($"**:heavy_plus_sign: {TShock.Players[args.Who].Name} has joined the server.**");
     }
 
@@ -134,7 +134,7 @@ namespace Terracord
     /// <param name="args">event arguments passed by hook</param>
     private void OnBroadcast(ServerBroadcastEventArgs args)
     {
-      Util.Log($"Server broadcast: {args.Message}");
+      Util.Log($"Server broadcast: {args.Message}", Util.Severity.Info);
       discord.Send($"**:mega: Broadcast:** {args.Message}");
     }
 
@@ -166,7 +166,7 @@ namespace Terracord
       */
 
       if(Config.LogChat)
-        Util.Log($"{TShock.Players[args.Who].Name} said: {args.Text}");
+        Util.Log($"{TShock.Players[args.Who].Name} said: {args.Text}", Util.Severity.Info);
       discord.Send($"**<{TShock.Players[args.Who].Name}>** {args.Text}");
     }
 
@@ -179,12 +179,12 @@ namespace Terracord
       try
       {
         string player = TShock.Players[args.Who].Name;
-        Util.Log($"{player} has left the server.");
+        Util.Log($"{player} has left the server.", Util.Severity.Info);
         discord.Send($"**:heavy_minus_sign: {player} has left the server.**");
       }
       catch(NullReferenceException nre)
       {
-        Util.Log($"Exception caught after player left TShock server: {nre.Message}");
+        Util.Log($"Exception caught after player left TShock server: {nre.Message}", Util.Severity.Error);
       }
     }
   }

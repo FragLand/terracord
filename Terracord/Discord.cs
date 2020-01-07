@@ -64,7 +64,7 @@ namespace Terracord
     /// <returns>void</returns>
     public async Task Connect()
     {
-      Util.Log("Connecting to Discord...");
+      Util.Log("Connecting to Discord...", Util.Severity.Info);
       try
       {
         // Connect to Discord
@@ -73,7 +73,7 @@ namespace Terracord
       }
       catch(Exception e)
       {
-        Util.Log($"Unable to connect to Discord: {e.Message}");
+        Util.Log($"Unable to connect to Discord: {e.Message}", Util.Severity.Error);
         if(Config.AbortOnError)
           Environment.Exit(Util.ExitFailure);
       }
@@ -85,7 +85,7 @@ namespace Terracord
       }
       catch(Exception e)
       {
-        Util.Log($"Unable to set game/playing status: {e.Message}");
+        Util.Log($"Unable to set game/playing status: {e.Message}", Util.Severity.Error);
         if(Config.AbortOnError)
           Environment.Exit(Util.ExitFailure);
       }
@@ -102,7 +102,29 @@ namespace Terracord
     /// <returns>Task.CompletedTask</returns>
     private Task Log(LogMessage message)
     {
-      Util.Log(message.ToString());
+      // Consolidate Discord.Net LogSeverity with Terracord Util.Severity
+      Util.Severity severity;
+      switch(message.Severity)
+      {
+        case LogSeverity.Debug:
+        case LogSeverity.Verbose:
+          severity = Util.Severity.Debug;
+          break;
+        case LogSeverity.Info:
+          severity = Util.Severity.Info;
+          break;
+        case LogSeverity.Warning:
+          severity = Util.Severity.Warning;
+          break;
+        case LogSeverity.Error:
+        case LogSeverity.Critical:
+          severity = Util.Severity.Error;
+          break;
+        default:
+          severity = Util.Severity.Info;
+          break;
+      }
+      Util.Log(message.ToString(), severity);
       return Task.CompletedTask;
     }
 
@@ -118,11 +140,11 @@ namespace Terracord
       }
       catch(Exception e)
       {
-        Util.Log($"Unable to acquire Discord channel: {e.Message}");
+        Util.Log($"Unable to acquire Discord channel: {e.Message}", Util.Severity.Error);
       }
 
       // The message below is sent to Discord every time the bot connects/reconnects
-      Util.Log("Relay available.");
+      Util.Log($"Relay available. Connected to Discord as {Client.CurrentUser.ToString()}.", Util.Severity.Info);
       Send("**:white_check_mark: Relay available.**");
       return Task.CompletedTask;
     }
@@ -146,12 +168,12 @@ namespace Terracord
 
         // Relay Discord message to Terraria players
         if(Config.LogChat)
-          Util.Log($"<{message.Author.Username}@Discord> {message.Content}");
+          Util.Log($"<{message.Author.Username}@Discord> {message.Content}", Util.Severity.Info);
         TShock.Utils.Broadcast($"<{message.Author.Username}@Discord> {message.Content}", Config.BroadcastColor[0], Config.BroadcastColor[1], Config.BroadcastColor[2]);
       }
       catch(Exception e)
       {
-        Util.Log($"Unable to broadcast TShock message: {e.Message}");
+        Util.Log($"Unable to broadcast TShock message: {e.Message}", Util.Severity.Error);
       }
 
       return Task.CompletedTask;
@@ -170,7 +192,7 @@ namespace Terracord
       }
       catch(Exception e)
       {
-        Util.Log($"Unable to send Discord message: {e.Message}");
+        Util.Log($"Unable to send Discord message: {e.Message}", Util.Severity.Error);
       }
     }
   }
