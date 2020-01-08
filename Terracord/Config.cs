@@ -37,6 +37,9 @@ namespace Terracord
     public static string TimestampFormat { get; private set; }
     public static bool AbortOnError { get; private set; }
 
+    /// <summary>
+    /// Parses the terracord.xml configuration file
+    /// </summary>
     public static void Parse()
     {
       // Set default timestamp format for Util.Log() called in exception in case terracord.xml cannot be parsed
@@ -85,6 +88,9 @@ namespace Terracord
         Display();
     }
 
+    /// <summary>
+    /// Displays the terracord.xml configuration options
+    /// </summary>
     public static void Display()
     {
       Util.Log("Configuration Values", Util.Severity.Debug);

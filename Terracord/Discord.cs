@@ -166,6 +166,10 @@ namespace Terracord
         if(message.Author.Id == Client.CurrentUser.Id)
           return Task.CompletedTask;
 
+        // Check for a command
+        if(message.Content.StartsWith(Config.CommandPrefix.ToString()) && message.Content.Length > 1)
+          CommandHandler(message.Content);
+
         // Relay Discord message to Terraria players
         if(Config.LogChat)
           Util.Log($"<{message.Author.Username}@Discord> {message.Content}", Util.Severity.Info);
@@ -175,6 +179,46 @@ namespace Terracord
       {
         Util.Log($"Unable to broadcast TShock message: {e.Message}", Util.Severity.Error);
       }
+
+      return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Handles Discord commands
+    /// </summary>
+    /// <param name="command">command sent by a Discord user</param>
+    private Task CommandHandler(string command)
+    {
+      command = command.Substring(1); // remove command prefix
+      Util.Log($"Command sent: {command}", Util.Severity.Info);
+
+      if(command.Equals("playerlist", StringComparison.OrdinalIgnoreCase))
+      {
+        string playerList = $"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n\n";
+        foreach(var player in TShock.Utils.GetPlayers(false))
+          playerList += $"{player}\n";
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.WithColor(Color.Blue)
+          .WithDescription(playerList)
+          .WithFooter(footer => footer.Text = $"Terracord {Terracord.version}")
+          .WithCurrentTimestamp()
+          .WithTitle("Player List");
+        channel.SendMessageAsync("", false, embed.Build());
+      }
+
+      if(command.Equals("serverinfo", StringComparison.OrdinalIgnoreCase))
+      {
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.WithColor(Color.Blue)
+          .WithDescription($"**Server Name:** {TShock.Config.ServerName}\n**Players:** {TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n**TShock Version:** {TShock.VersionNum.ToString()}")
+          .WithFooter(footer => footer.Text = $"Terracord {Terracord.version}")
+          .WithCurrentTimestamp()
+          .WithTitle("Server Information");
+        channel.SendMessageAsync("", false, embed.Build());
+      }
+
+      if(command.Equals("uptime", StringComparison.OrdinalIgnoreCase))
+        Send($"**__Uptime__**\n```\n{Util.Uptime()}\n```");
 
       return Task.CompletedTask;
     }

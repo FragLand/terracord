@@ -66,9 +66,9 @@ namespace Terracord
         }
         StreamWriter logFile = new StreamWriter($"tshock{Path.DirectorySeparatorChar}terracord.log", true);
         // Write to console first in case file is unavailable
-        Console.WriteLine($"Terracord: [{DateTime.Now.ToString(Config.TimestampFormat)}] [severity.ToString()] {logText.ToString()}");
+        Console.WriteLine($"Terracord: [{DateTime.Now.ToString(Config.TimestampFormat)}] [{severity.ToString()}] {logText.ToString()}");
         Console.ResetColor();
-        logFile.WriteLine($"[{DateTime.Now.ToString(Config.TimestampFormat)}] [severity.ToString()] {logText.ToString()}");
+        logFile.WriteLine($"[{DateTime.Now.ToString(Config.TimestampFormat)}] [{severity.ToString()}] {logText.ToString()}");
         logFile.Close();
       }
       catch(Exception e)
@@ -78,6 +78,12 @@ namespace Terracord
         if(Config.AbortOnError)
           Environment.Exit(ExitFailure);
       }
+    }
+
+    public static string Uptime()
+    {
+      TimeSpan elapsed = DateTime.Now.Subtract(Terracord.startTime);
+      return $"{elapsed.Days} day(s), {elapsed.Hours} hour(s), {elapsed.Minutes} minute(s), and {elapsed.Seconds} second(s)";
     }
   }
 }
