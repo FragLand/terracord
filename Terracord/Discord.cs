@@ -216,7 +216,7 @@ namespace Terracord
       if(command.Equals("playerlist", StringComparison.OrdinalIgnoreCase))
       {
         string playerList = $"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n\n";
-        foreach (var player in TShock.Utils.GetPlayers(false))
+        foreach(var player in TShock.Utils.GetPlayers(false))
           playerList += $"{player}\n";
         EmbedBuilder embed = new EmbedBuilder();
         embed.WithColor(Color.Blue)
@@ -260,7 +260,7 @@ namespace Terracord
     /// <returns>modified message text</returns>
     private string ConvertMentions(SocketMessage message)
     {
-       StringBuilder modifiedMessageText = new StringBuilder(message.Content);
+      StringBuilder modifiedMessageText = new StringBuilder(message.Content);
 
       if(message.MentionedChannels.Count > 0)
       {
