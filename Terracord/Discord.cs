@@ -21,6 +21,7 @@
 using Discord;
 using Discord.WebSocket;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using TShockAPI;
 
@@ -166,14 +167,17 @@ namespace Terracord
         if(message.Author.Id == Client.CurrentUser.Id)
           return Task.CompletedTask;
 
-        // Check for a command
+        // Check for and handle commands
         if(message.Content.StartsWith(Config.CommandPrefix.ToString()) && message.Content.Length > 1)
           CommandHandler(message.Content);
 
+        // Check for mentions and convert them to friendly names if found
+        string messageContent = ConvertMentions(message);
+
         // Relay Discord message to Terraria players
         if(Config.LogChat)
-          Util.Log($"<{message.Author.Username}@Discord> {message.Content}", Util.Severity.Info);
-        TShock.Utils.Broadcast($"<{message.Author.Username}@Discord> {message.Content}", Config.BroadcastColor[0], Config.BroadcastColor[1], Config.BroadcastColor[2]);
+          Util.Log($"<{message.Author.Username}@Discord> {messageContent}", Util.Severity.Info);
+        TShock.Utils.Broadcast($"<{message.Author.Username}@Discord> {messageContent}", Config.BroadcastColor[0], Config.BroadcastColor[1], Config.BroadcastColor[2]);
       }
       catch(Exception e)
       {
@@ -181,6 +185,23 @@ namespace Terracord
       }
 
       return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Sends a message to a Discord channel
+    /// </summary>
+    /// <param name="message">message to send to Discord channel</param>
+    public void Send(string message)
+    {
+      try
+      {
+        // channel? checks if object is null prior to sending message
+        channel?.SendMessageAsync(message);
+      }
+      catch(Exception e)
+      {
+        Util.Log($"Unable to send Discord message: {e.Message}", Util.Severity.Error);
+      }
     }
 
     /// <summary>
@@ -195,7 +216,7 @@ namespace Terracord
       if(command.Equals("playerlist", StringComparison.OrdinalIgnoreCase))
       {
         string playerList = $"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n\n";
-        foreach(var player in TShock.Utils.GetPlayers(false))
+        foreach (var player in TShock.Utils.GetPlayers(false))
           playerList += $"{player}\n";
         EmbedBuilder embed = new EmbedBuilder();
         embed.WithColor(Color.Blue)
@@ -218,26 +239,48 @@ namespace Terracord
       }
 
       if(command.Equals("uptime", StringComparison.OrdinalIgnoreCase))
-        Send($"**__Uptime__**\n```\n{Util.Uptime()}\n```");
+      {
+        //Send($"**__Uptime__**\n```\n{Util.Uptime()}\n```");
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.WithColor(Color.Blue)
+          .WithDescription(Util.Uptime())
+          .WithFooter(footer => footer.Text = $"Terracord {Terracord.version}")
+          .WithCurrentTimestamp()
+          .WithTitle("Uptime");
+        channel.SendMessageAsync("", false, embed.Build());
+      }
 
       return Task.CompletedTask;
     }
 
     /// <summary>
-    /// Sends a message to a Discord channel
+    /// Converts channel, role, and user mentions to friendly names before being broadcasted to TShock players
     /// </summary>
-    /// <param name="message">message to send to Discord channel</param>
-    public void Send(string message)
+    /// <param name="message">message received by Discord bot</param>
+    /// <returns>modified message text</returns>
+    private string ConvertMentions(SocketMessage message)
     {
-      try
+       StringBuilder modifiedMessageText = new StringBuilder(message.Content);
+
+      if(message.MentionedChannels.Count > 0)
       {
-        // channel? checks if object is null prior to sending message
-        channel?.SendMessageAsync(message);
+        foreach(var channel in message.MentionedChannels)
+          modifiedMessageText = modifiedMessageText.Replace($"<#{channel.Id}>", $"#{channel.Name}");
       }
-      catch(Exception e)
+
+      if(message.MentionedRoles.Count > 0)
       {
-        Util.Log($"Unable to send Discord message: {e.Message}", Util.Severity.Error);
+        foreach(var role in message.MentionedRoles)
+          modifiedMessageText = modifiedMessageText.Replace($"<@&{role.Id}>", $"@{role.Name}");
       }
+
+      if(message.MentionedUsers.Count > 0)
+      {
+        foreach(var user in message.MentionedUsers)
+          modifiedMessageText = modifiedMessageText.Replace($"<@!{user.Id}>", $"@{user.Username}");
+      }
+
+      return modifiedMessageText.ToString();
     }
   }
 }

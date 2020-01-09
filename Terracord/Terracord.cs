@@ -159,14 +159,17 @@ namespace Terracord
        * 1. Check args.Text for regex match of a tag.
        * 2. If 1 or more instances found, iterate through Discord server members to find potential username matches.
        * 3. Replace @user tags in args.Text with user.Mention and send the message
-      var guilds = botClient.Guilds;
+      var guilds = discord.Client.Guilds;
       foreach(var guild in guilds)
       {
-        var members = guild.Users;
-        foreach(var member in members)
+        foreach(var role in guild.Roles)
+          Console.WriteLine(role.Mention);
+        foreach(var channel in guild.TextChannels)
+          Console.WriteLine(channel.Mention);
+        foreach(var user in guild.Users)
         {
-          if("test".Equals(member.Username, StringComparison.OrdinalIgnoreCase))
-            Console.WriteLine($"{member.Mention}");
+          if("test".Equals(user.Username, StringComparison.OrdinalIgnoreCase))
+            Console.WriteLine($"{user.Mention}");
         }
       }
       */
