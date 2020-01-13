@@ -108,7 +108,7 @@ namespace Terracord
     {
       // Consolidate Discord.Net LogSeverity with Terracord Util.Severity
       Util.Severity severity;
-      switch (message.Severity)
+      switch(message.Severity)
       {
         case LogSeverity.Debug:
         case LogSeverity.Verbose:
