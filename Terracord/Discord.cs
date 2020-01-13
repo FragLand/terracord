@@ -33,6 +33,8 @@ namespace Terracord
     public DiscordSocketClient Client { get; }
     // Discord relay channel
     private IMessageChannel channel;
+    // Topic thread running?
+    public bool UpdateTopicRunning { get; private set; }
 
     public Discord()
     {
@@ -57,6 +59,7 @@ namespace Terracord
       Client.Log += Log;
       Client.Ready += Ready;
       Client.MessageReceived += MessageReceived;
+      UpdateTopicRunning = false;
     }
 
     /// <summary>
@@ -105,7 +108,7 @@ namespace Terracord
     {
       // Consolidate Discord.Net LogSeverity with Terracord Util.Severity
       Util.Severity severity;
-      switch(message.Severity)
+      switch (message.Severity)
       {
         case LogSeverity.Debug:
         case LogSeverity.Verbose:
@@ -143,6 +146,9 @@ namespace Terracord
       {
         Util.Log($"Unable to acquire Discord channel: {e.Message}", Util.Severity.Error);
       }
+
+      if(!UpdateTopicRunning)
+        _ = UpdateTopic();
 
       // The message below is sent to Discord every time the bot connects/reconnects
       Util.Log($"Relay available. Connected to Discord as {Client.CurrentUser.ToString()}.", Util.Severity.Info);
@@ -281,6 +287,31 @@ namespace Terracord
       }
 
       return modifiedMessageText.ToString();
+    }
+
+    /// <summary>
+    /// Periodically updates Discord channel topic
+    /// </summary>
+    /// <returns>void</returns>
+    private async Task UpdateTopic()
+    {
+      ITextChannel topicChannel = Client.GetChannel(Config.ChannelId) as ITextChannel;
+      UpdateTopicRunning = true;
+      while(true)
+      {
+        await topicChannel.ModifyAsync(chan =>
+        {
+          chan.Topic = $"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots} players online | Server online for {Util.Uptime()} | Last update: {DateTime.Now.ToString(Config.TimestampFormat)}";
+        });
+        try
+        {
+          await Task.Delay(Convert.ToInt32(Config.TopicInterval * 1000)); // seconds to milliseconds
+        }
+        catch(OverflowException oe)
+        {
+          Util.Log($"Topic interval value exceeds limit: {oe.Message}", Util.Severity.Error);
+        }
+      }
     }
   }
 }
