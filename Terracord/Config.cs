@@ -31,6 +31,7 @@ namespace Terracord
     public static ulong ChannelId { get; private set; }
     public static char CommandPrefix { get; private set; }
     public static string BotGame { get; private set; }
+    public static uint TopicInterval { get; private set; }
     public static byte[] BroadcastColor { get; private set; }
     public static bool LogChat { get; private set; }
     public static bool DebugMode { get; private set; }
@@ -58,6 +59,7 @@ namespace Terracord
         ChannelId = UInt64.Parse(configOptions.Element("channel").Attribute("id").Value.ToString());
         CommandPrefix = Char.Parse(configOptions.Element("command").Attribute("prefix").Value.ToString());
         BotGame = configOptions.Element("game").Attribute("status").Value.ToString();
+        TopicInterval = UInt32.Parse(configOptions.Element("topic").Attribute("interval").Value.ToString());
 
         // Populate broadcast RGB array values
         BroadcastColor = new byte[3]
@@ -99,6 +101,7 @@ namespace Terracord
       Util.Log($"Channel ID: {ChannelId}", Util.Severity.Debug);
       Util.Log($"Command Prefix: {CommandPrefix}", Util.Severity.Debug);
       Util.Log($"Bot Game: {BotGame}", Util.Severity.Debug);
+      Util.Log($"Topic Interval: {TopicInterval}", Util.Severity.Debug);
       Util.Log($"Broadcast Color (RGB): {BroadcastColor[0]}, {BroadcastColor[1]}, {BroadcastColor[2]}", Util.Severity.Debug);
       Util.Log($"Log Chat: {LogChat}", Util.Severity.Debug);
       Util.Log($"Debug Mode: {DebugMode}", Util.Severity.Debug);
@@ -126,6 +129,8 @@ namespace Terracord
         newConfigFile.WriteLine("  <command prefix=\"!\" />\n");
         newConfigFile.WriteLine("  <!-- Discord bot game for \"playing\" status -->");
         newConfigFile.WriteLine("  <game status=\"Terraria\" />\n");
+        newConfigFile.WriteLine("  <!-- Topic update interval in seconds -->");
+        newConfigFile.WriteLine("  <topic interval=\"300\" />\n");
         newConfigFile.WriteLine("  <!-- Terraria broadcast color in RGB -->");
         newConfigFile.WriteLine("  <broadcast red=\"255\" green=\"215\" blue=\"0\" />\n");
         newConfigFile.WriteLine("  <!-- Log all chat messages -->");

@@ -15,6 +15,9 @@
   <!-- Discord bot game for "playing" status -->
   <game status="Terraria" />
 
+  <!-- Topic update interval in seconds -->
+  <topic interval="300" />
+
   <!-- Terraria broadcast color in RGB -->
   <broadcast red="255" green="215" blue="0" />
 
