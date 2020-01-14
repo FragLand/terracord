@@ -148,7 +148,7 @@ namespace Terracord
       }
 
       if(!UpdateTopicRunning)
-        _ = UpdateTopic();
+        _ = UpdateTopic(); // fire and forget topic update thread
 
       // The message below is sent to Discord every time the bot connects/reconnects
       Util.Log($"Relay available. Connected to Discord as {Client.CurrentUser.ToString()}.", Util.Severity.Info);
@@ -173,9 +173,9 @@ namespace Terracord
         if(message.Author.Id == Client.CurrentUser.Id)
           return Task.CompletedTask;
 
-        // Check for and handle commands
+        // Handle commands
         if(message.Content.StartsWith(Config.CommandPrefix.ToString()) && message.Content.Length > 1)
-          CommandHandler(message.Content);
+          _ = CommandHandler(message.Content); // avoid blocking in MessageReceived() by using discard
 
         // Check for mentions and convert them to friendly names if found
         string messageContent = ConvertMentions(message);
@@ -214,7 +214,7 @@ namespace Terracord
     /// Handles Discord commands
     /// </summary>
     /// <param name="command">command sent by a Discord user</param>
-    private Task CommandHandler(string command)
+    private async Task CommandHandler(string command)
     {
       command = command.Substring(1); // remove command prefix
       Util.Log($"Command sent: {command}", Util.Severity.Info);
@@ -224,39 +224,47 @@ namespace Terracord
         string playerList = $"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n\n";
         foreach(var player in TShock.Utils.GetPlayers(false))
           playerList += $"{player}\n";
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.WithColor(Color.Blue)
-          .WithDescription(playerList)
-          .WithFooter(footer => footer.Text = $"Terracord {Terracord.version}")
-          .WithCurrentTimestamp()
-          .WithTitle("Player List");
-        channel.SendMessageAsync("", false, embed.Build());
+        await CommandResponse("Player List", playerList);
       }
 
       if(command.Equals("serverinfo", StringComparison.OrdinalIgnoreCase))
-      {
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.WithColor(Color.Blue)
-          .WithDescription($"**Server Name:** {TShock.Config.ServerName}\n**Players:** {TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n**TShock Version:** {TShock.VersionNum.ToString()}")
-          .WithFooter(footer => footer.Text = $"Terracord {Terracord.version}")
-          .WithCurrentTimestamp()
-          .WithTitle("Server Information");
-        channel.SendMessageAsync("", false, embed.Build());
-      }
+        await CommandResponse("Server Information", $"**Server Name:** {TShock.Config.ServerName}\n**Players:** {TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n**TShock Version:** {TShock.VersionNum.ToString()}");
 
       if(command.Equals("uptime", StringComparison.OrdinalIgnoreCase))
-      {
         //Send($"**__Uptime__**\n```\n{Util.Uptime()}\n```");
+        await CommandResponse("Uptime", Util.Uptime());
+
+      await Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Responds to commands
+    /// </summary>
+    /// <param name="title">command title</param>
+    /// <param name="description">command output</param>
+    /// <param name="color">embed color</param>
+    /// <returns>void</returns>
+    private async Task CommandResponse(string title, string description, Color? color = null)
+    {
+      try
+      {
+        Color embedColor = color ?? Color.Blue;
+        await channel.TriggerTypingAsync();
+        await Task.Delay(1500); // pause for 1.5 seconds
         EmbedBuilder embed = new EmbedBuilder();
-        embed.WithColor(Color.Blue)
-          .WithDescription(Util.Uptime())
+        embed.WithColor(embedColor)
+          .WithDescription(description)
           .WithFooter(footer => footer.Text = $"Terracord {Terracord.version}")
           .WithCurrentTimestamp()
-          .WithTitle("Uptime");
-        channel.SendMessageAsync("", false, embed.Build());
+          .WithTitle(title);
+        await channel.SendMessageAsync("", false, embed.Build());
+      }
+      catch(Exception e)
+      {
+        Util.Log($"Unable to send command response: {e.Message}", Util.Severity.Error);
       }
 
-      return Task.CompletedTask;
+      await Task.CompletedTask;
     }
 
     /// <summary>
