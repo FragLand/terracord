@@ -151,7 +151,7 @@ namespace Terracord
     private void OnChat(ServerChatEventArgs args)
     {
       // Do not relay commands
-      if(args.Text.StartsWith("/"))
+      if(args.Text.StartsWith(TShock.Config.CommandSpecifier) || args.Text.StartsWith(TShock.Config.CommandSilentSpecifier))
         return;
 
       /* Initial work on Discord mentions from Terraria
