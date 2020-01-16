@@ -75,9 +75,10 @@ namespace FragLand.TerracordPlugin
         }
         StreamWriter logFile = new StreamWriter($"tshock{Path.DirectorySeparatorChar}terracord.log", true);
         // Write to console first in case file is unavailable
-        Console.WriteLine($"Terracord: [{DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}] [{severity.ToString()}] {logText.ToString(Config.Locale)}");
+        string logEntry = $"[{DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}] [{severity.ToString()}] {logText.ToString(Config.Locale)}";
+        Console.WriteLine($"Terracord: {logEntry}");
         Console.ResetColor();
-        logFile.WriteLine($"[{DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}] [{severity.ToString()}] {logText.ToString(Config.Locale)}");
+        logFile.WriteLine(logEntry);
         logFile.Close();
       }
       catch(Exception e)
