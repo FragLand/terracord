@@ -19,10 +19,12 @@
  */
 
 using System;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Xml.Linq;
 
-namespace Terracord
+namespace FragLand.TerracordPlugin
 {
   class Config
   {
@@ -35,6 +37,8 @@ namespace Terracord
     public static byte[] BroadcastColor { get; private set; }
     public static bool LogChat { get; private set; }
     public static bool DebugMode { get; private set; }
+    public static string LocaleString { get; private set; }
+    public static CultureInfo Locale { get; private set; }
     public static string TimestampFormat { get; private set; }
     public static bool AbortOnError { get; private set; }
 
@@ -43,6 +47,9 @@ namespace Terracord
     /// </summary>
     public static void Parse()
     {
+      // Set default locale if value cannot be read from terracord.xml
+      LocaleString = "en-US";
+      Locale = new CultureInfo(LocaleString);
       // Set default timestamp format for Util.Log() called in exception in case terracord.xml cannot be parsed
       TimestampFormat = "MM/dd/yyyy HH:mm:ss zzz";
       // Do not terminate TShock by default if terracord.xml is unable to be parsed
@@ -55,24 +62,26 @@ namespace Terracord
         // terracord.xml root element
         XElement configOptions = configFile.Element("configuration");
 
-        BotToken = configOptions.Element("bot").Attribute("token").Value.ToString();
-        ChannelId = UInt64.Parse(configOptions.Element("channel").Attribute("id").Value.ToString());
-        CommandPrefix = Char.Parse(configOptions.Element("command").Attribute("prefix").Value.ToString());
-        BotGame = configOptions.Element("game").Attribute("status").Value.ToString();
-        TopicInterval = UInt32.Parse(configOptions.Element("topic").Attribute("interval").Value.ToString());
+        LocaleString = configOptions.Element("locale").Attribute("string").Value.ToString(Locale);
+        ChangeLocale();
+        BotToken = configOptions.Element("bot").Attribute("token").Value.ToString(Locale);
+        ChannelId = ulong.Parse(configOptions.Element("channel").Attribute("id").Value.ToString(Locale), Locale);
+        CommandPrefix =  char.Parse(configOptions.Element("command").Attribute("prefix").Value.ToString(Locale));
+        BotGame = configOptions.Element("game").Attribute("status").Value.ToString(Locale);
+        TopicInterval = uint.Parse(configOptions.Element("topic").Attribute("interval").Value.ToString(Locale), Locale);
 
         // Populate broadcast RGB array values
         BroadcastColor = new byte[3]
         {
-          Byte.Parse(configOptions.Element("broadcast").Attribute("red").Value.ToString()),
-          Byte.Parse(configOptions.Element("broadcast").Attribute("green").Value.ToString()),
-          Byte.Parse(configOptions.Element("broadcast").Attribute("blue").Value.ToString())
+          byte.Parse(configOptions.Element("broadcast").Attribute("red").Value.ToString(Locale), Locale),
+          byte.Parse(configOptions.Element("broadcast").Attribute("green").Value.ToString(Locale), Locale),
+          byte.Parse(configOptions.Element("broadcast").Attribute("blue").Value.ToString(Locale), Locale)
         };
 
-        LogChat = Boolean.Parse(configOptions.Element("log").Attribute("chat").Value.ToString());
-        DebugMode = Boolean.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString());
-        TimestampFormat = configOptions.Element("timestamp").Attribute("format").Value.ToString();
-        AbortOnError = Boolean.Parse(configOptions.Element("exception").Attribute("abort").Value.ToString());
+        LogChat = bool.Parse(configOptions.Element("log").Attribute("chat").Value.ToString(Locale));
+        DebugMode = bool.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString(Locale));
+        TimestampFormat = configOptions.Element("timestamp").Attribute("format").Value.ToString(Locale);
+        AbortOnError = bool.Parse(configOptions.Element("exception").Attribute("abort").Value.ToString(Locale));
       }
       catch(FileNotFoundException fnfe)
       {
@@ -83,11 +92,26 @@ namespace Terracord
       catch(Exception e)
       {
         Util.Log($"Unable to parse terracord.xml: {e.Message}", Util.Severity.Error);
+        throw;
       }
       Util.Log("terracord.xml parsed.", Util.Severity.Info);
       // Display configuration values
       if(Config.DebugMode)
         Display();
+    }
+
+    /// <summary>
+    /// Changes locale
+    /// </summary>
+    public static void ChangeLocale()
+    {
+      Locale = new CultureInfo(LocaleString);
+      CultureInfo.CurrentCulture = Locale;
+      CultureInfo.CurrentUICulture = Locale;
+      CultureInfo.DefaultThreadCurrentCulture = Locale;
+      CultureInfo.DefaultThreadCurrentUICulture = Locale;
+      Thread.CurrentThread.CurrentCulture = Locale;
+      Thread.CurrentThread.CurrentUICulture = Locale;
     }
 
     /// <summary>
@@ -105,6 +129,7 @@ namespace Terracord
       Util.Log($"Broadcast Color (RGB): {BroadcastColor[0]}, {BroadcastColor[1]}, {BroadcastColor[2]}", Util.Severity.Debug);
       Util.Log($"Log Chat: {LogChat}", Util.Severity.Debug);
       Util.Log($"Debug Mode: {DebugMode}", Util.Severity.Debug);
+      Util.Log($"Locale String: {LocaleString}", Util.Severity.Debug);
       Util.Log($"Timestamp Format: {TimestampFormat}", Util.Severity.Debug);
       Util.Log($"Exception Abort: {AbortOnError}", Util.Severity.Debug);
     }
@@ -137,6 +162,8 @@ namespace Terracord
         newConfigFile.WriteLine("  <log chat=\"true\" />\n");
         newConfigFile.WriteLine("  <!-- Debug mode -->");
         newConfigFile.WriteLine("  <debug mode=\"false\" />\n");
+        newConfigFile.WriteLine("  <!-- Locale -->");
+        newConfigFile.WriteLine("  <locale string=\"en-US\" />\n");
         newConfigFile.WriteLine("  <!-- Timestamp format -->");
         newConfigFile.WriteLine("  <timestamp format=\"MM/dd/yyyy HH:mm:ss zzz\" />\n");
         newConfigFile.WriteLine("  <!-- Terminate TShock when an error is encountered -->");
@@ -153,6 +180,7 @@ namespace Terracord
         Util.Log($"Unable to create terracord.xml: {e.Message}", Util.Severity.Error);
         if(AbortOnError)
           Environment.Exit(Util.ExitFailure);
+        throw;
       }
     }
   }
