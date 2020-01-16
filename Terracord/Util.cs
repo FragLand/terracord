@@ -84,11 +84,19 @@ namespace FragLand.TerracordPlugin
       catch(Exception e)
       {
         // Log message also gets written to console, so it will be visible
-        Log($"Unable to write to terracord.log: {e.Message}", Severity.Error);
-        if(Config.AbortOnError)
-          Environment.Exit(ExitFailure);
+        HandleFatalError($"Unable to write to terracord.log: {e.Message}");
         throw;
       }
+    }
+
+    /// <summary>
+    /// Handles fatal errors
+    /// </summary>
+    public static void HandleFatalError(string errorMessage)
+    {
+      Log(errorMessage, Severity.Error);
+      if(Config.AbortOnError)
+        Environment.Exit(ExitFailure);
     }
 
     public static string Uptime()

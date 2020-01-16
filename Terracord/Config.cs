@@ -177,9 +177,7 @@ namespace FragLand.TerracordPlugin
       }
       catch(Exception e)
       {
-        Util.Log($"Unable to create terracord.xml: {e.Message}", Util.Severity.Error);
-        if(AbortOnError)
-          Environment.Exit(Util.ExitFailure);
+        Util.HandleFatalError($"Unable to create terracord.xml: {e.Message}");
         throw;
       }
     }

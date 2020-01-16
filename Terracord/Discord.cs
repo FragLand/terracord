@@ -77,9 +77,7 @@ namespace FragLand.TerracordPlugin
       }
       catch(Exception e)
       {
-        Util.Log($"Unable to connect to Discord: {e.Message}", Util.Severity.Error);
-        if(Config.AbortOnError)
-          Environment.Exit(Util.ExitFailure);
+        Util.HandleFatalError($"Unable to connect to Discord: {e.Message}");
         throw;
       }
 
@@ -90,9 +88,7 @@ namespace FragLand.TerracordPlugin
       }
       catch(Exception e)
       {
-        Util.Log($"Unable to set game/playing status: {e.Message}", Util.Severity.Error);
-        if(Config.AbortOnError)
-          Environment.Exit(Util.ExitFailure);
+        Util.HandleFatalError($"Unable to set game/playing status: {e.Message}");
         throw;
       }
 
