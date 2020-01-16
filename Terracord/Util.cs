@@ -80,7 +80,7 @@ namespace FragLand.TerracordPlugin
         logFile.WriteLine($"[{DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}] [{severity.ToString()}] {logText.ToString(Config.Locale)}");
         logFile.Close();
       }
-      catch (Exception e)
+      catch(Exception e)
       {
         // Log message also gets written to console, so it will be visible
         Log($"Unable to write to terracord.log: {e.Message}", Severity.Error);
