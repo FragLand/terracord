@@ -25,7 +25,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TShockAPI;
 
-namespace Terracord
+namespace FragLand.TerracordPlugin
 {
   class Discord
   {
@@ -72,32 +72,30 @@ namespace Terracord
       try
       {
         // Connect to Discord
-        await Client.LoginAsync(TokenType.Bot, Config.BotToken);
-        await Client.StartAsync();
+        await Client.LoginAsync(TokenType.Bot, Config.BotToken).ConfigureAwait(true);
+        await Client.StartAsync().ConfigureAwait(true);
       }
       catch(Exception e)
       {
-        Util.Log($"Unable to connect to Discord: {e.Message}", Util.Severity.Error);
-        if(Config.AbortOnError)
-          Environment.Exit(Util.ExitFailure);
+        Util.HandleFatalError($"Unable to connect to Discord: {e.Message}");
+        throw;
       }
 
       try
       {
         // Set game/playing status
-        await Client.SetGameAsync(Config.BotGame);
+        await Client.SetGameAsync(Config.BotGame).ConfigureAwait(true);
       }
       catch(Exception e)
       {
-        Util.Log($"Unable to set game/playing status: {e.Message}", Util.Severity.Error);
-        if(Config.AbortOnError)
-          Environment.Exit(Util.ExitFailure);
+        Util.HandleFatalError($"Unable to set game/playing status: {e.Message}");
+        throw;
       }
 
       // Block task until program termination
       //await Task.Delay(-1);
       // Do not block since it prevents TShock console input when this method is called asynchronously
-      await Task.CompletedTask;
+      await Task.CompletedTask.ConfigureAwait(true);
     }
 
     /// <summary>
@@ -145,6 +143,7 @@ namespace Terracord
       catch(Exception e)
       {
         Util.Log($"Unable to acquire Discord channel: {e.Message}", Util.Severity.Error);
+        throw;
       }
 
       if(!UpdateTopicRunning)
@@ -152,7 +151,7 @@ namespace Terracord
 
       // The message below is sent to Discord every time the bot connects/reconnects
       Util.Log($"Relay available. Connected to Discord as {Client.CurrentUser.ToString()}.", Util.Severity.Info);
-      Send("**:white_check_mark: Relay available.**");
+      Send(Properties.Strings.RelayAvailableString);
       return Task.CompletedTask;
     }
 
@@ -174,7 +173,7 @@ namespace Terracord
           return Task.CompletedTask;
 
         // Handle commands
-        if(message.Content.StartsWith(Config.CommandPrefix.ToString()) && message.Content.Length > 1)
+        if(message.Content.StartsWith(Config.CommandPrefix.ToString(Config.Locale), StringComparison.InvariantCulture) && message.Content.Length > 1)
           _ = CommandHandler(message.Content); // avoid blocking in MessageReceived() by using discard
 
         // Check for mentions and convert them to friendly names if found
@@ -188,6 +187,7 @@ namespace Terracord
       catch(Exception e)
       {
         Util.Log($"Unable to broadcast TShock message: {e.Message}", Util.Severity.Error);
+        throw;
       }
 
       return Task.CompletedTask;
@@ -207,6 +207,7 @@ namespace Terracord
       catch(Exception e)
       {
         Util.Log($"Unable to send Discord message: {e.Message}", Util.Severity.Error);
+        throw;
       }
     }
 
@@ -224,17 +225,19 @@ namespace Terracord
         string playerList = $"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n\n";
         foreach(var player in TShock.Utils.GetPlayers(false))
           playerList += $"{player}\n";
-        await CommandResponse("Player List", playerList);
+        await CommandResponse("Player List", playerList).ConfigureAwait(true);
       }
 
       if(command.Equals("serverinfo", StringComparison.OrdinalIgnoreCase))
-        await CommandResponse("Server Information", $"**Server Name:** {TShock.Config.ServerName}\n**Players:** {TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n**TShock Version:** {TShock.VersionNum.ToString()}");
+        await CommandResponse("Server Information", 
+                              $"**Server Name:** {TShock.Config.ServerName}\n**Players:** {TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n**TShock Version:** {TShock.VersionNum.ToString()}")
+                              .ConfigureAwait(true);
 
       if(command.Equals("uptime", StringComparison.OrdinalIgnoreCase))
         //Send($"**__Uptime__**\n```\n{Util.Uptime()}\n```");
-        await CommandResponse("Uptime", Util.Uptime());
+        await CommandResponse("Uptime", Util.Uptime()).ConfigureAwait(true);
 
-      await Task.CompletedTask;
+      await Task.CompletedTask.ConfigureAwait(true);
     }
 
     /// <summary>
@@ -249,22 +252,23 @@ namespace Terracord
       try
       {
         Color embedColor = color ?? Color.Blue;
-        await channel.TriggerTypingAsync();
-        await Task.Delay(1500); // pause for 1.5 seconds
+        await channel.TriggerTypingAsync().ConfigureAwait(true);
+        await Task.Delay(1500).ConfigureAwait(true); // pause for 1.5 seconds
         EmbedBuilder embed = new EmbedBuilder();
         embed.WithColor(embedColor)
           .WithDescription(description)
-          .WithFooter(footer => footer.Text = $"Terracord {Terracord.version}")
+          .WithFooter(footer => footer.Text = $"Terracord {Terracord.PluginVersion}")
           .WithCurrentTimestamp()
           .WithTitle(title);
-        await channel.SendMessageAsync("", false, embed.Build());
+        await channel.SendMessageAsync("", false, embed.Build()).ConfigureAwait(true);
       }
       catch(Exception e)
       {
         Util.Log($"Unable to send command response: {e.Message}", Util.Severity.Error);
+        throw;
       }
 
-      await Task.CompletedTask;
+      await Task.CompletedTask.ConfigureAwait(true);
     }
 
     /// <summary>
@@ -272,7 +276,7 @@ namespace Terracord
     /// </summary>
     /// <param name="message">message received by Discord bot</param>
     /// <returns>modified message text</returns>
-    private string ConvertMentions(SocketMessage message)
+    private static string ConvertMentions(SocketMessage message)
     {
       StringBuilder modifiedMessageText = new StringBuilder(message.Content);
 
@@ -309,15 +313,17 @@ namespace Terracord
       {
         await topicChannel.ModifyAsync(chan =>
         {
-          chan.Topic = $"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots} players online | Server online for {Util.Uptime()} | Last update: {DateTime.Now.ToString(Config.TimestampFormat)}";
-        });
+          chan.Topic = $"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots} players online " +
+                       $"| Server online for {Util.Uptime()} | Last update: {DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}";
+        }).ConfigureAwait(true);
         try
         {
-          await Task.Delay(Convert.ToInt32(Config.TopicInterval * 1000)); // seconds to milliseconds
+          await Task.Delay(Convert.ToInt32(Config.TopicInterval * 1000)).ConfigureAwait(true); // seconds to milliseconds
         }
         catch(OverflowException oe)
         {
           Util.Log($"Topic interval value exceeds limit: {oe.Message}", Util.Severity.Error);
+          throw;
         }
       }
     }

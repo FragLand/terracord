@@ -21,7 +21,7 @@
 using System;
 using System.IO;
 
-namespace Terracord
+namespace FragLand.TerracordPlugin
 {
   class Util
   {
@@ -46,6 +46,15 @@ namespace Terracord
     {
       try
       {
+        // The switch expression below is supported in C# >=8.0 (.NET Core >=3.0 and .NET Standard >=2.1)
+        /*Console.ForegroundColor = severity switch
+        {
+          Severity.Debug => ConsoleColor.DarkGray,
+          Severity.Info => ConsoleColor.White,
+          Severity.Warning => ConsoleColor.Yellow,
+          Severity.Error => ConsoleColor.Red,
+          _ => ConsoleColor.White
+        };*/
         switch(severity)
         {
           case Severity.Debug:
@@ -66,18 +75,28 @@ namespace Terracord
         }
         StreamWriter logFile = new StreamWriter($"tshock{Path.DirectorySeparatorChar}terracord.log", true);
         // Write to console first in case file is unavailable
-        Console.WriteLine($"Terracord: [{DateTime.Now.ToString(Config.TimestampFormat)}] [{severity.ToString()}] {logText.ToString()}");
+        string logEntry = $"[{DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}] [{severity.ToString()}] {logText.ToString(Config.Locale)}";
+        Console.WriteLine($"Terracord: {logEntry}");
         Console.ResetColor();
-        logFile.WriteLine($"[{DateTime.Now.ToString(Config.TimestampFormat)}] [{severity.ToString()}] {logText.ToString()}");
+        logFile.WriteLine(logEntry);
         logFile.Close();
       }
       catch(Exception e)
       {
         // Log message also gets written to console, so it will be visible
-        Log($"Unable to write to terracord.log: {e.Message}", Severity.Error);
-        if(Config.AbortOnError)
-          Environment.Exit(ExitFailure);
+        HandleFatalError($"Unable to write to terracord.log: {e.Message}");
+        throw;
       }
+    }
+
+    /// <summary>
+    /// Handles fatal errors
+    /// </summary>
+    public static void HandleFatalError(string errorMessage)
+    {
+      Log(errorMessage, Severity.Error);
+      if(Config.AbortOnError)
+        Environment.Exit(ExitFailure);
     }
 
     public static string Uptime()

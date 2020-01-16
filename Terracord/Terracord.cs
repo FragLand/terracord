@@ -23,7 +23,7 @@ using Terraria;
 using TerrariaApi.Server;
 using TShockAPI;
 
-namespace Terracord
+namespace FragLand.TerracordPlugin
 {
   [ApiVersion(2, 1)]
   public class Terracord:TerrariaPlugin
@@ -49,11 +49,11 @@ namespace Terracord
     public override string Description => "A Discord <-> Terraria bridge plugin for TShock";
 
     // Plugin version
-    public static string version = "1.0.0";
+    public const string PluginVersion = "1.0.0";
     // Discord bot client
     private readonly Discord discord;
     // Plugin start time
-    public static DateTime startTime;
+    public static readonly DateTime startTime = DateTime.Now;
 
     /// <summary>
     /// Constructor
@@ -61,8 +61,6 @@ namespace Terracord
     /// <param name="game">TShock game</param>
     public Terracord(Main game):base(game)
     {
-      // Record plugin start time
-      startTime = DateTime.Now;
       // Parse terracord.xml configuration file
       Config.Parse();
       // Initialize Discord bot
@@ -90,7 +88,7 @@ namespace Terracord
       if(disposing)
       {
         Util.Log("Relay shutting down.", Util.Severity.Info);
-        discord.Send("**:octagonal_sign: Relay shutting down.**");
+        discord.Send(Properties.Strings.RelayShutdownString);
         ServerApi.Hooks.GameInitialize.Deregister(this, OnInitialize);
         ServerApi.Hooks.GamePostInitialize.Deregister(this, OnPostInitialize);
         ServerApi.Hooks.ServerJoin.Deregister(this, OnJoin);
@@ -151,7 +149,7 @@ namespace Terracord
     private void OnChat(ServerChatEventArgs args)
     {
       // Do not relay commands
-      if(args.Text.StartsWith(TShock.Config.CommandSpecifier) || args.Text.StartsWith(TShock.Config.CommandSilentSpecifier))
+      if(args.Text.StartsWith(TShock.Config.CommandSpecifier, StringComparison.InvariantCulture) || args.Text.StartsWith(TShock.Config.CommandSilentSpecifier, StringComparison.InvariantCulture))
         return;
 
       /* Initial work on Discord mentions from Terraria
@@ -197,6 +195,7 @@ namespace Terracord
       catch(NullReferenceException nre)
       {
         Util.Log($"Exception caught after player left TShock server: {nre.Message}", Util.Severity.Error);
+        throw;
       }
     }
   }

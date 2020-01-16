@@ -27,6 +27,9 @@
   <!-- Debug mode -->
   <debug mode="false" />
 
+  <!-- Locale -->
+  <locale string="en-US" />
+
   <!-- Timestamp format -->
   <timestamp format="MM/dd/yyyy HH:mm:ss zzz" />
 
