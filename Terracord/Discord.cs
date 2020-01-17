@@ -21,7 +21,9 @@
 using Discord;
 using Discord.WebSocket;
 using System;
+//using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TShockAPI;
 
@@ -179,6 +181,9 @@ namespace FragLand.TerracordPlugin
         // Check for mentions and convert them to friendly names if found
         string messageContent = ConvertMentions(message);
 
+        // Check for emojis/emotes and convert them if necessary
+        messageContent = ConvertEmotes(messageContent);
+
         // Relay Discord message to Terraria players
         if(Config.LogChat)
           Util.Log($"<{message.Author.Username}@Discord> {messageContent}", Util.Severity.Info);
@@ -299,6 +304,66 @@ namespace FragLand.TerracordPlugin
       }
 
       return modifiedMessageText.ToString();
+    }
+
+    /// <summary>
+    /// Converts custom Discord emotes before being sent to Terraria players
+    /// </summary>
+    /// <param name="message"></param>
+    /// <returns>modified message</returns>
+    private static string ConvertEmotes(string message)
+    {
+      string modifiedMessage = message;
+      string emoPattern = "<(:[a-zA-Z0-9]+:)[0-9]*>";
+
+      // Check for emotes and simplify them from <:example:> or <:custom_example:1234567890> to :example: or :custom_example:
+      if(Regex.IsMatch(modifiedMessage, emoPattern))
+        modifiedMessage = Regex.Replace(modifiedMessage, emoPattern, "$1");
+
+      // Check for and replace some standard emojis in the form :smile: with :)
+      //foreach(KeyValuePair<string, string> entry in Util.EmojiDict)
+      //{
+      //  if(modifiedMessage.Contains(entry.Value))
+      //    modifiedMessage = modifiedMessage.Replace(entry.Value, entry.Key);
+      //}
+
+      return modifiedMessage;
+    }
+
+    /// <summary>
+    /// Attempts to convert channel, role, and user mentions sent from Terraria players to Discord
+    /// </summary>
+    /// <param name="message"></param>
+    /// <returns>modified message</returns>
+    public static string ConvertMentions(string message, DiscordSocketClient discordClient)
+    {
+      string modifiedMessage = message;
+      string channelPattern = "[#](.*)";
+      string roleUserPattern = "[@](.*)";
+
+      var guilds = discordClient.Guilds;
+      if(Regex.IsMatch(modifiedMessage, channelPattern))
+      {
+        foreach(var guild in guilds)
+        {
+          foreach(var channel in guild.TextChannels)
+            modifiedMessage = Regex.Replace(modifiedMessage, $"#{channel.Name}", channel.Mention, RegexOptions.IgnoreCase);
+        }
+      }
+
+      if(Regex.IsMatch(modifiedMessage, roleUserPattern))
+      {
+        foreach(var guild in guilds)
+        {
+          foreach(var role in guild.Roles)
+            modifiedMessage = Regex.Replace(modifiedMessage, $"@{role.Name}", role.Mention, RegexOptions.IgnoreCase);
+          // ToDo: Deal with duplicate usernames (users with the same username will have different #NNNN discriminators)
+          foreach(var user in guild.Users)
+            modifiedMessage = Regex.Replace(modifiedMessage, $"@{user.Username}", user.Mention, RegexOptions.IgnoreCase);
+        }
+      }
+
+      return modifiedMessage;
     }
 
     /// <summary>

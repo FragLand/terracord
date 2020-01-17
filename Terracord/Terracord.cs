@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Text.RegularExpressions;
 using Terraria;
 using TerrariaApi.Server;
 using TShockAPI;
@@ -63,6 +64,8 @@ namespace FragLand.TerracordPlugin
     {
       // Parse terracord.xml configuration file
       Config.Parse();
+      // Populate emoji dictionary
+      //Util.PopulateEmojiDict();
       // Initialize Discord bot
       discord = new Discord();
     }
@@ -152,29 +155,14 @@ namespace FragLand.TerracordPlugin
       if(args.Text.StartsWith(TShock.Config.CommandSpecifier, StringComparison.InvariantCulture) || args.Text.StartsWith(TShock.Config.CommandSilentSpecifier, StringComparison.InvariantCulture))
         return;
 
-      /* Initial work on Discord mentions from Terraria
-       * Sequence:
-       * 1. Check args.Text for regex match of a tag.
-       * 2. If 1 or more instances found, iterate through Discord server members to find potential username matches.
-       * 3. Replace @user tags in args.Text with user.Mention and send the message
-      var guilds = discord.Client.Guilds;
-      foreach(var guild in guilds)
-      {
-        foreach(var role in guild.Roles)
-          Console.WriteLine(role.Mention);
-        foreach(var channel in guild.TextChannels)
-          Console.WriteLine(channel.Mention);
-        foreach(var user in guild.Users)
-        {
-          if("test".Equals(user.Username, StringComparison.OrdinalIgnoreCase))
-            Console.WriteLine($"{user.Mention}");
-        }
-      }
-      */
+      // Attempt to convert any channel, role, and user mentions
+      string modifiedMessage = args.Text;
+      if(Regex.IsMatch(modifiedMessage, "[@#](.*)"))
+        modifiedMessage = Discord.ConvertMentions(modifiedMessage, discord.Client);
 
       if(Config.LogChat)
-        Util.Log($"{TShock.Players[args.Who].Name} said: {args.Text}", Util.Severity.Info);
-      discord.Send($"**<{TShock.Players[args.Who].Name}>** {args.Text}");
+        Util.Log($"{TShock.Players[args.Who].Name} said: {modifiedMessage}", Util.Severity.Info);
+      discord.Send($"**<{TShock.Players[args.Who].Name}>** {modifiedMessage}");
     }
 
     /// <summary>

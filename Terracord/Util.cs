@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace FragLand.TerracordPlugin
@@ -37,6 +38,9 @@ namespace FragLand.TerracordPlugin
       Warning = 2,
       Error = 3    // includes critical messages and exceptions
     }
+
+    // Holds common emoji to text emoticon mappings
+    public static Dictionary<string, string> EmojiDict = new Dictionary<string, string>();
 
     /// <summary>
     /// Writes a log message to terracord.log and the TShock console
@@ -99,10 +103,43 @@ namespace FragLand.TerracordPlugin
         Environment.Exit(ExitFailure);
     }
 
+    /// <summary>
+    /// Calculates plugin uptime
+    /// </summary>
+    /// <returns>uptime as a string</returns>
     public static string Uptime()
     {
       TimeSpan elapsed = DateTime.Now.Subtract(Terracord.startTime);
       return $"{elapsed.Days} day(s), {elapsed.Hours} hour(s), {elapsed.Minutes} minute(s), and {elapsed.Seconds} second(s)";
     }
+
+    /// <summary>
+    /// Populates the dictionary by mapping Discord emojis to text emoticons
+    /// </summary>
+    /*public static void PopulateEmojiDict()
+    {
+      EmojiDict.Add("\uD83d\uDE04", ":)");
+      EmojiDict.Add("\uD83D\uDE03", ":)");
+      EmojiDict.Add("\uD83D\uDE42", ":)");
+      EmojiDict.Add("\u2639\uFE0F", ":(");
+      EmojiDict.Add("\uD83D\uDE26", ":(");
+      EmojiDict.Add("\uD83D\uDE41", ":(");
+      EmojiDict.Add("\uD83D\uDE06", "XD");
+      EmojiDict.Add("\uD83D\uDE1B", ":P");
+      EmojiDict.Add("\uD83D\uDE1D", "XP");
+      EmojiDict.Add("\uD83D\uDE1C", ";P");
+      EmojiDict.Add("\uD83D\uDE09", ";)");
+      EmojiDict.Add("\uD83D\uDE2E", ":o");
+      EmojiDict.Add("\uD83D\uDE10", ":|");
+      EmojiDict.Add("\uD83D\uDE01", ":D");
+      EmojiDict.Add("\uD83D\uDE00", ":D");
+      EmojiDict.Add("\uD83D\uDE2C", "8D");
+      EmojiDict.Add("\uD83D\uDE20", ">:(");
+      EmojiDict.Add("\uD83D\uDE21", ">8(");
+      EmojiDict.Add("\uD83D\uDE22", ":~(");
+      EmojiDict.Add("\uD83D\uDE17", ":*");
+      EmojiDict.Add("\u2764\uFE0F", "<3");
+      EmojiDict.Add("\uD83D\uDC94", "</3");
+    }*/
   }
 }
