@@ -155,10 +155,14 @@ namespace FragLand.TerracordPlugin
       if(args.Text.StartsWith(TShock.Config.CommandSpecifier, StringComparison.InvariantCulture) || args.Text.StartsWith(TShock.Config.CommandSilentSpecifier, StringComparison.InvariantCulture))
         return;
 
-      // Attempt to convert any channel, role, and user mentions
+      // Attempt to convert any channel mentions
       string modifiedMessage = args.Text;
-      if(Regex.IsMatch(modifiedMessage, "[@#](.*)"))
-        modifiedMessage = Discord.ConvertMentions(modifiedMessage, discord.Client);
+      if(Regex.IsMatch(modifiedMessage, "[#](.*)"))
+        modifiedMessage = Util.ConvertChannelMentions(modifiedMessage, discord.Client);
+
+      // Attempt to convert any role/user mentions
+      if(Regex.IsMatch(modifiedMessage, "[@](.*)"))
+        modifiedMessage = Util.ConvertRoleUserMentions(modifiedMessage, discord.Client);
 
       if(Config.LogChat)
         Util.Log($"{TShock.Players[args.Who].Name} said: {modifiedMessage}", Util.Severity.Info);
