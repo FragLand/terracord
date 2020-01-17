@@ -21,7 +21,7 @@
 using Discord;
 using Discord.WebSocket;
 using System;
-using System.Text;
+//using System.Collections.Generic;
 using System.Threading.Tasks;
 using TShockAPI;
 
@@ -177,7 +177,10 @@ namespace FragLand.TerracordPlugin
           _ = CommandHandler(message.Content); // avoid blocking in MessageReceived() by using discard
 
         // Check for mentions and convert them to friendly names if found
-        string messageContent = ConvertMentions(message);
+        string messageContent = Util.ConvertMentions(message);
+
+        // Check for emojis/emotes and convert them if necessary
+        messageContent = Util.ConvertEmotes(messageContent);
 
         // Relay Discord message to Terraria players
         if(Config.LogChat)
@@ -269,36 +272,6 @@ namespace FragLand.TerracordPlugin
       }
 
       await Task.CompletedTask.ConfigureAwait(true);
-    }
-
-    /// <summary>
-    /// Converts channel, role, and user mentions to friendly names before being broadcasted to TShock players
-    /// </summary>
-    /// <param name="message">message received by Discord bot</param>
-    /// <returns>modified message text</returns>
-    private static string ConvertMentions(SocketMessage message)
-    {
-      StringBuilder modifiedMessageText = new StringBuilder(message.Content);
-
-      if(message.MentionedChannels.Count > 0)
-      {
-        foreach(var channel in message.MentionedChannels)
-          modifiedMessageText = modifiedMessageText.Replace($"<#{channel.Id}>", $"#{channel.Name}");
-      }
-
-      if(message.MentionedRoles.Count > 0)
-      {
-        foreach(var role in message.MentionedRoles)
-          modifiedMessageText = modifiedMessageText.Replace($"<@&{role.Id}>", $"@{role.Name}");
-      }
-
-      if(message.MentionedUsers.Count > 0)
-      {
-        foreach(var user in message.MentionedUsers)
-          modifiedMessageText = modifiedMessageText.Replace($"<@!{user.Id}>", $"@{user.Username}");
-      }
-
-      return modifiedMessageText.ToString();
     }
 
     /// <summary>
