@@ -179,7 +179,7 @@ namespace FragLand.TerracordPlugin
     public static string ConvertChannelMentions(string message, DiscordSocketClient discordClient)
     {
       string modifiedMessage = message;
-      string channelPattern = "[#](.+)";
+      string channelPattern = @"#.+";
 
       var guilds = discordClient.Guilds;
       if(Regex.IsMatch(modifiedMessage, channelPattern))
@@ -203,7 +203,7 @@ namespace FragLand.TerracordPlugin
     public static string ConvertRoleUserMentions(string message, DiscordSocketClient discordClient)
     {
       string modifiedMessage = message;
-      string roleUserPattern = "[@](.+)";
+      string roleUserPattern = @"@.+";
 
       var guilds = discordClient.Guilds;
       if(Regex.IsMatch(modifiedMessage, roleUserPattern))
@@ -216,8 +216,8 @@ namespace FragLand.TerracordPlugin
           foreach(var user in guild.Users)
           {
             modifiedMessage = Regex.Replace(modifiedMessage, $"@{user.Username}", user.Mention, RegexOptions.IgnoreCase);
-            // Also replace nicknames with mentions
-            modifiedMessage = Regex.Replace(modifiedMessage, $"@{user.Nickname}", user.Mention, RegexOptions.IgnoreCase);
+            // Also replace nicknames with mentions -- this is bugged and replaces non-existent tags.
+            //modifiedMessage = Regex.Replace(modifiedMessage, $"@{user.Nickname}", user.Mention, RegexOptions.IgnoreCase);
           }
         }
       }

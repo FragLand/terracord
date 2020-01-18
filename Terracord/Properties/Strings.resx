@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="PlayerJoinedString" xml:space="preserve">
+    <value>has joined the server.</value>
+    <comment>Message sent to Discord text channel when a player joins the Terraria server</comment>
+  </data>
+  <data name="PlayerLeftString" xml:space="preserve">
+    <value>has left the server.</value>
+    <comment>Message sent to Discord text channel when a player leaves the Terraria server</comment>
+  </data>
   <data name="RelayAvailableString" xml:space="preserve">
     <value>**:white_check_mark: Relay available.**</value>
     <comment>Message sent to Discord text channel when relay becomes available</comment>

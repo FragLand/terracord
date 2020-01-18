@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="PlayerJoinedString" xml:space="preserve">
+    <value>ingressou no servidor.</value>
+    <comment>Mensagem enviada ao canal de texto do Discord quando um jogador entra no servidor Terraria</comment>
+  </data>
+  <data name="PlayerLeftString" xml:space="preserve">
+    <value>saiu do servidor.</value>
+    <comment>Mensagem enviada para o canal de texto Discord quando um jogador sai do servidor Terraria</comment>
+  </data>
   <data name="RelayAvailableString" xml:space="preserve">
     <value>**:white_check_mark: Relé disponível.**</value>
     <comment>Mensagem enviada para o canal de texto do Discord quando o relé estiver disponível</comment>
