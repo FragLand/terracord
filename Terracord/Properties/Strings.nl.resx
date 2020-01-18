@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="PlayerJoinedString" xml:space="preserve">
+    <value>is lid geworden van de server.</value>
+    <comment>Bericht verzonden naar Discord-tekstkanaal wanneer een speler lid wordt van de Terraria-server</comment>
+  </data>
+  <data name="PlayerLeftString" xml:space="preserve">
+    <value>heeft de server verlaten.</value>
+    <comment>Bericht verzonden naar Discord-tekstkanaal wanneer een speler de Terraria-server verlaat</comment>
+  </data>
   <data name="RelayAvailableString" xml:space="preserve">
     <value>**:white_check_mark: Relais beschikbaar.**</value>
     <comment>Bericht verzonden naar Discord-tekstkanaal wanneer relay beschikbaar komt</comment>

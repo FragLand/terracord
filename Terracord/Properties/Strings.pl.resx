@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="PlayerJoinedString" xml:space="preserve">
+    <value>dołączył do serwera.</value>
+    <comment>Wiadomość wysłana do kanału tekstowego Discord, gdy gracz dołącza do serwera Terraria</comment>
+  </data>
+  <data name="PlayerLeftString" xml:space="preserve">
+    <value>opuścił serwer.</value>
+    <comment>Wiadomość wysłana do kanału tekstowego Discord, gdy gracz opuści serwer Terraria</comment>
+  </data>
   <data name="RelayAvailableString" xml:space="preserve">
     <value>**:white_check_mark: Przekaźnik dostępny.**</value>
     <comment>Wiadomość wysłana do kanału tekstowego Discord, gdy przekaźnik stanie się dostępny</comment>

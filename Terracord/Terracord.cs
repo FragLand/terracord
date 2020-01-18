@@ -131,8 +131,7 @@ namespace FragLand.TerracordPlugin
     /// <param name="args">event arguments passed by hook</param>
     private void OnJoin(JoinEventArgs args)
     {
-      Util.Log($"{TShock.Players[args.Who].Name} has joined the server.", Util.Severity.Info);
-      discord.Send($"**:heavy_plus_sign: {TShock.Players[args.Who].Name} has joined the server.**");
+      PlayerEventNotify(args, Properties.Strings.PlayerJoinedString);
     }
 
     /// <summary>
@@ -157,11 +156,11 @@ namespace FragLand.TerracordPlugin
 
       // Attempt to convert any channel mentions
       string modifiedMessage = args.Text;
-      if(Regex.IsMatch(modifiedMessage, "[#](.*)"))
+      if(Regex.IsMatch(modifiedMessage, @"#.+"))
         modifiedMessage = Util.ConvertChannelMentions(modifiedMessage, discord.Client);
 
       // Attempt to convert any role/user mentions
-      if(Regex.IsMatch(modifiedMessage, "[@](.*)"))
+      if(Regex.IsMatch(modifiedMessage, @"@.+"))
         modifiedMessage = Util.ConvertRoleUserMentions(modifiedMessage, discord.Client);
 
       if(Config.LogChat)
@@ -175,20 +174,39 @@ namespace FragLand.TerracordPlugin
     /// <param name="args">event arguments passed by hook</param>
     private void OnLeave(LeaveEventArgs args)
     {
-      try
-      {
+      PlayerEventNotify(args, Properties.Strings.PlayerLeftString);
+    }
+
+    private void PlayerEventNotify(object eventArgs, string message)
+    {
+      //try
+      //{
         // This check should help prevent unnecessary exceptions from being logged after TShock reaps incomplete connections
-        if(args != null)
+        if(eventArgs != null)
         {
-          Util.Log($"{TShock.Players[args.Who].Name} has left the server.", Util.Severity.Info);
-          discord.Send($"**:heavy_minus_sign: {TShock.Players[args.Who].Name} has left the server.**");
+          string playerName = null;
+          if(eventArgs is JoinEventArgs)
+          {
+            JoinEventArgs joinEventArgs = (JoinEventArgs)eventArgs;
+            playerName = TShock.Players[joinEventArgs.Who].Name;
+          }
+          if(eventArgs is LeaveEventArgs)
+          {
+            LeaveEventArgs leaveEventArgs = (LeaveEventArgs)eventArgs;
+            playerName = TShock.Players[leaveEventArgs.Who].Name;
+          }
+          if(!String.IsNullOrEmpty(playerName))
+          {
+            Util.Log($"{playerName} {message}", Util.Severity.Info);
+            discord.Send($"**:heavy_minus_sign: {playerName} {message}**");
+          }
         }
-      }
-      catch(NullReferenceException nre)
-      {
-        Util.Log($"Exception caught after player left TShock server: {nre.Message}", Util.Severity.Error);
-        throw;
-      }
+      //}
+      //catch(NullReferenceException nre)
+      //{
+      //  Util.Log($"Exception caught after player joined or left TShock server: {nre.Message}", Util.Severity.Error);
+      //  throw;
+      //}
     }
   }
 }
