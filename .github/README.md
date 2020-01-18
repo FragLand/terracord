@@ -20,9 +20,14 @@ the [GPLv3](http://www.gnu.org/licenses/gpl-3.0.en.html). This project makes use
 1. Simply copy `Terracord.dll` and its dependencies into your TShock `ServerPlugins` directory. The dependencies should
 be contained in any release zip archive and includes the following files: `Discord.Net.Core.dll`, `Discord.Net.Rest.dll`,
 `Discord.Net.WebSocket.dll`, `Newtonsoft.Json.dll`, `System.Collections.Immutable.dll`, and `System.Interactive.Async.dll`.
-Ensure that the version of `Newtonsoft.Json.dll` copied to the `ServerPlugins` directory is >=11.0.2. This is a required 
-dependency of Discord.Net. The instance of this DLL included with TShock 4.3.26 is older (10.0.3) and using it results in
-not being able to establish a connection to a Discord server.
+
+   Ensure that the version of `Newtonsoft.Json.dll` copied to the `ServerPlugins` directory is >=11.0.2. This is a required 
+   dependency of Discord.Net. The instance of this DLL included with TShock 4.3.26 is older (10.0.3) and using it results in
+   not being able to establish a connection to a Discord server.
+
+   For localization support, copy any or all language directories (`de`, `en`, `ru`, etc.), each containing
+   `Terracord.resources.dll`, to the top-level directory where `TerrariaServer.exe` resides. You may then set the preferred
+   locale in `terracord.xml` to make any supported language active.
 
 2. Edit `terracord.xml` to set your bot token and Discord channel ID. This file should be saved to the `tshock` directory.
 Other settings in this configuration file may also be changed to your liking. The channel ID can be obtained by enabling 
@@ -41,7 +46,8 @@ not supporting Mono.
 ### Building
 #### Visual Studio
 1. Download and install [Visual Studio](https://visualstudio.microsoft.com/) if you do not have the software. The community
-edition is free and contains the essentials to build Terracord. In particular, you want the ".NET desktop development" workload. The "NuGet package manager" is also required to pull in the Discord.Net dependencies. Other individual components such as
+edition is free and contains the essentials to build Terracord. In particular, you want the ".NET desktop development" workload.
+The "NuGet package manager" is also required to pull in the Discord.Net dependencies. Other individual components such as
 debuggers, profilers, "Git for Windows", and the "GitHub extension for Visual Studio" may be useful.
 
 2. Obtain a copy of the Terracord source code if you have not already. This can be performed with
@@ -68,8 +74,8 @@ install `Discord.Net.Core` and `Discord.Net.WebSocket` via NuGet. You may also a
 
 #### .NET Core
 1. Install [.NET Core SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1). .NET Core SDK 3.1.100 is known to
-successfully build Terracord. You can also [configure various Linux package managers](https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-debian10) to install .NET core. This has the
-added benefit of being able to easily update the software.
+successfully build Terracord. You can also [configure various Linux package managers](https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-debian10)
+to install .NET core. This has the added benefit of being able to easily update the software.
 
 2. Obtain a copy of the Terracord source code:
 
