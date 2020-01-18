@@ -179,8 +179,8 @@ namespace FragLand.TerracordPlugin
 
     private void PlayerEventNotify(object eventArgs, string message)
     {
-      try
-      {
+      //try
+      //{
         // This check should help prevent unnecessary exceptions from being logged after TShock reaps incomplete connections
         if(eventArgs != null)
         {
@@ -202,11 +202,11 @@ namespace FragLand.TerracordPlugin
           }
         }
       }
-      catch(NullReferenceException nre)
-      {
-        Util.Log($"Exception caught after player joined or left TShock server: {nre.Message}", Util.Severity.Error);
-        throw;
-      }
+      //catch(NullReferenceException nre)
+      //{
+      //  Util.Log($"Exception caught after player joined or left TShock server: {nre.Message}", Util.Severity.Error);
+      //  throw;
+      //}
     }
   }
 }
