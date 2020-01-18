@@ -201,7 +201,7 @@ namespace FragLand.TerracordPlugin
             discord.Send($"**:heavy_minus_sign: {playerName} {message}**");
           }
         }
-      }
+      //}
       //catch(NullReferenceException nre)
       //{
       //  Util.Log($"Exception caught after player joined or left TShock server: {nre.Message}", Util.Severity.Error);
