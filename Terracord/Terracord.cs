@@ -131,8 +131,15 @@ namespace FragLand.TerracordPlugin
     /// <param name="args">event arguments passed by hook</param>
     private void OnJoin(JoinEventArgs args)
     {
-      Util.Log($"{TShock.Players[args.Who].Name} has joined the server.", Util.Severity.Info);
-      discord.Send($"**:heavy_plus_sign: {TShock.Players[args.Who].Name} has joined the server.**");
+      if(args != null)
+      {
+        string playerName = TShock.Players[args.Who].Name;
+        if(!String.IsNullOrEmpty(playerName))
+        {
+          Util.Log($"{playerName} has joined the server.", Util.Severity.Info);
+          discord.Send($"**:heavy_plus_sign: {playerName} has joined the server.**");
+        }
+      }
     }
 
     /// <summary>
@@ -180,8 +187,12 @@ namespace FragLand.TerracordPlugin
         // This check should help prevent unnecessary exceptions from being logged after TShock reaps incomplete connections
         if(args != null)
         {
-          Util.Log($"{TShock.Players[args.Who].Name} has left the server.", Util.Severity.Info);
-          discord.Send($"**:heavy_minus_sign: {TShock.Players[args.Who].Name} has left the server.**");
+          string playerName = TShock.Players[args.Who].Name;
+          if(!String.IsNullOrEmpty(playerName))
+          {
+            Util.Log($"{playerName} has left the server.", Util.Severity.Info);
+            discord.Send($"**:heavy_minus_sign: {playerName} has left the server.**");
+          }
         }
       }
       catch(NullReferenceException nre)
