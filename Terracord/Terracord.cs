@@ -177,6 +177,11 @@ namespace FragLand.TerracordPlugin
       PlayerEventNotify(args, Properties.Strings.PlayerLeftString);
     }
 
+    /// <summary>
+    /// Sends Terraria player join/leave events to the Discord text channel
+    /// </summary>
+    /// <param name="eventArgs">event arguments</param>
+    /// <param name="message">message</param>
     private void PlayerEventNotify(object eventArgs, string message)
     {
       //try
@@ -185,20 +190,21 @@ namespace FragLand.TerracordPlugin
         if(eventArgs != null)
         {
           string playerName = null;
-          if(eventArgs is JoinEventArgs)
+          string joinLeaveEmoji = null;
+          if(eventArgs is JoinEventArgs joinEventArgs)
           {
-            JoinEventArgs joinEventArgs = (JoinEventArgs)eventArgs;
             playerName = TShock.Players[joinEventArgs.Who].Name;
+            joinLeaveEmoji = ":heavy_plus_sign:";
           }
-          if(eventArgs is LeaveEventArgs)
+          if(eventArgs is LeaveEventArgs leaveEventArgs)
           {
-            LeaveEventArgs leaveEventArgs = (LeaveEventArgs)eventArgs;
             playerName = TShock.Players[leaveEventArgs.Who].Name;
+            joinLeaveEmoji = ":heavy_minus_sign:";
           }
           if(!String.IsNullOrEmpty(playerName))
           {
             Util.Log($"{playerName} {message}", Util.Severity.Info);
-            discord.Send($"**:heavy_minus_sign: {playerName} {message}**");
+            discord.Send($"**{joinLeaveEmoji} {playerName} {message}**");
           }
         }
       //}
