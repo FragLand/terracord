@@ -12,6 +12,9 @@
   <!-- Bot command prefix -->
   <command prefix="!" />
 
+  <!-- Relay Discord bot commands -->
+  <relay commands="true" />
+
   <!-- Discord bot game for "playing" status -->
   <game status="Terraria" />
 

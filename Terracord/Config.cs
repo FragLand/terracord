@@ -32,6 +32,7 @@ namespace FragLand.TerracordPlugin
     public static string BotToken { get; private set; }
     public static ulong ChannelId { get; private set; }
     public static char CommandPrefix { get; private set; }
+    public static bool RelayCommands { get; private set; }
     public static string BotGame { get; private set; }
     public static uint TopicInterval { get; private set; }
     public static byte[] BroadcastColor { get; private set; }
@@ -67,6 +68,7 @@ namespace FragLand.TerracordPlugin
         BotToken = configOptions.Element("bot").Attribute("token").Value.ToString(Locale);
         ChannelId = ulong.Parse(configOptions.Element("channel").Attribute("id").Value.ToString(Locale), Locale);
         CommandPrefix =  char.Parse(configOptions.Element("command").Attribute("prefix").Value.ToString(Locale));
+        RelayCommands = bool.Parse(configOptions.Element("relay").Attribute("commands").Value.ToString(Locale));
         BotGame = configOptions.Element("game").Attribute("status").Value.ToString(Locale);
         TopicInterval = uint.Parse(configOptions.Element("topic").Attribute("interval").Value.ToString(Locale), Locale);
 
@@ -124,6 +126,7 @@ namespace FragLand.TerracordPlugin
       Util.Log($"Bot Token: {BotToken}", Util.Severity.Debug);
       Util.Log($"Channel ID: {ChannelId}", Util.Severity.Debug);
       Util.Log($"Command Prefix: {CommandPrefix}", Util.Severity.Debug);
+      Util.Log($"Relay Commands: {RelayCommands}", Util.Severity.Debug);
       Util.Log($"Bot Game: {BotGame}", Util.Severity.Debug);
       Util.Log($"Topic Interval: {TopicInterval}", Util.Severity.Debug);
       Util.Log($"Broadcast Color (RGB): {BroadcastColor[0]}, {BroadcastColor[1]}, {BroadcastColor[2]}", Util.Severity.Debug);
@@ -152,6 +155,8 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <channel id=\"123\" />\n");
         newConfigFile.WriteLine("  <!-- Bot command prefix -->");
         newConfigFile.WriteLine("  <command prefix=\"!\" />\n");
+        newConfigFile.WriteLine("  <!-- Relay Discord bot commands -->");
+        newConfigFile.WriteLine("  <relay commands=\"true\" />\n");
         newConfigFile.WriteLine("  <!-- Discord bot game for \"playing\" status -->");
         newConfigFile.WriteLine("  <game status=\"Terraria\" />\n");
         newConfigFile.WriteLine("  <!-- Topic update interval in seconds -->");
