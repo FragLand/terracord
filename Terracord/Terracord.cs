@@ -92,6 +92,7 @@ namespace FragLand.TerracordPlugin
       {
         Util.Log("Relay shutting down.", Util.Severity.Info);
         discord.Send(Properties.Strings.RelayShutdownString);
+        discord.SetTopic("Relay offline").ConfigureAwait(true);
         ServerApi.Hooks.GameInitialize.Deregister(this, OnInitialize);
         ServerApi.Hooks.GamePostInitialize.Deregister(this, OnPostInitialize);
         ServerApi.Hooks.ServerJoin.Deregister(this, OnJoin);

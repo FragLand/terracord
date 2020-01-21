@@ -279,20 +279,30 @@ namespace FragLand.TerracordPlugin
     }
 
     /// <summary>
+    /// Sets the Discord text channel topic
+    /// </summary>
+    /// <param name="topic">new channel topic</param>
+    /// <returns>void</returns>
+    public async Task SetTopic(string topic)
+    {
+      ITextChannel topicChannel = Client.GetChannel(Config.ChannelId) as ITextChannel;
+      await topicChannel.ModifyAsync(chan =>
+      {
+        chan.Topic = topic;
+      }).ConfigureAwait(true);
+    }
+
+    /// <summary>
     /// Periodically updates Discord channel topic
     /// </summary>
     /// <returns>void</returns>
     private async Task UpdateTopic()
     {
-      ITextChannel topicChannel = Client.GetChannel(Config.ChannelId) as ITextChannel;
       UpdateTopicRunning = true;
       while(true)
       {
-        await topicChannel.ModifyAsync(chan =>
-        {
-          chan.Topic = $"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots} players online " +
-                       $"| Server online for {Util.Uptime()} | Last update: {DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}";
-        }).ConfigureAwait(true);
+        await SetTopic($"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots} players online " +
+                       $"| Server online for {Util.Uptime()} | Last update: {DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}").ConfigureAwait(true);
         try
         {
           await Task.Delay(Convert.ToInt32(Config.TopicInterval * 1000)).ConfigureAwait(true); // seconds to milliseconds
