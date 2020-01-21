@@ -174,7 +174,11 @@ namespace FragLand.TerracordPlugin
 
         // Handle commands
         if(message.Content.StartsWith(Config.CommandPrefix.ToString(Config.Locale), StringComparison.InvariantCulture) && message.Content.Length > 1)
+        {
           _ = CommandHandler(message.Content); // avoid blocking in MessageReceived() by using discard
+          if(!Config.RelayCommands)
+            return Task.CompletedTask;
+        }
 
         // Check for mentions and convert them to friendly names if found
         string messageContent = Util.ConvertMentions(message);
