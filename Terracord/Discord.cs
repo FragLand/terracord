@@ -156,6 +156,46 @@ namespace FragLand.TerracordPlugin
     }
 
     /// <summary>
+    /// Preprocess Discord messages prior to broadcasting to Terraria players
+    /// </summary>
+    /// <param name="message">message received by Discord bot</param>
+    /// <returns>true if message should be broadcasted to Terraria players or false if not</returns>
+    private bool PreprocessMessage(SocketMessage message, ref string messageContent)
+    {
+      // Check for null or empty messages
+      if(message == null || (String.IsNullOrEmpty(message.Content) && message.Attachments.Count == 0))
+        return false;
+
+      // Only accept messages from configured Discord text channel
+      if(message.Channel.Id != Config.ChannelId)
+        return false;
+
+      // Do not send duplicates messages from Discord bot to Terraria players
+      if(message.Author.Id == Client.CurrentUser.Id)
+        return false;
+
+      // Handle commands
+      if(message.Content.StartsWith(Config.CommandPrefix.ToString(Config.Locale), StringComparison.InvariantCulture) && message.Content.Length > 1)
+      {
+        _ = CommandHandler(message.Content); // avoid blocking in MessageReceived() by using discard
+        if(!Config.RelayCommands)
+          return false;
+      }
+
+      // Check for mentions and convert them to friendly names if found
+      messageContent = Util.ConvertMentions(message);
+
+      // Check for emojis/emotes and convert them if necessary
+      messageContent = Util.ConvertEmotes(messageContent);
+
+      // Check for attachments
+      if(message.Attachments.Count > 0)
+        messageContent = Util.CheckMessageAttachments(message, messageContent);
+
+      return true;
+    }
+
+    /// <summary>
     /// Called when a new message is received by the Discord bot
     /// </summary>
     /// <param name="message">message received by Discord bot</param>
@@ -164,32 +204,15 @@ namespace FragLand.TerracordPlugin
     {
       try
       {
-        // Only accept messages from configured Discord text channel
-        if(message.Channel.Id != Config.ChannelId)
-          return Task.CompletedTask;
-
-        // Do not send duplicates messages from Discord bot to Terraria players
-        if(message.Author.Id == Client.CurrentUser.Id)
-          return Task.CompletedTask;
-
-        // Handle commands
-        if(message.Content.StartsWith(Config.CommandPrefix.ToString(Config.Locale), StringComparison.InvariantCulture) && message.Content.Length > 1)
-        {
-          _ = CommandHandler(message.Content); // avoid blocking in MessageReceived() by using discard
-          if(!Config.RelayCommands)
-            return Task.CompletedTask;
-        }
-
-        // Check for mentions and convert them to friendly names if found
-        string messageContent = Util.ConvertMentions(message);
-
-        // Check for emojis/emotes and convert them if necessary
-        messageContent = Util.ConvertEmotes(messageContent);
-
+        string messageContent = null;
+        bool relayMessage = PreprocessMessage(message, ref messageContent);
         // Relay Discord message to Terraria players
-        if(Config.LogChat)
-          Util.Log($"<{message.Author.Username}@Discord> {messageContent}", Util.Severity.Info);
-        TShock.Utils.Broadcast($"<{message.Author.Username}@Discord> {messageContent}", Config.BroadcastColor[0], Config.BroadcastColor[1], Config.BroadcastColor[2]);
+        if(relayMessage)
+        {
+          if(Config.LogChat)
+            Util.Log($"<{message.Author.Username}@Discord> {messageContent}", Util.Severity.Info);
+          TShock.Utils.Broadcast($"<{message.Author.Username}@Discord> {messageContent}", Config.BroadcastColor[0], Config.BroadcastColor[1], Config.BroadcastColor[2]);
+        }
       }
       catch(Exception e)
       {
