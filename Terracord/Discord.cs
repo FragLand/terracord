@@ -162,37 +162,44 @@ namespace FragLand.TerracordPlugin
     /// <returns>true if message should be broadcasted to Terraria players or false if not</returns>
     private bool PreprocessMessage(SocketMessage message, ref string messageContent)
     {
+      bool relayMessage = true;
       // Check for null or empty messages
-      if(message == null || (String.IsNullOrEmpty(message.Content) && message.Attachments.Count == 0))
-        return false;
-
-      // Only accept messages from configured Discord text channel
-      if(message.Channel.Id != Config.ChannelId)
-        return false;
-
-      // Do not send duplicates messages from Discord bot to Terraria players
-      if(message.Author.Id == Client.CurrentUser.Id)
-        return false;
-
-      // Handle commands
-      if(message.Content.StartsWith(Config.CommandPrefix.ToString(Config.Locale), StringComparison.InvariantCulture) && message.Content.Length > 1)
+      if(message != null && (!String.IsNullOrEmpty(message.Content) || message.Attachments.Count > 0))
       {
-        _ = CommandHandler(message.Content); // avoid blocking in MessageReceived() by using discard
-        if(!Config.RelayCommands)
-          return false;
+        // Only accept messages from configured Discord text channel
+        if(message.Channel.Id == Config.ChannelId)
+        {
+          // Do not send duplicates messages from Discord bot to Terraria players
+          if(message.Author.Id != Client.CurrentUser.Id)
+          {
+            // Handle commands
+            if(message.Content.StartsWith(Config.CommandPrefix.ToString(Config.Locale), StringComparison.InvariantCulture) && message.Content.Length > 1)
+            {
+              _ = CommandHandler(message.Content); // avoid blocking in MessageReceived() by using discard
+              if(!Config.RelayCommands)
+                relayMessage = false;
+            }
+
+            // Check for mentions and convert them to friendly names if found
+            messageContent = Util.ConvertMentions(message);
+
+            // Check for emojis/emotes and convert them if necessary
+            messageContent = Util.ConvertEmotes(messageContent);
+
+            // Check for attachments
+            if(message.Attachments.Count > 0)
+              messageContent = Util.CheckMessageAttachments(message, messageContent);
+          }
+          else
+            relayMessage = false;
+        }
+        else
+          relayMessage = false;
       }
+      else
+        relayMessage = false;
 
-      // Check for mentions and convert them to friendly names if found
-      messageContent = Util.ConvertMentions(message);
-
-      // Check for emojis/emotes and convert them if necessary
-      messageContent = Util.ConvertEmotes(messageContent);
-
-      // Check for attachments
-      if(message.Attachments.Count > 0)
-        messageContent = Util.CheckMessageAttachments(message, messageContent);
-
-      return true;
+      return relayMessage;
     }
 
     /// <summary>
