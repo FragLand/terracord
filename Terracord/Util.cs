@@ -117,6 +117,21 @@ namespace FragLand.TerracordPlugin
     }
 
     /// <summary>
+    /// Checks Discord message for attachments and includes attachment properties in returned string
+    /// </summary>
+    /// <param name="message">message received by Discord bot</param>
+    /// <param name="messageContent">modified message content</param>
+    public static string CheckMessageAttachments(SocketMessage message, string messageContent)
+    {
+      foreach(var attachment in message.Attachments)
+      {
+        messageContent = $"Attachment: (File: {attachment.Filename}) (URL: {attachment.Url}) (Message: {messageContent})";
+        break; // there should only be a single attachment per message
+      }
+      return messageContent;
+    }
+
+    /// <summary>
     /// Converts channel, role, and user mentions to friendly names before being broadcasted to TShock players
     /// </summary>
     /// <param name="message">message received by Discord bot</param>
