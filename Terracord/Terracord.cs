@@ -23,6 +23,7 @@ using System.Text.RegularExpressions;
 using Terraria;
 using TerrariaApi.Server;
 using TShockAPI;
+using TShockAPI.Hooks;
 
 namespace FragLand.TerracordPlugin
 {
@@ -81,6 +82,7 @@ namespace FragLand.TerracordPlugin
       ServerApi.Hooks.ServerBroadcast.Register(this, OnBroadcast);
       ServerApi.Hooks.ServerChat.Register(this, OnChat);
       ServerApi.Hooks.ServerLeave.Register(this, OnLeave);
+      GeneralHooks.ReloadEvent += OnReload;
     }
 
     /// <summary>
@@ -99,6 +101,7 @@ namespace FragLand.TerracordPlugin
         ServerApi.Hooks.ServerBroadcast.Deregister(this, OnBroadcast);
         ServerApi.Hooks.ServerChat.Deregister(this, OnChat);
         ServerApi.Hooks.ServerLeave.Deregister(this, OnLeave);
+        GeneralHooks.ReloadEvent -= OnReload;
         discord.Client.Dispose();
       }
       base.Dispose(disposing);
@@ -176,6 +179,17 @@ namespace FragLand.TerracordPlugin
     private void OnLeave(LeaveEventArgs args)
     {
       PlayerEventNotify(args, Properties.Strings.PlayerLeftString);
+    }
+
+    /// <summary>
+    /// Called when the TShock reload command is issued
+    /// </summary>
+    /// <param name="args">event arguments passed by hook</param>
+    private void OnReload(ReloadEventArgs args)
+    {
+      Util.Log("Reload triggered. Please note that Discord bot token changes require a restart to take effect.", Util.Severity.Info);
+      Config.Parse();
+      Util.Log("Reload complete.", Util.Severity.Info);
     }
 
     /// <summary>
