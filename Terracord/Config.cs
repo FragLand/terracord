@@ -23,6 +23,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Xml.Linq;
+using TShockAPI;
 
 namespace FragLand.TerracordPlugin
 {
@@ -59,7 +60,7 @@ namespace FragLand.TerracordPlugin
       try
       {
         // terracord.xml configuration file
-        XDocument configFile = XDocument.Load($"tshock{Path.DirectorySeparatorChar}terracord.xml");
+        XDocument configFile = XDocument.Load($"{TShock.SavePath}{Path.DirectorySeparatorChar}Terracord{Path.DirectorySeparatorChar}terracord.xml");
         // terracord.xml root element
         XElement configOptions = configFile.Element("configuration");
 
