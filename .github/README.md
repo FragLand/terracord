@@ -29,16 +29,16 @@ be contained in any release zip archive and includes the following files: `Disco
    `Terracord.resources.dll`, to the top-level directory where `TerrariaServer.exe` resides. You may then set the preferred
    locale in `terracord.xml` to make any supported language active.
 
-2. Edit `terracord.xml` to set your bot token and Discord channel ID. This file should be saved to the `tshock` directory.
-Other settings in this configuration file may also be changed to your liking. The channel ID can be obtained by enabling 
-developer mode in your Discord application and then copying the ID of the relevant text channel you want to relay Terraria 
-messages to. A channel ID appears as a long string of numbers. The process is described
+2. Edit `terracord.xml` to set your bot token and Discord channel ID. This file should be saved to the `tshock > Terracord`
+directory. Other settings in this configuration file may also be changed to your liking. The channel ID can be obtained by
+enabling developer mode in your Discord application and then copying the ID of the relevant text channel you want to relay
+Terraria messages to. A channel ID appears as a long string of numbers. The process is described
 [here](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-). In order
 to obtain a bot token, you will need to create a Discord bot application. The process is described
 [here](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token).
 
 3. Restart your TShock server to load the plugin. For review or troubleshooting purposes, `terracord.log` can be found in
-the `tshock` directory.
+the `tshock > Terracord` directory.
 
 :warning: Unfortunately, Terracord may not work with [Mono](https://www.mono-project.com/). This is due to Discord.Net
 not supporting Mono.
