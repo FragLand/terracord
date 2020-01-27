@@ -29,6 +29,8 @@ namespace FragLand.TerracordPlugin
 {
   class Config
   {
+    // Terracord path
+    public static string TerracordPath = $"{TShock.SavePath}{Path.DirectorySeparatorChar}Terracord{Path.DirectorySeparatorChar}";
     // terracord.xml options
     public static string BotToken { get; private set; }
     public static ulong ChannelId { get; private set; }
@@ -60,7 +62,7 @@ namespace FragLand.TerracordPlugin
       try
       {
         // terracord.xml configuration file
-        XDocument configFile = XDocument.Load($"{TShock.SavePath}{Path.DirectorySeparatorChar}Terracord{Path.DirectorySeparatorChar}terracord.xml");
+        XDocument configFile = XDocument.Load($"{TerracordPath}terracord.xml");
         // terracord.xml root element
         XElement configOptions = configFile.Element("configuration");
 
@@ -143,10 +145,10 @@ namespace FragLand.TerracordPlugin
     /// </summary>
     public static void Generate()
     {
-      Util.Log($"Attempting to generate tshock{Path.DirectorySeparatorChar}terracord.xml since the file did not exist...", Util.Severity.Info);
+      Util.Log($"Attempting to generate {TerracordPath}terracord.xml since the file did not exist...", Util.Severity.Info);
       try
       {
-        StreamWriter newConfigFile = new StreamWriter($"tshock{Path.DirectorySeparatorChar}terracord.xml", false);
+        StreamWriter newConfigFile = new StreamWriter($"{TerracordPath}terracord.xml", false);
         newConfigFile.WriteLine("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
         newConfigFile.WriteLine("<!-- Terracord configuration -->");
         newConfigFile.WriteLine("<configuration>\n");
@@ -176,7 +178,7 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <exception abort=\"false\" />\n");
         newConfigFile.WriteLine("</configuration>");
         newConfigFile.Close();
-        Util.Log($"tshock{Path.DirectorySeparatorChar}terracord.xml created successfully.", Util.Severity.Info);
+        Util.Log($"{TerracordPath}terracord.xml created successfully.", Util.Severity.Info);
         Util.Log("Please configure your bot token and channel ID before loading the Terracord plugin.", Util.Severity.Warning);
         if(AbortOnError)
           Environment.Exit(Util.ExitFailure);
