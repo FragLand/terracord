@@ -48,18 +48,14 @@ namespace FragLand.TerracordPlugin
           playerList += $"{player}\n";
         await CommandResponse(channel, "Player List", playerList).ConfigureAwait(true);
       }
-
       else if(command.Equals("serverinfo", StringComparison.OrdinalIgnoreCase))
         await CommandResponse(channel, "Server Information",
                               $"**Server Name:** {TShock.Config.ServerName}\n**Players:** {TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n**TShock Version:** {TShock.VersionNum.ToString()}")
                               .ConfigureAwait(true);
-
       else if(command.Equals("uptime", StringComparison.OrdinalIgnoreCase))
         //Send($"**__Uptime__**\n```\n{Util.Uptime()}\n```");
         await CommandResponse(channel, "Uptime", Util.Uptime()).ConfigureAwait(true);
-
-      // Let TShock attempt to handle the command
-      else
+      else // let TShock attempt to handle the command
         _ = ExecuteTShockCommand(userId, channel, command);
 
       await Task.CompletedTask.ConfigureAwait(true);
