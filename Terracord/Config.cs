@@ -34,6 +34,7 @@ namespace FragLand.TerracordPlugin
     // terracord.xml options
     public static string BotToken { get; private set; }
     public static ulong ChannelId { get; private set; }
+    public static ulong OwnerId { get; private set; }
     public static char CommandPrefix { get; private set; }
     public static bool RelayCommands { get; private set; }
     public static string BotGame { get; private set; }
@@ -70,6 +71,7 @@ namespace FragLand.TerracordPlugin
         ChangeLocale();
         BotToken = configOptions.Element("bot").Attribute("token").Value.ToString(Locale);
         ChannelId = ulong.Parse(configOptions.Element("channel").Attribute("id").Value.ToString(Locale), Locale);
+        OwnerId = ulong.Parse(configOptions.Element("owner").Attribute("id").Value.ToString(Locale), Locale);
         CommandPrefix =  char.Parse(configOptions.Element("command").Attribute("prefix").Value.ToString(Locale));
         RelayCommands = bool.Parse(configOptions.Element("relay").Attribute("commands").Value.ToString(Locale));
         BotGame = configOptions.Element("game").Attribute("status").Value.ToString(Locale);
@@ -128,6 +130,7 @@ namespace FragLand.TerracordPlugin
       Util.Log("--------------------", Util.Severity.Debug);
       Util.Log($"Bot Token: {BotToken}", Util.Severity.Debug);
       Util.Log($"Channel ID: {ChannelId}", Util.Severity.Debug);
+      Util.Log($"Owner ID: {OwnerId}", Util.Severity.Debug);
       Util.Log($"Command Prefix: {CommandPrefix}", Util.Severity.Debug);
       Util.Log($"Relay Commands: {RelayCommands}", Util.Severity.Debug);
       Util.Log($"Bot Game: {BotGame}", Util.Severity.Debug);
@@ -156,6 +159,8 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <bot token=\"ABC\" />\n");
         newConfigFile.WriteLine("  <!-- Discord channel ID -->");
         newConfigFile.WriteLine("  <channel id=\"123\" />\n");
+        newConfigFile.WriteLine("  <!-- Discord bot owner ID -->");
+        newConfigFile.WriteLine("  <owner id=\"123\" />\n");
         newConfigFile.WriteLine("  <!-- Bot command prefix -->");
         newConfigFile.WriteLine("  <command prefix=\"!\" />\n");
         newConfigFile.WriteLine("  <!-- Relay Discord bot commands -->");

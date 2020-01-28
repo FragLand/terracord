@@ -177,7 +177,7 @@ namespace FragLand.TerracordPlugin
       // Handle commands
       if(message.Content.StartsWith(Config.CommandPrefix.ToString(Config.Locale), StringComparison.InvariantCulture) && message.Content.Length > 1)
       {
-        _ = CommandHandler(message.Content); // avoid blocking in MessageReceived() by using discard
+        _ = Command.CommandHandler(message.Author.Id, channel, message.Content); // avoid blocking in MessageReceived() by using discard
         if(!Config.RelayCommands)
           return false;
       }
@@ -239,66 +239,6 @@ namespace FragLand.TerracordPlugin
         Util.Log($"Unable to send Discord message: {e.Message}", Util.Severity.Error);
         throw;
       }
-    }
-
-    /// <summary>
-    /// Handles Discord commands
-    /// </summary>
-    /// <param name="command">command sent by a Discord user</param>
-    private async Task CommandHandler(string command)
-    {
-      command = command.Substring(1); // remove command prefix
-      Util.Log($"Command sent: {command}", Util.Severity.Info);
-
-      if(command.Equals("playerlist", StringComparison.OrdinalIgnoreCase))
-      {
-        string playerList = $"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n\n";
-        foreach(var player in TShock.Utils.GetPlayers(false))
-          playerList += $"{player}\n";
-        await CommandResponse("Player List", playerList).ConfigureAwait(true);
-      }
-
-      if(command.Equals("serverinfo", StringComparison.OrdinalIgnoreCase))
-        await CommandResponse("Server Information", 
-                              $"**Server Name:** {TShock.Config.ServerName}\n**Players:** {TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n**TShock Version:** {TShock.VersionNum.ToString()}")
-                              .ConfigureAwait(true);
-
-      if(command.Equals("uptime", StringComparison.OrdinalIgnoreCase))
-        //Send($"**__Uptime__**\n```\n{Util.Uptime()}\n```");
-        await CommandResponse("Uptime", Util.Uptime()).ConfigureAwait(true);
-
-      await Task.CompletedTask.ConfigureAwait(true);
-    }
-
-    /// <summary>
-    /// Responds to commands
-    /// </summary>
-    /// <param name="title">command title</param>
-    /// <param name="description">command output</param>
-    /// <param name="color">embed color</param>
-    /// <returns>void</returns>
-    private async Task CommandResponse(string title, string description, Color? color = null)
-    {
-      try
-      {
-        Color embedColor = color ?? Color.Blue;
-        await channel.TriggerTypingAsync().ConfigureAwait(true);
-        await Task.Delay(1500).ConfigureAwait(true); // pause for 1.5 seconds
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.WithColor(embedColor)
-          .WithDescription(description)
-          .WithFooter(footer => footer.Text = $"Terracord {Terracord.PluginVersion}")
-          .WithCurrentTimestamp()
-          .WithTitle(title);
-        await channel.SendMessageAsync("", false, embed.Build()).ConfigureAwait(true);
-      }
-      catch(Exception e)
-      {
-        Util.Log($"Unable to send command response: {e.Message}", Util.Severity.Error);
-        throw;
-      }
-
-      await Task.CompletedTask.ConfigureAwait(true);
     }
 
     /// <summary>
