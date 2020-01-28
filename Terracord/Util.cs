@@ -24,7 +24,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using TShockAPI;
 
 namespace FragLand.TerracordPlugin
 {
@@ -81,7 +80,7 @@ namespace FragLand.TerracordPlugin
             Console.ForegroundColor = ConsoleColor.White;
             break;
         }
-        StreamWriter logFile = new StreamWriter($"{TShock.SavePath}{Path.DirectorySeparatorChar}Terracord{Path.DirectorySeparatorChar}terracord.log", true);
+        StreamWriter logFile = new StreamWriter($"{Config.TerracordPath}terracord.log", true);
         // Write to console first in case file is unavailable
         string logEntry = $"[{DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}] [{severity.ToString()}] {logText.ToString(Config.Locale)}";
         Console.WriteLine($"Terracord: {logEntry}");
