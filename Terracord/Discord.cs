@@ -231,7 +231,7 @@ namespace FragLand.TerracordPlugin
     {
       try
       {
-        // Channel? checks if object is null prior to sending message
+        // channel? checks if object is null prior to sending message
         channel?.SendMessageAsync(message);
       }
       catch(Exception e)
