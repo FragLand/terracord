@@ -9,6 +9,9 @@
   <!-- Discord channel ID -->
   <channel id="123" />
 
+  <!-- Discord bot owner ID -->
+  <owner id="123" />
+
   <!-- Bot command prefix -->
   <command prefix="!" />
 
