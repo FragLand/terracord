@@ -38,7 +38,7 @@ namespace FragLand.TerracordPlugin
     /// <summary>
     /// Plugin version
     /// </summary>
-    public override Version Version => new Version(1, 1, 0);
+    public override Version Version => new Version(1, 2, 0);
 
     /// <summary>
     /// Plugin author(s)
@@ -51,7 +51,7 @@ namespace FragLand.TerracordPlugin
     public override string Description => "A Discord <-> Terraria bridge plugin for TShock";
 
     // Plugin version
-    public const string PluginVersion = "1.1.0";
+    public const string PluginVersion = "1.2.0";
     // Discord bot client
     private readonly Discord discord;
     // Plugin start time
@@ -154,8 +154,8 @@ namespace FragLand.TerracordPlugin
     /// <param name="args">event arguments passed by hook</param>
     private void OnChat(ServerChatEventArgs args)
     {
-      // Do not relay commands
-      if(args.Text.StartsWith(TShock.Config.CommandSpecifier, StringComparison.InvariantCulture) || args.Text.StartsWith(TShock.Config.CommandSilentSpecifier, StringComparison.InvariantCulture))
+      // Do not relay commands or messages from muted players
+      if(args.Text.StartsWith(TShock.Config.CommandSpecifier, StringComparison.InvariantCulture) || args.Text.StartsWith(TShock.Config.CommandSilentSpecifier, StringComparison.InvariantCulture) || TShock.Players[args.Who].mute)
         return;
 
       // Attempt to convert any channel mentions
@@ -199,8 +199,8 @@ namespace FragLand.TerracordPlugin
     /// <param name="message">message</param>
     private void PlayerEventNotify(object eventArgs, string message)
     {
-      //try
-      //{
+      try
+      {
         // This check should help prevent unnecessary exceptions from being logged after TShock reaps incomplete connections
         if(eventArgs != null)
         {
@@ -222,12 +222,15 @@ namespace FragLand.TerracordPlugin
             discord.Send($"**{joinLeaveEmoji} {playerName} {message}**");
           }
         }
-      //}
-      //catch(NullReferenceException nre)
-      //{
-      //  Util.Log($"Exception caught after player joined or left TShock server: {nre.Message}", Util.Severity.Error);
-      //  throw;
-      //}
+      }
+      catch(NullReferenceException nre)
+      {
+        if(Config.DebugMode)
+        {
+          Util.Log($"Exception caught after player joined or left TShock server: {nre.Message}", Util.Severity.Error);
+          throw;
+        }
+      }
     }
   }
 }
