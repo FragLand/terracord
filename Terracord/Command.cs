@@ -43,14 +43,19 @@ namespace FragLand.TerracordPlugin
 
       if(command.Equals("playerlist", StringComparison.OrdinalIgnoreCase))
       {
-        string playerList = $"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n\n";
-        foreach(var player in TShock.Utils.GetPlayers(false))
-          playerList += $"{player}\n";
+        string playerList = $"{TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots}\n\n";
+        //foreach(var player in TShock.Utils.GetPlayers(false))
+        //  playerList += $"{player.Name}\n";
+        foreach(TSPlayer player in TShock.Players)
+        {
+          if(player != null && player.Active)
+            playerList += $"{player.Name}";
+        }
         await CommandResponse(channel, "Player List", playerList).ConfigureAwait(true);
       }
       else if(command.Equals("serverinfo", StringComparison.OrdinalIgnoreCase))
         await CommandResponse(channel, "Server Information",
-                              $"**Server Name:** {TShock.Config.ServerName}\n**Players:** {TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots}\n**TShock Version:** {TShock.VersionNum.ToString()}")
+                              $"**Server Name:** {TShock.Config.ServerName}\n**Players:** {TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots}\n**TShock Version:** {TShock.VersionNum.ToString()}")
                               .ConfigureAwait(true);
       else if(command.Equals("uptime", StringComparison.OrdinalIgnoreCase))
         //Send($"**__Uptime__**\n```\n{Util.Uptime()}\n```");

@@ -9,9 +9,9 @@ jobs:
         - nuget restore Terracord.sln
         - TMPDIR=tmp
         - mkdir $TMPDIR
-        - ZIPFILE=tshock_4.3.26.zip
+        - ZIPFILE=TShock_4.4.0_Pre8_Terraria1.4.0.4.zip
         - cd $TMPDIR
-        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip
+        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre8/TShock_4.4.0_Pre8_Terraria1.4.0.4.zip
         - unzip -q $ZIPFILE OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll
         - mkdir -p ../lib
         - mv OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll ../lib
@@ -31,9 +31,9 @@ jobs:
         - dotnet restore
         - TMPDIR=tmp
         - mkdir $TMPDIR
-        - ZIPFILE=tshock_4.3.26.zip
+        - ZIPFILE=TShock_4.4.0_Pre8_Terraria1.4.0.4.zip
         - cd $TMPDIR
-        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip
+        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre8/TShock_4.4.0_Pre8_Terraria1.4.0.4.zip
         - unzip -q $ZIPFILE OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll
         - mkdir -p ../lib
         - mv OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll ../lib
