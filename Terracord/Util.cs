@@ -241,6 +241,34 @@ namespace FragLand.TerracordPlugin
     }
 
     /// <summary>
+    /// Filter broadcast message based on contents (TShock 4.4 broadcast fix)
+    /// </summary>
+    /// <param name="message">message to check</param>
+    /// <returns>true if message should be filtered or false otherwise</returns>
+    public static bool FilterBroadcast(string message)
+    {
+      bool retval = false;
+      if(Regex.IsMatch(message, "^.+ has (joined|left).$")) // join/leave events
+        retval = true;
+      if(Regex.IsMatch(message, "^.+: .*$"))                // chat message
+        retval = true;
+      if(Regex.IsMatch(message, "^<.+@Discord> .*$"))       // Discord message
+        retval = true;
+      return retval;
+    }
+
+    /// <summary>
+    /// Check for newlines/carriage returns and replace them to prevent multi-line broadcasts without a Discord author prefixed (TShock 4.4 broadcast fix)
+    /// </summary>
+    /// <param name="message">message to check</param>
+    /// <returns>modified message</returns>
+    public static string FixMultiline(string message)
+    {
+      string modifiedMessage = Regex.Replace(message, @"\n|\r", " ");
+      return modifiedMessage;
+    }
+
+    /// <summary>
     /// Populates the dictionary by mapping Discord emojis to text emoticons
     /// </summary>
     /*public static void PopulateEmojiDict()

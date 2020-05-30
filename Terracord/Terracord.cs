@@ -144,6 +144,8 @@ namespace FragLand.TerracordPlugin
     /// <param name="args">event arguments passed by hook</param>
     private void OnBroadcast(ServerBroadcastEventArgs args)
     {
+      if(Util.FilterBroadcast($"{args.Message}"))
+        return;
       Util.Log($"Server broadcast: {args.Message}", Util.Severity.Info);
       discord.Send($"**:mega: Broadcast:** {args.Message}");
     }

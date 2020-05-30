@@ -188,6 +188,9 @@ namespace FragLand.TerracordPlugin
       // Check for emojis/emotes and convert them if necessary
       messageContent = Util.ConvertEmotes(messageContent);
 
+      // Check for newlines/carriage returns and replace them to prevent multi-line broadcasts without a Discord author prefixed (TShock 4.4 broadcast fix)
+      messageContent = Util.FixMultiline(messageContent);
+
       // Check for attachments
       if(message.Attachments.Count > 0)
         messageContent = Util.CheckMessageAttachments(message, messageContent);
@@ -264,7 +267,7 @@ namespace FragLand.TerracordPlugin
       UpdateTopicRunning = true;
       while(true)
       {
-        await SetTopic($"{TShock.Utils.ActivePlayers()}/{TShock.Config.MaxSlots} players online " +
+        await SetTopic($"{TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots} players online " +
                        $"| Server online for {Util.Uptime()} | Last update: {DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}").ConfigureAwait(true);
         try
         {
