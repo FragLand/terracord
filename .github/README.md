@@ -22,7 +22,7 @@ be contained in any release zip archive and includes the following files: `Disco
 `Discord.Net.WebSocket.dll`, `Newtonsoft.Json.dll`, `System.Collections.Immutable.dll`, and `System.Interactive.Async.dll`.
 
    Ensure that the version of `Newtonsoft.Json.dll` copied to the `ServerPlugins` directory is >=11.0.2. This is a required 
-   dependency of Discord.Net. The instance of this DLL included with TShock 4.3.26 is older (10.0.3) and using it results in
+   dependency of Discord.Net. The instance of this DLL included with TShock 4.4.0 is older (10.0.3) and using it results in
    not being able to establish a connection to a Discord server.
 
    For localization support, copy any or all language directories (`de`, `en`, `ru`, etc.), each containing
@@ -55,7 +55,7 @@ debuggers, profilers, "Git for Windows", and the "GitHub extension for Visual St
 [download a zip archive of the source](https://github.com/FragLand/terracord/archive/master.zip) and extract the contents
 to an arbitrary location.
 
-3. Download the [release archive of TShock](https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip).
+3. Download the latest [TShock release](https://github.com/Pryaxis/TShock/releases).
 
 4. Create a directory named `lib` at the same path where `Terracord.sln` resides.
 
@@ -85,9 +85,9 @@ to install .NET core. This has the added benefit of being able to easily update 
 
    `wget https://github.com/FragLand/terracord/archive/master.zip && unzip master.zip`
 
-3. Download and extract TShock:
+3. Download and extract the latest [TShock release](https://github.com/Pryaxis/TShock/releases):
 
-   `wget https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip && unzip tshock_4.3.26.zip`
+   `wget https://github.com/Pryaxis/TShock/releases/download/vx.x.x/tshock_x.x.x.zip && unzip tshock_x.x.x.zip`
 
 4. Create a directory named `lib` at the same path where `Terracord.sln` resides:
 
@@ -125,9 +125,9 @@ support this. Therefore, the following steps should be considered experimental.
 
    `wget https://github.com/FragLand/terracord/archive/master.zip && unzip master.zip`
 
-3. Download and extract TShock:
+3. Download and extract the latest [TShock release](https://github.com/Pryaxis/TShock/releases):
 
-   `wget https://github.com/Pryaxis/TShock/releases/download/v4.3.26/tshock_4.3.26.zip && unzip tshock_4.3.26.zip`
+   `wget https://github.com/Pryaxis/TShock/releases/download/vx.x.x/tshock_x.x.x.zip && unzip tshock_x.x.x.zip`
 
 4. Create a directory named `lib` at the same path where `Terracord.sln` resides:
 
