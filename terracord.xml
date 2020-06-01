@@ -30,6 +30,9 @@
   <!-- Toggle broadcasts, chat, and world saves displayed in Discord -->
   <silence broadcasts="false" chat="false" saves="false" />
 
+  <!-- Toggle Discord chat displayed in game -->
+  <ignore chat="false" />
+
   <!-- Log all chat messages -->
   <log chat="true" />
 

@@ -182,6 +182,10 @@ namespace FragLand.TerracordPlugin
           return false;
       }
 
+      // Do not relay Discord chat to players if this option is enabled
+      if(Config.IgnoreChat)
+        return false;
+
       // Check for mentions and convert them to friendly names if found
       messageContent = Util.ConvertMentions(message);
 
