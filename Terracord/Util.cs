@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace FragLand.TerracordPlugin
 {
@@ -32,6 +33,9 @@ namespace FragLand.TerracordPlugin
     // Exit values
     //private const int ExitSuccess = 0; // unused for now
     public const int ExitFailure = -1;
+
+    // Mutex for log file writes
+    private static Mutex LogMutex = new Mutex();
 
     // Log severity
     public enum Severity
@@ -80,13 +84,16 @@ namespace FragLand.TerracordPlugin
             Console.ForegroundColor = ConsoleColor.White;
             break;
         }
-        StreamWriter logFile = new StreamWriter($"{Config.TerracordPath}terracord.log", true);
+
         // Write to console first in case file is unavailable
         string logEntry = $"[{DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}] [{severity.ToString()}] {logText.ToString(Config.Locale)}";
         Console.WriteLine($"Terracord: {logEntry}");
         Console.ResetColor();
+        LogMutex.WaitOne();
+        StreamWriter logFile = new StreamWriter($"{Config.TerracordPath}terracord.log", true);
         logFile.WriteLine(logEntry);
         logFile.Close();
+        LogMutex.ReleaseMutex();
       }
       catch(Exception e)
       {
