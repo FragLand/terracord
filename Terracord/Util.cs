@@ -258,6 +258,11 @@ namespace FragLand.TerracordPlugin
         return true;
       if(Regex.IsMatch(message, "^.+: .*$"))                // chat message
         return true;
+      if(Config.SilenceWorldsaves)
+      {
+        if(message.Equals("Saving world...", StringComparison.OrdinalIgnoreCase) || message.Equals("World saved.", StringComparison.OrdinalIgnoreCase))
+          return true;
+      }
       if(Regex.IsMatch(message, "^.+ has (joined|left).$")) // join/leave events
         return true;
       return false;

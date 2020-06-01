@@ -40,6 +40,7 @@ namespace FragLand.TerracordPlugin
     public static string BotGame { get; private set; }
     public static uint TopicInterval { get; private set; }
     public static byte[] BroadcastColor { get; private set; }
+    public static bool SilenceWorldsaves { get; private set; }
     public static bool LogChat { get; private set; }
     public static bool DebugMode { get; private set; }
     public static string LocaleString { get; private set; }
@@ -87,6 +88,7 @@ namespace FragLand.TerracordPlugin
           byte.Parse(configOptions.Element("broadcast").Attribute("blue").Value.ToString(Locale), Locale)
         };
 
+        SilenceWorldsaves = bool.Parse(configOptions.Element("silence").Attribute("worldsaves").Value.ToString(Locale));
         LogChat = bool.Parse(configOptions.Element("log").Attribute("chat").Value.ToString(Locale));
         DebugMode = bool.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString(Locale));
         TimestampFormat = configOptions.Element("timestamp").Attribute("format").Value.ToString(Locale);
@@ -138,6 +140,7 @@ namespace FragLand.TerracordPlugin
       Util.Log($"Bot Game: {BotGame}", Util.Severity.Debug);
       Util.Log($"Topic Interval: {TopicInterval}", Util.Severity.Debug);
       Util.Log($"Broadcast Color (RGB): {BroadcastColor[0]}, {BroadcastColor[1]}, {BroadcastColor[2]}", Util.Severity.Debug);
+      Util.Log($"Silence Worldsaves: {SilenceWorldsaves}", Util.Severity.Debug);
       Util.Log($"Log Chat: {LogChat}", Util.Severity.Debug);
       Util.Log($"Debug Mode: {DebugMode}", Util.Severity.Debug);
       Util.Log($"Locale String: {LocaleString}", Util.Severity.Debug);
@@ -173,6 +176,8 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <topic interval=\"300\" />\n");
         newConfigFile.WriteLine("  <!-- Terraria broadcast color in RGB -->");
         newConfigFile.WriteLine("  <broadcast red=\"255\" green=\"215\" blue=\"0\" />\n");
+        newConfigFile.WriteLine("  <!-- Toggle world saves displayed in Discord -->");
+        newConfigFile.WriteLine("  <silence worldsaves=\"false\" />");
         newConfigFile.WriteLine("  <!-- Log all chat messages -->");
         newConfigFile.WriteLine("  <log chat=\"true\" />\n");
         newConfigFile.WriteLine("  <!-- Debug mode -->");
