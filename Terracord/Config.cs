@@ -62,6 +62,8 @@ namespace FragLand.TerracordPlugin
 
       try
       {
+        // Create Terracord directory if it does not exist
+        Directory.CreateDirectory(TerracordPath);
         // terracord.xml configuration file
         XDocument configFile = XDocument.Load($"{TerracordPath}terracord.xml");
         // terracord.xml root element
