@@ -42,7 +42,7 @@ namespace FragLand.TerracordPlugin
     public static byte[] BroadcastColor { get; private set; }
     public static bool SilenceBroadcasts { get; private set; }
     public static bool SilenceChat { get; private set; }
-    public static bool SilenceWorldsaves { get; private set; }
+    public static bool SilenceSaves { get; private set; }
     public static bool IgnoreChat { get; private set; }
     public static bool LogChat { get; private set; }
     public static bool DebugMode { get; private set; }
@@ -93,7 +93,7 @@ namespace FragLand.TerracordPlugin
 
         SilenceBroadcasts = bool.Parse(configOptions.Element("silence").Attribute("broadcasts").Value.ToString(Locale));
         SilenceChat = bool.Parse(configOptions.Element("silence").Attribute("chat").Value.ToString(Locale));
-        SilenceWorldsaves = bool.Parse(configOptions.Element("silence").Attribute("worldsaves").Value.ToString(Locale));
+        SilenceSaves = bool.Parse(configOptions.Element("silence").Attribute("worldsaves").Value.ToString(Locale));
         IgnoreChat = bool.Parse(configOptions.Element("ignore").Attribute("chat").Value.ToString(Locale));
         LogChat = bool.Parse(configOptions.Element("log").Attribute("chat").Value.ToString(Locale));
         DebugMode = bool.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString(Locale));
@@ -148,7 +148,7 @@ namespace FragLand.TerracordPlugin
       Util.Log($"Broadcast Color (RGB): {BroadcastColor[0]}, {BroadcastColor[1]}, {BroadcastColor[2]}", Util.Severity.Debug);
       Util.Log($"Silence Broadcasts: {SilenceBroadcasts}", Util.Severity.Debug);
       Util.Log($"Silence Chat: {SilenceChat}", Util.Severity.Debug);
-      Util.Log($"Silence Worldsaves: {SilenceWorldsaves}", Util.Severity.Debug);
+      Util.Log($"Silence Saves: {SilenceSaves}", Util.Severity.Debug);
       Util.Log($"Ignore Chat: {IgnoreChat}", Util.Severity.Debug);
       Util.Log($"Log Chat: {LogChat}", Util.Severity.Debug);
       Util.Log($"Debug Mode: {DebugMode}", Util.Severity.Debug);
