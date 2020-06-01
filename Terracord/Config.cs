@@ -40,6 +40,8 @@ namespace FragLand.TerracordPlugin
     public static string BotGame { get; private set; }
     public static uint TopicInterval { get; private set; }
     public static byte[] BroadcastColor { get; private set; }
+    public static bool SilenceBroadcasts { get; private set; }
+    public static bool SilenceChat { get; private set; }
     public static bool SilenceWorldsaves { get; private set; }
     public static bool LogChat { get; private set; }
     public static bool DebugMode { get; private set; }
@@ -88,6 +90,8 @@ namespace FragLand.TerracordPlugin
           byte.Parse(configOptions.Element("broadcast").Attribute("blue").Value.ToString(Locale), Locale)
         };
 
+        SilenceBroadcasts = bool.Parse(configOptions.Element("silence").Attribute("broadcasts").Value.ToString(Locale));
+        SilenceChat = bool.Parse(configOptions.Element("silence").Attribute("chat").Value.ToString(Locale));
         SilenceWorldsaves = bool.Parse(configOptions.Element("silence").Attribute("worldsaves").Value.ToString(Locale));
         LogChat = bool.Parse(configOptions.Element("log").Attribute("chat").Value.ToString(Locale));
         DebugMode = bool.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString(Locale));
@@ -140,6 +144,8 @@ namespace FragLand.TerracordPlugin
       Util.Log($"Bot Game: {BotGame}", Util.Severity.Debug);
       Util.Log($"Topic Interval: {TopicInterval}", Util.Severity.Debug);
       Util.Log($"Broadcast Color (RGB): {BroadcastColor[0]}, {BroadcastColor[1]}, {BroadcastColor[2]}", Util.Severity.Debug);
+      Util.Log($"Silence Broadcasts: {SilenceBroadcasts}", Util.Severity.Debug);
+      Util.Log($"Silence Chat: {SilenceChat}", Util.Severity.Debug);
       Util.Log($"Silence Worldsaves: {SilenceWorldsaves}", Util.Severity.Debug);
       Util.Log($"Log Chat: {LogChat}", Util.Severity.Debug);
       Util.Log($"Debug Mode: {DebugMode}", Util.Severity.Debug);
@@ -176,6 +182,10 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <topic interval=\"300\" />\n");
         newConfigFile.WriteLine("  <!-- Terraria broadcast color in RGB -->");
         newConfigFile.WriteLine("  <broadcast red=\"255\" green=\"215\" blue=\"0\" />\n");
+        newConfigFile.WriteLine("  <!-- Toggle broadcasts displayed in Discord -->");
+        newConfigFile.WriteLine("  <silence broadcasts=\"false\" />");
+        newConfigFile.WriteLine("  <!-- Toggle game chat displayed in Discord -->");
+        newConfigFile.WriteLine("  <silence chat=\"false\" />");
         newConfigFile.WriteLine("  <!-- Toggle world saves displayed in Discord -->");
         newConfigFile.WriteLine("  <silence worldsaves=\"false\" />");
         newConfigFile.WriteLine("  <!-- Log all chat messages -->");
