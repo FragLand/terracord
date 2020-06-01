@@ -258,7 +258,7 @@ namespace FragLand.TerracordPlugin
         return true;
       if(Regex.IsMatch(message, "^.+: .*$"))                // chat message
         return true;
-      if(Config.SilenceWorldsaves)
+      if(Config.SilenceSaves)
       {
         if(message.Equals("Saving world...", StringComparison.OrdinalIgnoreCase) || message.Equals("World saved.", StringComparison.OrdinalIgnoreCase))
           return true;

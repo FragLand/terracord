@@ -27,14 +27,8 @@
   <!-- Terraria broadcast color in RGB -->
   <broadcast red="255" green="215" blue="0" />
 
-  <!-- Toggle broadcasts displayed in Discord -->
-  <silence broadcasts="false" />
-
-  <!-- Toggle game chat displayed in Discord -->
-  <silence chat="false" />
-
-  <!-- Toggle world saves displayed in Discord -->
-  <silence worldsaves="false" />
+  <!-- Toggle broadcasts, chat, and world saves displayed in Discord -->
+  <silence broadcasts="false" chat="false" saves="false" />
 
   <!-- Log all chat messages -->
   <log chat="true" />
