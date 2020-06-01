@@ -254,14 +254,13 @@ namespace FragLand.TerracordPlugin
     /// <returns>true if message should be filtered or false otherwise</returns>
     public static bool FilterBroadcast(string message)
     {
-      bool retval = false;
-      if(Regex.IsMatch(message, "^.+ has (joined|left).$")) // join/leave events
-        retval = true;
-      if(Regex.IsMatch(message, "^.+: .*$"))                // chat message
-        retval = true;
       if(Regex.IsMatch(message, "^<.+@Discord> .*$"))       // Discord message
-        retval = true;
-      return retval;
+        return true;
+      if(Regex.IsMatch(message, "^.+: .*$"))                // chat message
+        return true;
+      if(Regex.IsMatch(message, "^.+ has (joined|left).$")) // join/leave events
+        return true;
+      return false;
     }
 
     /// <summary>
