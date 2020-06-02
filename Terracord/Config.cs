@@ -93,7 +93,7 @@ namespace FragLand.TerracordPlugin
 
         SilenceBroadcasts = bool.Parse(configOptions.Element("silence").Attribute("broadcasts").Value.ToString(Locale));
         SilenceChat = bool.Parse(configOptions.Element("silence").Attribute("chat").Value.ToString(Locale));
-        SilenceSaves = bool.Parse(configOptions.Element("silence").Attribute("worldsaves").Value.ToString(Locale));
+        SilenceSaves = bool.Parse(configOptions.Element("silence").Attribute("saves").Value.ToString(Locale));
         IgnoreChat = bool.Parse(configOptions.Element("ignore").Attribute("chat").Value.ToString(Locale));
         LogChat = bool.Parse(configOptions.Element("log").Attribute("chat").Value.ToString(Locale));
         DebugMode = bool.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString(Locale));
@@ -186,7 +186,7 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <!-- Terraria broadcast color in RGB -->");
         newConfigFile.WriteLine("  <broadcast red=\"255\" green=\"215\" blue=\"0\" />\n");
         newConfigFile.WriteLine("  <!-- Toggle broadcasts, chat, and world saves displayed in Discord -->");
-        newConfigFile.WriteLine("  <silence broadcasts=\"false\" chat=\"false\" worldsaves=\"false\" />\n");
+        newConfigFile.WriteLine("  <silence broadcasts=\"false\" chat=\"false\" saves=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Toggle Discord chat displayed in game -->");
         newConfigFile.WriteLine("  <ignore chat=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Log all chat messages -->");
