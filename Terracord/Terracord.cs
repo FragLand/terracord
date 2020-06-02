@@ -144,8 +144,14 @@ namespace FragLand.TerracordPlugin
     /// <param name="args">event arguments passed by hook</param>
     private void OnBroadcast(ServerBroadcastEventArgs args)
     {
+      // Do not relay game broadcasts to Discord if this option is enabled
+      if(Config.SilenceBroadcasts)
+        return;
+
+      // Filter broadcast messages based on content
       if(Util.FilterBroadcast($"{args.Message}"))
         return;
+
       Util.Log($"Server broadcast: {args.Message}", Util.Severity.Info);
       discord.Send($"**:mega: Broadcast:** {args.Message}");
     }
@@ -156,6 +162,10 @@ namespace FragLand.TerracordPlugin
     /// <param name="args">event arguments passed by hook</param>
     private void OnChat(ServerChatEventArgs args)
     {
+      // Do not relay game chat to Discord if this option is enabled
+      if(Config.SilenceChat)
+        return;
+
       // Do not relay commands or messages from muted players
       if(args.Text.StartsWith(TShock.Config.CommandSpecifier, StringComparison.InvariantCulture) || args.Text.StartsWith(TShock.Config.CommandSilentSpecifier, StringComparison.InvariantCulture) || TShock.Players[args.Who].mute)
         return;
