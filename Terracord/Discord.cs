@@ -199,6 +199,10 @@ namespace FragLand.TerracordPlugin
       if(message.Attachments.Count > 0)
         messageContent = Util.CheckMessageAttachments(message, messageContent);
 
+      // Truncate messages that exceed allowed threshold
+      if(Config.MessageLength > 0 && messageContent.Length > Config.MessageLength)
+        messageContent = messageContent.Substring(0, (Config.MessageLength - 1));
+
       return true;
     }
 

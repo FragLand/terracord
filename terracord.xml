@@ -36,6 +36,9 @@
   <!-- Log all chat messages -->
   <log chat="true" />
 
+  <!-- Maximum length allowed in game for received Discord messages (0 = unlimited) -->
+  <message length="0" />
+
   <!-- Debug mode -->
   <debug mode="false" />
 
