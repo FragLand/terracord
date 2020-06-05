@@ -45,6 +45,7 @@ namespace FragLand.TerracordPlugin
     public static bool SilenceSaves { get; private set; }
     public static bool IgnoreChat { get; private set; }
     public static bool LogChat { get; private set; }
+    public static int MessageLength { get; private set; }
     public static bool DebugMode { get; private set; }
     public static string LocaleString { get; private set; }
     public static CultureInfo Locale { get; private set; }
@@ -96,6 +97,7 @@ namespace FragLand.TerracordPlugin
         SilenceSaves = bool.Parse(configOptions.Element("silence").Attribute("saves").Value.ToString(Locale));
         IgnoreChat = bool.Parse(configOptions.Element("ignore").Attribute("chat").Value.ToString(Locale));
         LogChat = bool.Parse(configOptions.Element("log").Attribute("chat").Value.ToString(Locale));
+        MessageLength = int.Parse(configOptions.Element("message").Attribute("length").Value.ToString(Locale), Locale);
         DebugMode = bool.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString(Locale));
         TimestampFormat = configOptions.Element("timestamp").Attribute("format").Value.ToString(Locale);
         AbortOnError = bool.Parse(configOptions.Element("exception").Attribute("abort").Value.ToString(Locale));
@@ -151,6 +153,7 @@ namespace FragLand.TerracordPlugin
       Util.Log($"Silence Saves: {SilenceSaves}", Util.Severity.Debug);
       Util.Log($"Ignore Chat: {IgnoreChat}", Util.Severity.Debug);
       Util.Log($"Log Chat: {LogChat}", Util.Severity.Debug);
+      Util.Log($"Message Length: {MessageLength}", Util.Severity.Debug);
       Util.Log($"Debug Mode: {DebugMode}", Util.Severity.Debug);
       Util.Log($"Locale String: {LocaleString}", Util.Severity.Debug);
       Util.Log($"Timestamp Format: {TimestampFormat}", Util.Severity.Debug);
@@ -191,6 +194,8 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <ignore chat=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Log all chat messages -->");
         newConfigFile.WriteLine("  <log chat=\"true\" />\n");
+        newConfigFile.WriteLine("  <!-- Maximum length allowed in game for received Discord messages (0 = unlimited) -->");
+        newConfigFile.WriteLine("  <message length=\"0\" />\n");
         newConfigFile.WriteLine("  <!-- Debug mode -->");
         newConfigFile.WriteLine("  <debug mode=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Locale -->");
