@@ -49,6 +49,7 @@ namespace FragLand.TerracordPlugin
     public static bool DebugMode { get; private set; }
     public static string LocaleString { get; private set; }
     public static CultureInfo Locale { get; private set; }
+    public static string AuthorFormat { get; private set; }
     public static string TimestampFormat { get; private set; }
     public static bool AbortOnError { get; private set; }
 
@@ -99,6 +100,7 @@ namespace FragLand.TerracordPlugin
         LogChat = bool.Parse(configOptions.Element("log").Attribute("chat").Value.ToString(Locale));
         MessageLength = int.Parse(configOptions.Element("message").Attribute("length").Value.ToString(Locale), Locale);
         DebugMode = bool.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString(Locale));
+        AuthorFormat = configOptions.Element("author").Attribute("format").Value.ToString(Locale);
         TimestampFormat = configOptions.Element("timestamp").Attribute("format").Value.ToString(Locale);
         AbortOnError = bool.Parse(configOptions.Element("exception").Attribute("abort").Value.ToString(Locale));
       }
@@ -156,6 +158,7 @@ namespace FragLand.TerracordPlugin
       Util.Log($"Message Length: {MessageLength}", Util.Severity.Debug);
       Util.Log($"Debug Mode: {DebugMode}", Util.Severity.Debug);
       Util.Log($"Locale String: {LocaleString}", Util.Severity.Debug);
+      Util.Log($"Author Format: {AuthorFormat}", Util.Severity.Debug);
       Util.Log($"Timestamp Format: {TimestampFormat}", Util.Severity.Debug);
       Util.Log($"Exception Abort: {AbortOnError}", Util.Severity.Debug);
     }
@@ -200,6 +203,8 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <debug mode=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Locale -->");
         newConfigFile.WriteLine("  <locale string=\"en-US\" />\n");
+        newConfigFile.WriteLine("  <!-- Discord message author appearance in game -->");
+        newConfigFile.WriteLine("  <author format=\"&lt;%u%@Discord&gt;\" />\n");
         newConfigFile.WriteLine("  <!-- Timestamp format -->");
         newConfigFile.WriteLine("  <timestamp format=\"MM/dd/yyyy HH:mm:ss zzz\" />\n");
         newConfigFile.WriteLine("  <!-- Terminate TShock when an error is encountered -->");

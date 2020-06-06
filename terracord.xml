@@ -45,6 +45,9 @@
   <!-- Locale -->
   <locale string="en-US" />
 
+  <!-- Discord message author appearance in game -->
+  <author format="&lt;%u%@Discord&gt;" />
+
   <!-- Timestamp format -->
   <timestamp format="MM/dd/yyyy HH:mm:ss zzz" />
 
