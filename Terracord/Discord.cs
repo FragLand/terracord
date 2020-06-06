@@ -220,9 +220,10 @@ namespace FragLand.TerracordPlugin
         // Relay Discord message to Terraria players
         if(relayMessage)
         {
+          string authorFormat = Config.AuthorFormat.Replace("%u%", message.Author.Username);
           if(Config.LogChat)
-            Util.Log($"<{message.Author.Username}@Discord> {messageContent}", Util.Severity.Info);
-          TShock.Utils.Broadcast($"<{message.Author.Username}@Discord> {messageContent}", Config.BroadcastColor[0], Config.BroadcastColor[1], Config.BroadcastColor[2]);
+            Util.Log($"{authorFormat} {messageContent}", Util.Severity.Info);
+          TShock.Utils.Broadcast($"{authorFormat} {messageContent}", Config.BroadcastColor[0], Config.BroadcastColor[1], Config.BroadcastColor[2]);
         }
       }
       catch(Exception e)
