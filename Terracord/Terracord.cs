@@ -19,6 +19,7 @@
  */
 
 using System;
+using System.Threading;
 using System.Text.RegularExpressions;
 using Terraria;
 using TerrariaApi.Server;
@@ -94,7 +95,8 @@ namespace FragLand.TerracordPlugin
       {
         Util.Log("Relay shutting down.", Util.Severity.Info);
         discord.Send(Properties.Strings.RelayShutdownString);
-        discord.SetTopic("Relay offline").ConfigureAwait(true);
+        discord.SetTopic(Config.OfflineTopic).ConfigureAwait(true);
+        Thread.Sleep(1000); // allow time for topic to be set above
         ServerApi.Hooks.GameInitialize.Deregister(this, OnInitialize);
         ServerApi.Hooks.GamePostInitialize.Deregister(this, OnPostInitialize);
         ServerApi.Hooks.ServerJoin.Deregister(this, OnJoin);

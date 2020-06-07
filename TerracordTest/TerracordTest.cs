@@ -55,10 +55,14 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<bool>(Config.RelayCommands);
       Assert.True(Config.RemoteCommands);
       Assert.IsType<bool>(Config.RemoteCommands);
+      Assert.True(Config.RemoteResults);
+      Assert.IsType<bool>(Config.RemoteResults);
       Assert.Equal("Terraria", Config.BotGame);
       Assert.IsType<string>(Config.BotGame);
       Assert.Equal("300", Config.TopicInterval.ToString());
       Assert.IsType<uint>(Config.TopicInterval);
+      Assert.Equal("Relay offline", Config.OfflineTopic);
+      Assert.IsType<string>(Config.OfflineTopic);
       Assert.Equal("255", Config.BroadcastColor[0].ToString());
       Assert.IsType<byte>(Config.BroadcastColor[0]);
       Assert.Equal("215", Config.BroadcastColor[1].ToString());

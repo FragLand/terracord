@@ -35,7 +35,7 @@ namespace FragLand.TerracordPlugin
     public const int ExitFailure = -1;
 
     // Mutex for log file writes
-    private static Mutex LogMutex = new Mutex();
+    private static readonly Mutex LogMutex = new Mutex();
 
     // Log severity
     public enum Severity
@@ -86,7 +86,7 @@ namespace FragLand.TerracordPlugin
         }
 
         // Write to console first in case file is unavailable
-        string logEntry = $"[{DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}] [{severity.ToString()}] {logText.ToString(Config.Locale)}";
+        string logEntry = $"[{DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}] [{severity}] {logText.ToString(Config.Locale)}";
         Console.WriteLine($"Terracord: {logEntry}");
         Console.ResetColor();
         LogMutex.WaitOne();
@@ -111,16 +111,6 @@ namespace FragLand.TerracordPlugin
       Log(errorMessage, Severity.Error);
       if(Config.AbortOnError)
         Environment.Exit(ExitFailure);
-    }
-
-    /// <summary>
-    /// Calculates plugin uptime
-    /// </summary>
-    /// <returns>uptime as a string</returns>
-    public static string Uptime()
-    {
-      TimeSpan elapsed = DateTime.Now.Subtract(Terracord.startTime);
-      return $"{elapsed.Days} day(s), {elapsed.Hours} hour(s), {elapsed.Minutes} minute(s), and {elapsed.Seconds} second(s)";
     }
 
     /// <summary>
