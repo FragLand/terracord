@@ -61,7 +61,10 @@ namespace FragLand.TerracordPlugin
         //Send($"**__Uptime__**\n```\n{Util.Uptime()}\n```");
         await CommandResponse(channel, "Uptime", Util.Uptime()).ConfigureAwait(true);
       else // let TShock attempt to handle the command
-        _ = ExecuteTShockCommand(userId, channel, command);
+      {
+        if(Config.RemoteCommands)
+          _ = ExecuteTShockCommand(userId, channel, command);
+      }
 
       await Task.CompletedTask.ConfigureAwait(true);
     }

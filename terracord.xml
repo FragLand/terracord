@@ -15,8 +15,11 @@
   <!-- Bot command prefix -->
   <command prefix="!" />
 
-  <!-- Relay Discord bot commands -->
+  <!-- Relay bot commands from Discord to players -->
   <relay commands="true" />
+
+  <!-- Toggle execution of TShock commands submitted remotely by Discord bot owner -->
+  <remote commands="true" />
 
   <!-- Discord bot game for "playing" status -->
   <game status="Terraria" />
