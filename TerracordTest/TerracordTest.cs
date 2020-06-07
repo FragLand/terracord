@@ -47,8 +47,12 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<string>(Config.BotToken);
       Assert.Equal("123", Config.ChannelId.ToString());
       Assert.IsType<ulong>(Config.ChannelId);
+      Assert.Equal("123", Config.OwnerId.ToString());
+      Assert.IsType<ulong>(Config.OwnerId);
       Assert.Equal('!', Config.CommandPrefix);
       Assert.IsType<char>(Config.CommandPrefix);
+      Assert.True(Config.RelayCommands);
+      Assert.IsType<bool>(Config.RelayCommands);
       Assert.Equal("Terraria", Config.BotGame);
       Assert.IsType<string>(Config.BotGame);
       Assert.Equal("300", Config.TopicInterval.ToString());
@@ -59,13 +63,28 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<byte>(Config.BroadcastColor[1]);
       Assert.Equal("0", Config.BroadcastColor[2].ToString());
       Assert.IsType<byte>(Config.BroadcastColor[2]);
+      Assert.False(Config.SilenceBroadcasts);
+      Assert.IsType<bool>(Config.SilenceBroadcasts);
+      Assert.False(Config.SilenceChat);
+      Assert.IsType<bool>(Config.SilenceChat);
+      Assert.False(Config.SilenceSaves);
+      Assert.IsType<bool>(Config.SilenceSaves);
+      Assert.False(Config.IgnoreChat);
+      Assert.IsType<bool>(Config.IgnoreChat);
       Assert.True(Config.LogChat);
+      Assert.IsType<bool>(Config.LogChat);
+      Assert.Equal("0", Config.MessageLength.ToString());
+      Assert.IsType<int>(Config.MessageLength);
       Assert.False(Config.DebugMode);
+      Assert.IsType<bool>(Config.DebugMode);
       Assert.Equal("en-US", Config.LocaleString);
       Assert.IsType<string>(Config.LocaleString);
+      Assert.Equal("<%u%@Discord>", Config.AuthorFormat.ToString());
+      Assert.IsType<string>(Config.AuthorFormat);
       Assert.Equal("MM/dd/yyyy HH:mm:ss zzz", Config.TimestampFormat);
       Assert.IsType<string>(Config.TimestampFormat);
       Assert.False(Config.AbortOnError);
+      Assert.IsType<bool>(Config.AbortOnError);
     }
   }
 }
