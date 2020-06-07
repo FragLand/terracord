@@ -150,7 +150,7 @@ namespace FragLand.TerracordPlugin
         _ = UpdateTopic(); // fire and forget topic update thread
 
       // The message below is sent to Discord every time the bot connects/reconnects
-      Util.Log($"Relay available. Connected to Discord as {Client.CurrentUser.ToString()}.", Util.Severity.Info);
+      Util.Log($"Relay available. Connected to Discord as {Client.CurrentUser}.", Util.Severity.Info);
       Send(Properties.Strings.RelayAvailableString);
       return Task.CompletedTask;
     }
@@ -277,7 +277,7 @@ namespace FragLand.TerracordPlugin
       while(true)
       {
         await SetTopic($"{TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots} players online " +
-                       $"| Server online for {Util.Uptime()} | Last update: {DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}").ConfigureAwait(true);
+                       $"| Server online for {Command.Uptime()} | Last update: {DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}").ConfigureAwait(true);
         try
         {
           await Task.Delay(Convert.ToInt32(Config.TopicInterval * 1000)).ConfigureAwait(true); // seconds to milliseconds

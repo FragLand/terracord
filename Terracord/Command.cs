@@ -27,7 +27,7 @@ namespace FragLand.TerracordPlugin
 {
   class Command
   {
-    private const string CommandList = "annoy ban broadcast confuse firework give godmode heal kick kill mute reload restart rocket save slap stop warp whisper";
+    private const string CommandList = "annoy ban broadcast firework give godmode heal kick kill mute reload save slap stop warp whisper";
 
     /// <summary>
     /// Handles Discord commands
@@ -41,25 +41,14 @@ namespace FragLand.TerracordPlugin
       command = command.Substring(1); // remove command prefix
       Util.Log($"Command sent: {command}", Util.Severity.Info);
 
-      if(command.Equals("playerlist", StringComparison.OrdinalIgnoreCase))
-      {
-        string playerList = $"{TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots}\n\n";
-        //foreach(var player in TShock.Utils.GetPlayers(false))
-        //  playerList += $"{player.Name}\n";
-        foreach(TSPlayer player in TShock.Players)
-        {
-          if(player != null && player.Active)
-            playerList += $"{player.Name}";
-        }
-        await CommandResponse(channel, "Player List", playerList).ConfigureAwait(true);
-      }
+      if(command.Equals("help", StringComparison.OrdinalIgnoreCase))
+        await CommandResponse(channel, "Help", Help()).ConfigureAwait(true);
+      else if(command.Equals("playerlist", StringComparison.OrdinalIgnoreCase))
+        await CommandResponse(channel, "Player List", PlayerList()).ConfigureAwait(true);
       else if(command.Equals("serverinfo", StringComparison.OrdinalIgnoreCase))
-        await CommandResponse(channel, "Server Information",
-                              $"**Server Name:** {TShock.Config.ServerName}\n**Players:** {TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots}\n**TShock Version:** {TShock.VersionNum.ToString()}")
-                              .ConfigureAwait(true);
+        await CommandResponse(channel, "Server Information", ServerInfo()).ConfigureAwait(true);
       else if(command.Equals("uptime", StringComparison.OrdinalIgnoreCase))
-        //Send($"**__Uptime__**\n```\n{Util.Uptime()}\n```");
-        await CommandResponse(channel, "Uptime", Util.Uptime()).ConfigureAwait(true);
+        await CommandResponse(channel, "Uptime", Uptime()).ConfigureAwait(true);
       else // let TShock attempt to handle the command
       {
         if(Config.RemoteCommands)
@@ -83,15 +72,96 @@ namespace FragLand.TerracordPlugin
         if(userId == Config.OwnerId) // check if user is authorized
         {
           if(Commands.HandleCommand(TSPlayer.Server, $"{TShock.Config.CommandSpecifier}{command}"))
-            await CommandResponse(channel, "Command Status", $"Remotely executed: {command}", Color.Green).ConfigureAwait(true);
+          {
+            if(Config.RemoteResults)
+              await CommandResponse(channel, "Command Status", $"Remotely executed: {command}", Color.Green).ConfigureAwait(true);
+          }
           else
-            await CommandResponse(channel, "Command Status", $"Failed to execute: {command}", Color.Red).ConfigureAwait(true);
+          {
+            if(Config.RemoteResults)
+              await CommandResponse(channel, "Command Status", $"Failed to execute: {command}", Color.Red).ConfigureAwait(true);
+          }
         }
         else
           await CommandResponse(channel, "Command Status", $"Access denied for: {command}", Color.Red).ConfigureAwait(true);
       }
 
       await Task.CompletedTask.ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// Provides command help
+    /// </summary>
+    /// <returns>command details</returns>
+    public static string Help()
+    {
+      string commandList = "__**General Commands**__\n" +
+                           "**help**       - Display command list\n" +
+                           "**playerlist** - Display online players\n" +
+                           "**serverinfo** - Display server details\n" +
+                           "**uptime**     - Display plugin uptime\n\n";
+      if(Config.RemoteCommands)
+      {
+        commandList += "__**Administrative Commands**__\n" +
+                       "**annoy <player> <seconds>**                    - Annoy player with a sound for the specified amount of time\n" +
+                       "**ban add <player/IP address> <time> [reason]** - Ban player or IP address for the specified time with optional reason -- " +
+                       "<time> can be 0 for a permanent ban or is in the format: 1d 2h 3m 4s\n" +
+                       "**ban del <player>**                            - Unban player\n" +
+                       "**ban delip <IP address>**                      - Unban IP address\n" +
+                       "**broadcast <text>**                            - Broadcast arbitrary text to all players\n" +
+                       "**firework <player> [color]**                   - Detonate a blue, green, red, or yellow firework on a player\n" +
+                       "**give <item/ID> <player> [amount]**            - Give player an item specified by name or numerical ID with optional amount\n" +
+                       "**godmode <player>**                            - Make player invincible\n" +
+                       "**heal <player>**                               - Restore player health\n" +
+                       "**kick <player> [reason]**                      - Kick player for optional reason\n" +
+                       "**kill <player>**                               - Kill player\n" +
+                       "**mute <player> [reason]**                      - Mute player for optional reason\n" +
+                       "**reload**                                      - Reload configuration\n" +
+                       "**save**                                        - Save world\n" +
+                       "**slap <player> [damage]**                      - Slap player for arbitrary damage\n" +
+                       "**stop**                                        - Shut down server\n" +
+                       "**warp send <player> <location>**               - Warp player to preset location\n" +
+                       "**whisper <player> <text>**                     - Messages player with arbitrary text";
+      }
+      return commandList;
+    }
+
+    /// <summary>
+    /// Provides player list
+    /// </summary>
+    /// <returns>player count and list of players</returns>
+    public static string PlayerList()
+    {
+      string playerList = $"{TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots}\n\n";
+      //foreach(var player in TShock.Utils.GetPlayers(false))
+      //  playerList += $"{player.Name}\n";
+      foreach(TSPlayer player in TShock.Players)
+      {
+        if(player != null && player.Active)
+          playerList += $"{player.Name}\n";
+      }
+      return playerList;
+    }
+
+    /// <summary>
+    /// Provides server information
+    /// </summary>
+    /// <returns>server information</returns>
+    public static string ServerInfo()
+    {
+      return $"**Server Name:** {TShock.Config.ServerName}\n" +
+             $"**Players:** {TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots}\n" +
+             $"**TShock Version:** {TShock.VersionNum}";
+    }
+
+    /// <summary>
+    /// Calculates plugin uptime
+    /// </summary>
+    /// <returns>uptime as a string</returns>
+    public static string Uptime()
+    {
+      TimeSpan elapsed = DateTime.Now.Subtract(Terracord.startTime);
+      return $"{elapsed.Days} day(s), {elapsed.Hours} hour(s), {elapsed.Minutes} minute(s), and {elapsed.Seconds} second(s)";
     }
 
     /// <summary>
@@ -111,10 +181,10 @@ namespace FragLand.TerracordPlugin
         await Task.Delay(1500).ConfigureAwait(true); // pause for 1.5 seconds
         EmbedBuilder embed = new EmbedBuilder();
         embed.WithColor(embedColor)
-          .WithDescription(description)
-          .WithFooter(footer => footer.Text = $"Terracord {Terracord.PluginVersion}")
-          .WithCurrentTimestamp()
-          .WithTitle(title);
+             .WithDescription(description)
+             .WithFooter(footer => footer.Text = $"Terracord {Terracord.PluginVersion}")
+             .WithCurrentTimestamp()
+             .WithTitle(title);
         await channel.SendMessageAsync("", false, embed.Build()).ConfigureAwait(true);
       }
       catch(Exception e)
