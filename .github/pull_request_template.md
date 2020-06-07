@@ -1,6 +1,4 @@
-Closes # .
-
-Proposed Changes
+## Proposed Changes
 - 
 - 
 - 
