@@ -33,6 +33,9 @@
   <!-- Toggle broadcasts, chat, and world saves displayed in Discord -->
   <silence broadcasts="false" chat="false" saves="false" />
 
+  <!-- Notify Discord channel of relay availability after restoring the connection -->
+  <announce reconnect="true" />
+
   <!-- Toggle Discord chat displayed in game -->
   <ignore chat="false" />
 
