@@ -46,6 +46,7 @@ namespace FragLand.TerracordPlugin
     public static bool SilenceBroadcasts { get; private set; }
     public static bool SilenceChat { get; private set; }
     public static bool SilenceSaves { get; private set; }
+    public static bool AnnounceReconnect { get; private set; }
     public static bool IgnoreChat { get; private set; }
     public static bool LogChat { get; private set; }
     public static int MessageLength { get; private set; }
@@ -102,6 +103,7 @@ namespace FragLand.TerracordPlugin
         SilenceBroadcasts = bool.Parse(configOptions.Element("silence").Attribute("broadcasts").Value.ToString(Locale));
         SilenceChat = bool.Parse(configOptions.Element("silence").Attribute("chat").Value.ToString(Locale));
         SilenceSaves = bool.Parse(configOptions.Element("silence").Attribute("saves").Value.ToString(Locale));
+        AnnounceReconnect = bool.Parse(configOptions.Element("announce").Attribute("reconnect").Value.ToString(Locale));
         IgnoreChat = bool.Parse(configOptions.Element("ignore").Attribute("chat").Value.ToString(Locale));
         LogChat = bool.Parse(configOptions.Element("log").Attribute("chat").Value.ToString(Locale));
         MessageLength = int.Parse(configOptions.Element("message").Attribute("length").Value.ToString(Locale), Locale);
@@ -162,6 +164,7 @@ namespace FragLand.TerracordPlugin
       Util.Log($"Silence Broadcasts: {SilenceBroadcasts}", Util.Severity.Debug);
       Util.Log($"Silence Chat: {SilenceChat}", Util.Severity.Debug);
       Util.Log($"Silence Saves: {SilenceSaves}", Util.Severity.Debug);
+      Util.Log($"Announce Reconnect: {AnnounceReconnect}", Util.Severity.Debug);
       Util.Log($"Ignore Chat: {IgnoreChat}", Util.Severity.Debug);
       Util.Log($"Log Chat: {LogChat}", Util.Severity.Debug);
       Util.Log($"Message Length: {MessageLength}", Util.Severity.Debug);
@@ -204,6 +207,8 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <broadcast red=\"255\" green=\"215\" blue=\"0\" />\n");
         newConfigFile.WriteLine("  <!-- Toggle broadcasts, chat, and world saves displayed in Discord -->");
         newConfigFile.WriteLine("  <silence broadcasts=\"false\" chat=\"false\" saves=\"false\" />\n");
+        newConfigFile.WriteLine("  <!-- Notify Discord channel of relay availability after restoring the connection -->");
+        newConfigFile.WriteLine("  <announce reconnect=\"true\" />\n");
         newConfigFile.WriteLine("  <!-- Toggle Discord chat displayed in game -->");
         newConfigFile.WriteLine("  <ignore chat=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Log all chat messages -->");

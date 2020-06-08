@@ -75,6 +75,8 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<bool>(Config.SilenceChat);
       Assert.False(Config.SilenceSaves);
       Assert.IsType<bool>(Config.SilenceSaves);
+      Assert.True(Config.AnnounceReconnect);
+      Assert.IsType<bool>(Config.AnnounceReconnect);
       Assert.False(Config.IgnoreChat);
       Assert.IsType<bool>(Config.IgnoreChat);
       Assert.True(Config.LogChat);

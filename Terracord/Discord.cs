@@ -35,6 +35,8 @@ namespace FragLand.TerracordPlugin
     private IMessageChannel channel;
     // Topic thread running?
     public bool UpdateTopicRunning { get; private set; }
+    // Tracks the number of connections to the Discord server during lifetime of plugin
+    private static uint connectionCounter = 0;
 
     public Discord()
     {
@@ -149,9 +151,13 @@ namespace FragLand.TerracordPlugin
       if(!UpdateTopicRunning)
         _ = UpdateTopic(); // fire and forget topic update thread
 
-      // The message below is sent to Discord every time the bot connects/reconnects
-      Util.Log($"Relay available. Connected to Discord as {Client.CurrentUser}.", Util.Severity.Info);
-      Send(Properties.Strings.RelayAvailableString);
+      // Only announce reconnections if configured to do so
+      connectionCounter++;
+      if(Config.AnnounceReconnect || connectionCounter <= 1)
+      {
+        Util.Log($"Relay available. Connected to Discord as {Client.CurrentUser}.", Util.Severity.Info);
+        Send(Properties.Strings.RelayAvailableString);
+      }
       return Task.CompletedTask;
     }
 
