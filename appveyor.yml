@@ -5,14 +5,14 @@ configuration: Debug
 before_build:
   - nuget restore
   - SET TEMPDIR=temp
-  - SET ZIPFILE=TShock_4.4.0_Pre8_Terraria1.4.0.4.zip
+  - SET ZIPFILE=TShock4.4.0_Pre11_Terraria1.4.0.5.zip
   - md %TEMPDIR%
   - cd %TEMPDIR%
-  - curl -fsSLJo %ZIPFILE% https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre8/TShock_4.4.0_Pre8_Terraria1.4.0.4.zip
+  - curl -fsSLJo %ZIPFILE% https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre11/TShock4.4.0_Pre11_Terraria1.4.0.5.zip
   - 7z e %ZIPFILE% -o..\lib\ OTAPI.dll TerrariaServer.exe TShockAPI.dll -r
 build:
   # Ignore TerracordTest
-  project: Terracord\Terracord.csproj
+  #project: Terracord\Terracord.csproj
   verbosity: minimal
 on_success:
   - ps: Invoke-RestMethod https://raw.githubusercontent.com/DiscordHooks/appveyor-discord-webhook/master/send.ps1 -o send.ps1
