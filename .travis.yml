@@ -7,17 +7,20 @@ jobs:
       mono: latest
       install:
         - nuget restore Terracord.sln
+        - nuget install xunit.runner.console -Version 2.4.1 -OutputDirectory testrunner
         - TMPDIR=tmp
         - mkdir $TMPDIR
-        - ZIPFILE=TShock_4.4.0_Pre8_Terraria1.4.0.4.zip
+        - ZIPFILE=TShock4.4.0_Pre11_Terraria1.4.0.5.zip
         - cd $TMPDIR
-        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre8/TShock_4.4.0_Pre8_Terraria1.4.0.4.zip
+        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre11/TShock4.4.0_Pre11_Terraria1.4.0.5.zip
         - unzip -q $ZIPFILE OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll
         - mkdir -p ../lib
         - mv OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll ../lib
         - cd ..
       script:
         - msbuild /p:Configuration=Debug Terracord.sln
+        - msbuild /p:Configuration=Debug TerracordTest/TerracordTest.csproj
+        - mono ./testrunner/xunit.runner.console.2.4.1/tools/net46/xunit.console.exe ./TerracordTest/bin/Debug/net46/TerracordTest.dll
       after_success:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
@@ -31,15 +34,15 @@ jobs:
         - dotnet restore
         - TMPDIR=tmp
         - mkdir $TMPDIR
-        - ZIPFILE=TShock_4.4.0_Pre8_Terraria1.4.0.4.zip
+        - ZIPFILE=TShock4.4.0_Pre11_Terraria1.4.0.5.zip
         - cd $TMPDIR
-        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre8/TShock_4.4.0_Pre8_Terraria1.4.0.4.zip
+        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre11/TShock4.4.0_Pre11_Terraria1.4.0.5.zip
         - unzip -q $ZIPFILE OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll
         - mkdir -p ../lib
         - mv OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll ../lib
         - cd ..
       script:
-        - dotnet build -c Debug
+        - dotnet build -c Debug -f netstandard2.0
       after_success:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh

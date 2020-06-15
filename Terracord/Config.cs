@@ -180,9 +180,10 @@ namespace FragLand.TerracordPlugin
     /// </summary>
     public static void Generate()
     {
-      Util.Log($"Attempting to generate {TerracordPath}terracord.xml since the file did not exist...", Util.Severity.Info);
       try
       {
+        Directory.CreateDirectory(TerracordPath);
+        Util.Log($"Attempting to generate {TerracordPath}terracord.xml since the file did not exist...", Util.Severity.Info);
         StreamWriter newConfigFile = new StreamWriter($"{TerracordPath}terracord.xml", false);
         newConfigFile.WriteLine("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
         newConfigFile.WriteLine("<!-- Terracord configuration -->");

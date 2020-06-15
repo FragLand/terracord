@@ -33,7 +33,7 @@ namespace FragLand.TerracordPluginTests
     public void ConfigGenerateTest()
     {
       Config.Generate();
-      Assert.False(File.Exists($"tshock{Path.DirectorySeparatorChar}terracord.xml"));
+      Assert.True(File.Exists($"tshock{Path.DirectorySeparatorChar}Terracord{Path.DirectorySeparatorChar}terracord.xml"));
     }
 
     /// <summary>
