@@ -183,7 +183,7 @@ namespace FragLand.TerracordPlugin
       // Handle commands
       if(message.Content.StartsWith(Config.CommandPrefix.ToString(Config.Locale), StringComparison.InvariantCulture) && message.Content.Length > 1)
       {
-        _ = Command.CommandHandler(message.Author.Id, channel, message.Content); // avoid blocking in MessageReceived() by using discard
+        _ = Command.CommandHandler(message.Author.Id, message.Author.Username, channel, message.Content); // avoid blocking in MessageReceived() by using discard
         if(!Config.RelayCommands)
           return false;
       }

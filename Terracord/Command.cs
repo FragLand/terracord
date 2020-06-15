@@ -20,6 +20,7 @@
 
 using Discord;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TShockAPI;
 
@@ -27,7 +28,16 @@ namespace FragLand.TerracordPlugin
 {
   class Command
   {
-    private const string CommandList = "annoy ban broadcast firework give godmode heal kick kill mute reload save slap stop warp whisper";
+    // This class is instanced as a TShock client object that issues commands
+    class TerracordPlayer:TSPlayer
+    {
+      public List<string> Output = new List<string>();
+      public TerracordPlayer(string player):base(player){}
+      public override void SendMessage(string msg, byte red, byte green, byte blue)
+      {
+        Output.Add(msg); // command output
+      }
+    }
 
     /// <summary>
     /// Handles Discord commands
@@ -36,7 +46,7 @@ namespace FragLand.TerracordPlugin
     /// <param name="channel">Discord text channel</param>
     /// <param name="command">command sent by a Discord user</param>
     /// <returns>void</returns>
-    public static async Task CommandHandler(ulong userId, IMessageChannel channel, string command)
+    public static async Task CommandHandler(ulong userId, string username, IMessageChannel channel, string command)
     {
       command = command.Substring(1); // remove command prefix
       Util.Log($"Command sent: {command}", Util.Severity.Info);
@@ -52,7 +62,7 @@ namespace FragLand.TerracordPlugin
       else // let TShock attempt to handle the command
       {
         if(Config.RemoteCommands)
-          _ = ExecuteTShockCommand(userId, channel, command);
+          _ = ExecuteTShockCommand(userId, username, channel, command);
       }
 
       await Task.CompletedTask.ConfigureAwait(true);
@@ -65,26 +75,24 @@ namespace FragLand.TerracordPlugin
     /// <param name="channel">Discord text channel</param>
     /// <param name="command">command sent by a Discord user</param>
     /// <returns>void</returns>
-    private static async Task ExecuteTShockCommand(ulong userId, IMessageChannel channel, string command)
+    private static async Task ExecuteTShockCommand(ulong userId, string username, IMessageChannel channel, string command)
     {
-      if(CommandList.Contains(command.Split(' ')[0].ToLower(Config.Locale))) // check if command is valid
+      if(userId == Config.OwnerId) // check if user is authorized
       {
-        if(userId == Config.OwnerId) // check if user is authorized
+        TerracordPlayer terracordPlayer = new TerracordPlayer(username){Group = new SuperAdminGroup()};
+        //if(Commands.HandleCommand(TSPlayer.Server, $"{TShock.Config.CommandSpecifier}{command}"))
+        if(Commands.HandleCommand(terracordPlayer, $"{TShock.Config.CommandSpecifier}{command}"))
         {
-          if(Commands.HandleCommand(TSPlayer.Server, $"{TShock.Config.CommandSpecifier}{command}"))
-          {
-            if(Config.RemoteResults)
-              await CommandResponse(channel, "Command Status", $"Remotely executed: {command}", Color.Green).ConfigureAwait(true);
-          }
-          else
-          {
-            if(Config.RemoteResults)
-              await CommandResponse(channel, "Command Status", $"Failed to execute: {command}", Color.Red).ConfigureAwait(true);
-          }
+          foreach(string commandOutput in terracordPlayer.Output)
+            await CommandResponse(channel, "Command Status", $"Command output: {commandOutput}", Color.Green).ConfigureAwait(true);
         }
         else
-          await CommandResponse(channel, "Command Status", $"Access denied for: {command}", Color.Red).ConfigureAwait(true);
+        {
+          await CommandResponse(channel, "Command Status", $"Failed to execute: {command}", Color.Red).ConfigureAwait(true);
+        }
       }
+      else
+        await CommandResponse(channel, "Command Status", $"Access denied for: {command}", Color.Red).ConfigureAwait(true);
 
       await Task.CompletedTask.ConfigureAwait(true);
     }
@@ -95,34 +103,11 @@ namespace FragLand.TerracordPlugin
     /// <returns>command details</returns>
     public static string Help()
     {
-      string commandList = "__**General Commands**__\n" +
+      string commandList = "__**Commands**__\n" +
                            "**help**       - Display command list\n" +
                            "**playerlist** - Display online players\n" +
                            "**serverinfo** - Display server details\n" +
                            "**uptime**     - Display plugin uptime\n\n";
-      if(Config.RemoteCommands)
-      {
-        commandList += "__**Administrative Commands**__\n" +
-                       "**annoy <player> <seconds>**                    - Annoy player with a sound for the specified amount of time\n" +
-                       "**ban add <player/IP address> <time> [reason]** - Ban player or IP address for the specified time with optional reason -- " +
-                       "<time> can be 0 for a permanent ban or is in the format: 1d 2h 3m 4s\n" +
-                       "**ban del <player>**                            - Unban player\n" +
-                       "**ban delip <IP address>**                      - Unban IP address\n" +
-                       "**broadcast <text>**                            - Broadcast arbitrary text to all players\n" +
-                       "**firework <player> [color]**                   - Detonate a blue, green, red, or yellow firework on a player\n" +
-                       "**give <item/ID> <player> [amount]**            - Give player an item specified by name or numerical ID with optional amount\n" +
-                       "**godmode <player>**                            - Make player invincible\n" +
-                       "**heal <player>**                               - Restore player health\n" +
-                       "**kick <player> [reason]**                      - Kick player for optional reason\n" +
-                       "**kill <player>**                               - Kill player\n" +
-                       "**mute <player> [reason]**                      - Mute player for optional reason\n" +
-                       "**reload**                                      - Reload configuration\n" +
-                       "**save**                                        - Save world\n" +
-                       "**slap <player> [damage]**                      - Slap player for arbitrary damage\n" +
-                       "**stop**                                        - Shut down server\n" +
-                       "**warp send <player> <location>**               - Warp player to preset location\n" +
-                       "**whisper <player> <text>**                     - Messages player with arbitrary text";
-      }
       return commandList;
     }
 
