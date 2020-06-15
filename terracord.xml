@@ -18,8 +18,8 @@
   <!-- Relay bot commands from Discord to players -->
   <relay commands="true" />
 
-  <!-- Toggle execution of TShock commands submitted remotely by Discord bot owner and display results -->
-  <remote commands="true" results="true" />
+  <!-- Toggle execution of TShock commands submitted remotely by Discord bot owner -->
+  <remote commands="true" />
 
   <!-- Discord bot game for "playing" status -->
   <game status="Terraria" />
