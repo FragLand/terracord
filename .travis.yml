@@ -7,7 +7,7 @@ jobs:
       mono: latest
       install:
         - nuget restore Terracord.sln
-        - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
+        - nuget install xunit.runner.console -OutputDirectory testrunner
         - TMPDIR=tmp
         - mkdir $TMPDIR
         - ZIPFILE=TShock4.4.0_Pre11_Terraria1.4.0.5.zip
@@ -20,7 +20,7 @@ jobs:
       script:
         - msbuild /p:Configuration=Debug Terracord.sln
         - msbuild /p:Configuration=Debug TerracordTest/TerracordTest.csproj
-        - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./TerracordTest/bin/Debug/net46/TerracordTest.dll
+        - mono ./testrunner/xunit.runner.console.2.*/tools/xunit.console.exe ./TerracordTest/bin/Debug/net46/TerracordTest.dll
       after_success:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
