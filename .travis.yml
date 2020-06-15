@@ -20,6 +20,9 @@ jobs:
       script:
         - msbuild /p:Configuration=Debug Terracord.sln
         - msbuild /p:Configuration=Debug TerracordTest/TerracordTest.csproj
+        - ls -la ./testrunner/xunit.runner.console.2.*
+        - ls -la ./testrunner/xunit.runner.console.2.*/tools
+        - ls -la ./TerracordTest/bin/Debug/net46
         - mono ./testrunner/xunit.runner.console.2.*/tools/xunit.console.exe ./TerracordTest/bin/Debug/net46/TerracordTest.dll
       after_success:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
