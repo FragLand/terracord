@@ -271,6 +271,26 @@ namespace FragLand.TerracordPlugin
     }
 
     /// <summary>
+    /// Check if user is authorized to execute remote TShock commands based on Discord role membership
+    /// </summary>
+    /// <param name="user">user to check</param>
+    /// <returns>true if user is authorized or false otherwise</returns>
+    public static bool AuthorizedUser(SocketUser user)
+    {
+      if(String.IsNullOrEmpty(Config.AuthorizedRoles))
+        return false;
+      foreach(var role in ((SocketGuildUser)(user)).Roles)
+      {
+        foreach(string allowedRole in Config.AuthorizedRoles.Split(' '))
+        {
+          if(role.Name.Equals(allowedRole, StringComparison.OrdinalIgnoreCase))
+            return true;
+        }
+      }
+      return false;
+    }
+
+    /// <summary>
     /// Populates the dictionary by mapping Discord emojis to text emoticons
     /// </summary>
     /*public static void PopulateEmojiDict()
