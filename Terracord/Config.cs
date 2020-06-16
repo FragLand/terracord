@@ -38,6 +38,7 @@ namespace FragLand.TerracordPlugin
     public static char CommandPrefix { get; private set; }
     public static bool RelayCommands { get; private set; }
     public static bool RemoteCommands { get; private set; }
+    public static string AuthorizedRoles { get; private set; }
     public static string BotGame { get; private set; }
     public static uint TopicInterval { get; private set; }
     public static string OfflineTopic { get; private set; }
@@ -86,6 +87,7 @@ namespace FragLand.TerracordPlugin
         CommandPrefix =  char.Parse(configOptions.Element("command").Attribute("prefix").Value.ToString(Locale));
         RelayCommands = bool.Parse(configOptions.Element("relay").Attribute("commands").Value.ToString(Locale));
         RemoteCommands = bool.Parse(configOptions.Element("remote").Attribute("commands").Value.ToString(Locale));
+        AuthorizedRoles = configOptions.Element("authorized").Attribute("roles").Value.ToString(Locale);
         BotGame = configOptions.Element("game").Attribute("status").Value.ToString(Locale);
         TopicInterval = uint.Parse(configOptions.Element("topic").Attribute("interval").Value.ToString(Locale), Locale);
         OfflineTopic = configOptions.Element("topic").Attribute("offline").Value.ToString(Locale);
@@ -154,6 +156,7 @@ namespace FragLand.TerracordPlugin
       Util.Log($"Command Prefix: {CommandPrefix}", Util.Severity.Debug);
       Util.Log($"Relay Commands: {RelayCommands}", Util.Severity.Debug);
       Util.Log($"Remote Commands: {RemoteCommands}", Util.Severity.Debug);
+      Util.Log($"Authorized Roles: {AuthorizedRoles}", Util.Severity.Debug);
       Util.Log($"Bot Game: {BotGame}", Util.Severity.Debug);
       Util.Log($"Topic Interval: {TopicInterval}", Util.Severity.Debug);
       Util.Log($"Offline Topic: {OfflineTopic}", Util.Severity.Debug);
@@ -197,6 +200,8 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <relay commands=\"true\" />\n");
         newConfigFile.WriteLine("  <!-- Toggle execution of TShock commands submitted remotely by Discord bot owner -->");
         newConfigFile.WriteLine("  <remote commands=\"true\" />\n");
+        newConfigFile.WriteLine("  <!-- List of space-separated Discord roles authorized to execute TShock commands remotely -->");
+        newConfigFile.WriteLine("  <authorized roles=\"Administrators Moderators\" />\n");
         newConfigFile.WriteLine("  <!-- Discord bot game for \"playing\" status -->");
         newConfigFile.WriteLine("  <game status=\"Terraria\" />\n");
         newConfigFile.WriteLine("  <!-- Topic update interval in seconds and topic to set when relay is offline -->");

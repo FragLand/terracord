@@ -19,6 +19,7 @@
  */
 
 using Discord;
+using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -42,11 +43,11 @@ namespace FragLand.TerracordPlugin
     /// <summary>
     /// Handles Discord commands
     /// </summary>
-    /// <param name="userId">ID of user issuing the command</param>
+    /// <param name="user">user issuing the command</param>
     /// <param name="channel">Discord text channel</param>
     /// <param name="command">command sent by a Discord user</param>
     /// <returns>void</returns>
-    public static async Task CommandHandler(ulong userId, string username, IMessageChannel channel, string command)
+    public static async Task CommandHandler(SocketUser user, IMessageChannel channel, string command)
     {
       command = command.Substring(1); // remove command prefix
       Util.Log($"Command sent: {command}", Util.Severity.Info);
@@ -62,7 +63,7 @@ namespace FragLand.TerracordPlugin
       else // let TShock attempt to handle the command
       {
         if(Config.RemoteCommands)
-          _ = ExecuteTShockCommand(userId, username, channel, command);
+          _ = ExecuteTShockCommand(user, channel, command);
       }
 
       await Task.CompletedTask.ConfigureAwait(true);
@@ -71,15 +72,15 @@ namespace FragLand.TerracordPlugin
     /// <summary>
     /// Attempts to execute a TShock command sent from Discord
     /// </summary>
-    /// <param name="userId">ID if user issuing the command</param>
+    /// <param name="user">user issuing the command</param>
     /// <param name="channel">Discord text channel</param>
     /// <param name="command">command sent by a Discord user</param>
     /// <returns>void</returns>
-    private static async Task ExecuteTShockCommand(ulong userId, string username, IMessageChannel channel, string command)
+    private static async Task ExecuteTShockCommand(SocketUser user, IMessageChannel channel, string command)
     {
-      if(userId == Config.OwnerId) // check if user is authorized
+      if(user.Id == Config.OwnerId || Util.AuthorizedUser(user)) // check if user is authorized
       {
-        TerracordPlayer terracordPlayer = new TerracordPlayer(username){Group = new SuperAdminGroup()};
+        TerracordPlayer terracordPlayer = new TerracordPlayer(user.Username){Group = new SuperAdminGroup()};
         //if(Commands.HandleCommand(TSPlayer.Server, $"{TShock.Config.CommandSpecifier}{command}"))
         if(Commands.HandleCommand(terracordPlayer, $"{TShock.Config.CommandSpecifier}{command}"))
         {

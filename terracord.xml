@@ -21,6 +21,9 @@
   <!-- Toggle execution of TShock commands submitted remotely by Discord bot owner -->
   <remote commands="true" />
 
+  <!-- List of space-separated Discord roles authorized to execute TShock commands remotely -->
+  <authorized roles="Administrators Moderators" />
+
   <!-- Discord bot game for "playing" status -->
   <game status="Terraria" />
 
