@@ -170,7 +170,7 @@ namespace FragLand.TerracordPlugin
 
       // Check for emotes and simplify them from <:example:> or <:custom_example:1234567890> to :example: or :custom_example:
       if(Regex.IsMatch(modifiedMessage, emoPattern))
-        modifiedMessage = Regex.Replace(modifiedMessage, emoPattern, "$1");
+        modifiedMessage = Regex.Replace(Regex.Escape(modifiedMessage), emoPattern, "$1");
 
       // Check for and replace some standard emojis in the form :smile: with :)
       //foreach(KeyValuePair<string, string> entry in Util.EmojiDict)
@@ -199,7 +199,7 @@ namespace FragLand.TerracordPlugin
         foreach(var guild in guilds)
         {
           foreach(var channel in guild.TextChannels)
-            modifiedMessage = Regex.Replace(modifiedMessage, $"#{channel.Name}", channel.Mention, RegexOptions.IgnoreCase);
+            modifiedMessage = Regex.Replace(Regex.Escape(modifiedMessage), $"#{channel.Name}", channel.Mention, RegexOptions.IgnoreCase);
         }
       }
 
@@ -223,13 +223,13 @@ namespace FragLand.TerracordPlugin
         foreach(var guild in guilds)
         {
           foreach(var role in guild.Roles)
-            modifiedMessage = Regex.Replace(modifiedMessage, $"@{role.Name}", role.Mention, RegexOptions.IgnoreCase);
+            modifiedMessage = Regex.Replace(Regex.Escape(modifiedMessage), $"@{role.Name}", role.Mention, RegexOptions.IgnoreCase);
           // ToDo: Deal with duplicate usernames (users with the same username will have different #NNNN discriminators)
           foreach(var user in guild.Users)
           {
-            modifiedMessage = Regex.Replace(modifiedMessage, $"@{user.Username}", user.Mention, RegexOptions.IgnoreCase);
+            modifiedMessage = Regex.Replace(Regex.Escape(modifiedMessage), $"@{user.Username}", user.Mention, RegexOptions.IgnoreCase);
             // Also replace nicknames with mentions -- this is bugged and replaces non-existent tags.
-            //modifiedMessage = Regex.Replace(modifiedMessage, $"@{user.Nickname}", user.Mention, RegexOptions.IgnoreCase);
+            //modifiedMessage = Regex.Replace(Regex.Escape(modifiedMessage), $"@{user.Nickname}", user.Mention, RegexOptions.IgnoreCase);
           }
         }
       }
