@@ -6,7 +6,7 @@
 
 Terracord
 =========
-Terracord is a [Discord](http://discordapp.com/) <-> [Terraria](http://terraria.org/) bridge plugin for
+Terracord is a [Discord](http://discord.com/) <-> [Terraria](http://terraria.org/) bridge plugin for
 [TShock](http://tshock.co/). The plugin enables the bi-directional flow of messages between a Discord text
 channel and a TShock server. This project is inspired by [DiscordSRV](https://github.com/DiscordSRV/DiscordSRV)
 which is a Discord <-> [Minecraft](http://www.minecraft.net/) chat relay plugin for [PaperMC](http://papermc.io/)
