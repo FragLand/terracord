@@ -25,6 +25,7 @@ using Terraria;
 using TerrariaApi.Server;
 using TShockAPI;
 using TShockAPI.Hooks;
+using OTAPI;
 
 namespace FragLand.TerracordPlugin
 {
@@ -81,7 +82,8 @@ namespace FragLand.TerracordPlugin
       ServerApi.Hooks.GamePostInitialize.Register(this, OnPostInitialize);
       ServerApi.Hooks.ServerJoin.Register(this, OnJoin);
       ServerApi.Hooks.ServerBroadcast.Register(this, OnBroadcast);
-      ServerApi.Hooks.ServerChat.Register(this, OnChat);
+      //ServerApi.Hooks.ServerChat.Register(this, OnChat);
+      PlayerHooks.PlayerChat += OnChat;
       ServerApi.Hooks.ServerLeave.Register(this, OnLeave);
       GeneralHooks.ReloadEvent += OnReload;
     }
@@ -101,7 +103,8 @@ namespace FragLand.TerracordPlugin
         ServerApi.Hooks.GamePostInitialize.Deregister(this, OnPostInitialize);
         ServerApi.Hooks.ServerJoin.Deregister(this, OnJoin);
         ServerApi.Hooks.ServerBroadcast.Deregister(this, OnBroadcast);
-        ServerApi.Hooks.ServerChat.Deregister(this, OnChat);
+        //ServerApi.Hooks.ServerChat.Deregister(this, OnChat);
+        PlayerHooks.PlayerChat -= OnChat;
         ServerApi.Hooks.ServerLeave.Deregister(this, OnLeave);
         GeneralHooks.ReloadEvent -= OnReload;
         discord.Client.Dispose();
@@ -162,18 +165,21 @@ namespace FragLand.TerracordPlugin
     /// Called when a chat message is intercepted
     /// </summary>
     /// <param name="args">event arguments passed by hook</param>
-    private void OnChat(ServerChatEventArgs args)
+    //private void OnChat(ServerChatEventArgs args)
+    private void OnChat(TShockAPI.Hooks.PlayerChatEventArgs args)
     {
       // Do not relay game chat to Discord if this option is enabled
       if(Config.SilenceChat)
         return;
 
+      // PlayerHooks.OnPlayerChat() already handles filtering commands and muted players.
       // Do not relay commands or messages from muted players
-      if(args.Text.StartsWith(TShock.Config.CommandSpecifier, StringComparison.InvariantCulture) || args.Text.StartsWith(TShock.Config.CommandSilentSpecifier, StringComparison.InvariantCulture) || TShock.Players[args.Who].mute)
-        return;
+      //if(args.Text.StartsWith(TShock.Config.CommandSpecifier, StringComparison.InvariantCulture) || args.Text.StartsWith(TShock.Config.CommandSilentSpecifier, StringComparison.InvariantCulture) || TShock.Players[args.Who].mute)
+      //  return;
 
       // Attempt to convert any channel mentions
-      string modifiedMessage = args.Text;
+      //string modifiedMessage = args.Text;
+      string modifiedMessage = args.RawText;
       if(Regex.IsMatch(modifiedMessage, @"#.+"))
         modifiedMessage = Util.ConvertChannelMentions(modifiedMessage, discord.Client);
 
@@ -182,8 +188,12 @@ namespace FragLand.TerracordPlugin
         modifiedMessage = Util.ConvertRoleUserMentions(modifiedMessage, discord.Client);
 
       if(Config.LogChat)
-        Util.Log($"{TShock.Players[args.Who].Name} said: {modifiedMessage}", Util.Severity.Info);
-      discord.Send($"**<{TShock.Players[args.Who].Name}>** {modifiedMessage}");
+      {
+        //Util.Log($"{TShock.Players[args.Who].Name} said: {modifiedMessage}", Util.Severity.Info);
+        Util.Log($"{args.Player.Name} said: {modifiedMessage}", Util.Severity.Info);
+      }
+      //discord.Send($"**<{TShock.Players[args.Who].Name}>** {modifiedMessage}");
+      discord.Send($"**<{args.Player.Name}>** {modifiedMessage}");
     }
 
     /// <summary>
