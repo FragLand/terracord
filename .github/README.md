@@ -153,6 +153,9 @@ support this. Therefore, the following steps should be considered experimental.
 
 8. With luck, a wild `Terracord.dll` will appear.
 
+### Related Projects
+[@Dids](https://github.com/Dids) has contributed a Docker image of TShock bundled with Terracord at: https://github.com/Didstopia/terraria-server
+
 ### Contributing and Support
 Feel free to [submit an issue](https://github.com/FragLand/terracord/issues/new) if you require assistance or would like to
 make a feature request. You are also welcome to join our Discord server at https://discord.frag.land/. Any contributions such
