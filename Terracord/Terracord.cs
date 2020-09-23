@@ -25,7 +25,6 @@ using Terraria;
 using TerrariaApi.Server;
 using TShockAPI;
 using TShockAPI.Hooks;
-using OTAPI;
 
 namespace FragLand.TerracordPlugin
 {
@@ -166,7 +165,7 @@ namespace FragLand.TerracordPlugin
     /// </summary>
     /// <param name="args">event arguments passed by hook</param>
     //private void OnChat(ServerChatEventArgs args)
-    private void OnChat(TShockAPI.Hooks.PlayerChatEventArgs args)
+    private void OnChat(PlayerChatEventArgs args)
     {
       // Do not relay game chat to Discord if this option is enabled
       if(Config.SilenceChat)
@@ -233,12 +232,12 @@ namespace FragLand.TerracordPlugin
           if(eventArgs is JoinEventArgs joinEventArgs)
           {
             playerName = TShock.Players[joinEventArgs.Who].Name;
-            joinLeaveEmoji = ":heavy_plus_sign:";
+            joinLeaveEmoji = Config.JoinPrefix;
           }
           if(eventArgs is LeaveEventArgs leaveEventArgs)
           {
             playerName = TShock.Players[leaveEventArgs.Who].Name;
-            joinLeaveEmoji = ":heavy_minus_sign:";
+            joinLeaveEmoji = Config.LeavePrefix;
           }
           if(!String.IsNullOrEmpty(playerName))
           {

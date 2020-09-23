@@ -39,6 +39,12 @@
   <!-- Notify Discord channel of relay availability after restoring the connection -->
   <announce reconnect="true" />
 
+  <!-- Player join event prefix/emoji displayed in Discord -->
+  <join prefix=":green_circle:" />
+
+  <!-- Player leave event prefix/emoji displayed in Discord -->
+  <leave prefix=":red_circle:" />
+
   <!-- Toggle Discord chat displayed in game -->
   <ignore chat="false" />
 

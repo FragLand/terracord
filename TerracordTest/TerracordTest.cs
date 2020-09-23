@@ -77,6 +77,10 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<bool>(Config.SilenceSaves);
       Assert.True(Config.AnnounceReconnect);
       Assert.IsType<bool>(Config.AnnounceReconnect);
+      Assert.Equal(":green_circle:", Config.JoinPrefix);
+      Assert.IsType<string>(Config.JoinPrefix);
+      Assert.Equal(":red_circle:", Config.LeavePrefix);
+      Assert.IsType<string>(Config.LeavePrefix);
       Assert.False(Config.IgnoreChat);
       Assert.IsType<bool>(Config.IgnoreChat);
       Assert.True(Config.LogChat);
