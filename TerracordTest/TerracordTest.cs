@@ -49,8 +49,8 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<ulong>(Config.ChannelId);
       Assert.Equal("123", Config.OwnerId.ToString());
       Assert.IsType<ulong>(Config.OwnerId);
-      Assert.Equal('!', Config.CommandPrefix);
-      Assert.IsType<char>(Config.CommandPrefix);
+      Assert.Equal("!", Config.CommandPrefix);
+      Assert.IsType<string>(Config.CommandPrefix);
       Assert.True(Config.RelayCommands);
       Assert.IsType<bool>(Config.RelayCommands);
       Assert.True(Config.RemoteCommands);

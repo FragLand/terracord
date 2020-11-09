@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EmptyCommandPrefixString" xml:space="preserve">
+    <value>명령 접두사가 비어 있습니다</value>
+    <comment>명령 접두사가 비어 있음을 나타냅니다</comment>
+  </data>
   <data name="PlayerJoinedString" xml:space="preserve">
     <value>서버에 가입하십시오.</value>
     <comment>플레이어가 Terraria 서버에 가입 할 때 Discord 텍스트 채널로 전송되는 메시지</comment>

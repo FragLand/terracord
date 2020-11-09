@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EmptyCommandPrefixString" xml:space="preserve">
+    <value>O prefixo do comando está vazio!</value>
+    <comment>Indica que o prefixo do comando está vazio</comment>
+  </data>
   <data name="PlayerJoinedString" xml:space="preserve">
     <value>ingressou no servidor.</value>
     <comment>Mensagem enviada ao canal de texto do Discord quando um jogador entra no servidor Terraria</comment>
