@@ -35,7 +35,7 @@ namespace FragLand.TerracordPlugin
     public static string BotToken { get; private set; }
     public static ulong ChannelId { get; private set; }
     public static ulong OwnerId { get; private set; }
-    public static char CommandPrefix { get; private set; }
+    public static string CommandPrefix { get; private set; }
     public static bool RelayCommands { get; private set; }
     public static bool RemoteCommands { get; private set; }
     public static string AuthorizedRoles { get; private set; }
@@ -86,7 +86,9 @@ namespace FragLand.TerracordPlugin
         BotToken = configOptions.Element("bot").Attribute("token").Value.ToString(Locale);
         ChannelId = ulong.Parse(configOptions.Element("channel").Attribute("id").Value.ToString(Locale), Locale);
         OwnerId = ulong.Parse(configOptions.Element("owner").Attribute("id").Value.ToString(Locale), Locale);
-        CommandPrefix =  char.Parse(configOptions.Element("command").Attribute("prefix").Value.ToString(Locale));
+        CommandPrefix =  configOptions.Element("command").Attribute("prefix").Value.ToString(Locale);
+        if(CommandPrefix.Length == 0 || CommandPrefix.Trim().Length == 0)
+          throw new IOException(Properties.Strings.EmptyCommandPrefixString);
         RelayCommands = bool.Parse(configOptions.Element("relay").Attribute("commands").Value.ToString(Locale));
         RemoteCommands = bool.Parse(configOptions.Element("remote").Attribute("commands").Value.ToString(Locale));
         AuthorizedRoles = configOptions.Element("authorized").Attribute("roles").Value.ToString(Locale);

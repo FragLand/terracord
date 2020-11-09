@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EmptyCommandPrefixString" xml:space="preserve">
+    <value>命令前缀为空</value>
+    <comment>表示命令前缀为空</comment>
+  </data>
+  <data name="PlayerJoinedString" xml:space="preserve">
+    <value>已加入服务器。</value>
+    <comment>玩家加入Terraria服务器时发送到Discord文本通道的消息</comment>
+  </data>
+  <data name="PlayerLeftString" xml:space="preserve">
+    <value>离开了服务器。</value>
+    <comment>玩家离开Terraria服务器时发送到Discord文本通道的消息</comment>
+  </data>
   <data name="RelayAvailableString" xml:space="preserve">
     <value>**:white_check_mark: 继电器可用。**</value>
     <comment>中继可用时将消息发送到Discord文本通道</comment>

@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EmptyCommandPrefixString" xml:space="preserve">
+    <value>بادئة الأمر فارغة</value>
+    <comment>يشير إلى أن بادئة الأمر فارغة</comment>
+  </data>
   <data name="PlayerJoinedString" xml:space="preserve">
     <value>انضم إلى الخادم</value>
     <comment>تم إرسال الرسالة إلى قناة Discord النصية عندما انضم اللاعب إلى خادم Terraria</comment>

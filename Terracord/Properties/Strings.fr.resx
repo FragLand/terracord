@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EmptyCommandPrefixString" xml:space="preserve">
+    <value>Le préfixe de commande est vide!</value>
+    <comment>Indique que le préfixe de commande est vide</comment>
+  </data>
   <data name="PlayerJoinedString" xml:space="preserve">
     <value>rejoint le serveur.</value>
     <comment>Message envoyé à la chaîne de texte Discord lorsqu'un joueur rejoint le serveur Terraria</comment>

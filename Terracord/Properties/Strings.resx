@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EmptyCommandPrefixString" xml:space="preserve">
+    <value>Command prefix is empty!</value>
+    <comment>Indicates that the command prefix is empty</comment>
+  </data>
   <data name="PlayerJoinedString" xml:space="preserve">
     <value>has joined the server.</value>
     <comment>Message sent to Discord text channel when a player joins the Terraria server</comment>
