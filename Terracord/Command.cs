@@ -49,7 +49,7 @@ namespace FragLand.TerracordPlugin
     /// <returns>void</returns>
     public static async Task CommandHandler(SocketUser user, IMessageChannel channel, string command)
     {
-      command = command.Substring(Config.CommandPrefix.Length); // remove command prefix
+      command = command.Substring(Config.CommandPrefix.Length).TrimStart(); // remove command prefix
       Util.Log($"Command sent: {command}", Util.Severity.Info);
 
       if(command.Equals("help", StringComparison.OrdinalIgnoreCase))
