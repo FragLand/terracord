@@ -37,7 +37,10 @@ Terraria messages to. A channel ID appears as a long string of numbers. The proc
 to obtain a bot token, you will need to create a Discord bot application. The process is described
 [here](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token).
 
-3. Restart your TShock server to load the plugin. For review or troubleshooting purposes, `terracord.log` can be found in
+3. If desired, give the Discord bot **Manage Channel** permission on the text channel it is configured to use. This is required
+to dynamically update the channel topic with information about the Terraria server.
+
+4. Restart your TShock server to load the plugin. For review or troubleshooting purposes, `terracord.log` can be found in
 the `tshock > Terracord` directory.
 
 :warning: Unfortunately, Terracord may not work with [Mono](https://www.mono-project.com/). This is due to Discord.Net
