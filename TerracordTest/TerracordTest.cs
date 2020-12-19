@@ -79,7 +79,7 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<bool>(Config.AnnounceReconnect);
       Assert.Equal("**:white_check_mark: Relay available.**", Config.AvailableText);
       Assert.IsType<string>(Config.AvailableText);
-      Assert.Equal("**:octagonal_sign: Relay shutting down.**", Config.AvailableText);
+      Assert.Equal("**:octagonal_sign: Relay shutting down.**", Config.UnavailableText);
       Assert.IsType<string>(Config.UnavailableText);
       Assert.Equal("**:green_circle: %p% has joined the server.**", Config.JoinText);
       Assert.IsType<string>(Config.JoinText);
