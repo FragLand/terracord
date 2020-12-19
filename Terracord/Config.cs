@@ -237,9 +237,9 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when the relay is shutting down -->");
         newConfigFile.WriteLine("  <unavailable text=\"**:octagonal_sign: Relay shutting down.**\" />\n");
         newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when a player joins the game -->");
-        newConfigFile.WriteLine("  <join text=\":green_circle: %p% has joined the server.\" />\n");
+        newConfigFile.WriteLine("  <join text=\"**:green_circle: %p% has joined the server.**\" />\n");
         newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when a player leaves the game -->");
-        newConfigFile.WriteLine("  <leave text=\":red_circle: %p% has left the server.\" />\n");
+        newConfigFile.WriteLine("  <leave text=\"**:red_circle: %p% has left the server.**\" />\n");
         newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when a broadcast is sent from the game -->");
         newConfigFile.WriteLine("  <broadcast text=\"**:mega: Broadcast:** %m%\" />\n");
         newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when a player chats in the game -->");
