@@ -87,9 +87,9 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<string>(Config.LeaveText);
       Assert.Equal("**:mega: Broadcast:** %m%", Config.BroadcastText);
       Assert.IsType<string>(Config.BroadcastText);
-      Assert.Equal("**&lt;%p%&gt;** %m%", Config.PlayerText);
+      Assert.Equal("**<%p%>** %m%", Config.PlayerText);
       Assert.IsType<string>(Config.PlayerText);
-      Assert.Equal("&lt;%u%@Discord&gt; %m%", Config.ChatText);
+      Assert.Equal("<%u%@Discord> %m%", Config.ChatText);
       Assert.IsType<string>(Config.ChatText);
       Assert.False(Config.IgnoreChat);
       Assert.IsType<bool>(Config.IgnoreChat);
