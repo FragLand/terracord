@@ -8,7 +8,7 @@
     <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <Platforms>x86</Platforms>
     <Company>Frag Land</Company>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <PackageProjectUrl>http://www.frag.land/</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/FragLand/terracord</RepositoryUrl>
@@ -21,6 +21,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <ApplicationIcon />
     <Win32Resource />
+    <CodeAnalysisRuleSet>Terracord.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
@@ -55,25 +56,6 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>TerracordTest</_Parameter1>
     </AssemblyAttribute>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Properties\Strings.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Strings.fr.resx">
-      <Generator></Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Strings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>FragLand.TerracordPlugin.Properties</CustomToolNamespace>
-    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

@@ -9,7 +9,7 @@
     <Authors>Lloyd Dilley</Authors>
     <Company>Frag Land</Company>
     <Product>TerracordTest</Product>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Description>Terracord unit tests</Description>
     <Copyright>2019-2020</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
