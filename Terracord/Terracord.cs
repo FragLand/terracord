@@ -39,7 +39,7 @@ namespace FragLand.TerracordPlugin
     /// <summary>
     /// Plugin version
     /// </summary>
-    public override Version Version => new Version(1, 2, 1);
+    public override Version Version => new Version(1, 2, 2);
 
     /// <summary>
     /// Plugin author(s)
@@ -52,7 +52,7 @@ namespace FragLand.TerracordPlugin
     public override string Description => "A Discord <-> Terraria bridge plugin for TShock";
 
     // Plugin version
-    public const string PluginVersion = "1.2.1";
+    public const string PluginVersion = "1.2.2";
     // Discord bot client
     private readonly Discord discord;
     // Plugin start time
@@ -95,7 +95,7 @@ namespace FragLand.TerracordPlugin
       if(disposing)
       {
         Util.Log("Relay shutting down.", Util.Severity.Info);
-        discord.Send(Properties.Strings.RelayShutdownString);
+        discord.Send(Config.UnavailableText);
         discord.SetTopic(Config.OfflineTopic).ConfigureAwait(true);
         Thread.Sleep(1000); // allow time for topic to be set above
         ServerApi.Hooks.GameInitialize.Deregister(this, OnInitialize);
@@ -139,7 +139,7 @@ namespace FragLand.TerracordPlugin
     /// <param name="args">event arguments passed by hook</param>
     private void OnJoin(JoinEventArgs args)
     {
-      PlayerEventNotify(args, Properties.Strings.PlayerJoinedString);
+      PlayerEventNotify(args, Config.JoinText);
     }
 
     /// <summary>
@@ -157,7 +157,7 @@ namespace FragLand.TerracordPlugin
         return;
 
       Util.Log($"Server broadcast: {args.Message}", Util.Severity.Info);
-      discord.Send($"**:mega: Broadcast:** {args.Message}");
+      discord.Send(Config.BroadcastText.Replace("%m%", args.Message.ToString()));
     }
 
     /// <summary>
@@ -192,7 +192,9 @@ namespace FragLand.TerracordPlugin
         Util.Log($"{args.Player.Name} said: {modifiedMessage}", Util.Severity.Info);
       }
       //discord.Send($"**<{TShock.Players[args.Who].Name}>** {modifiedMessage}");
-      discord.Send($"**<{args.Player.Name}>** {modifiedMessage}");
+      string text = Config.PlayerText.Replace("%p%", args.Player.Name);
+      text = text.Replace("%m%", modifiedMessage);
+      discord.Send(text);
     }
 
     /// <summary>
@@ -201,7 +203,7 @@ namespace FragLand.TerracordPlugin
     /// <param name="args">event arguments passed by hook</param>
     private void OnLeave(LeaveEventArgs args)
     {
-      PlayerEventNotify(args, Properties.Strings.PlayerLeftString);
+      PlayerEventNotify(args, Config.LeaveText);
     }
 
     /// <summary>
@@ -228,21 +230,15 @@ namespace FragLand.TerracordPlugin
         if(eventArgs != null)
         {
           string playerName = null;
-          string joinLeaveEmoji = null;
           if(eventArgs is JoinEventArgs joinEventArgs)
-          {
             playerName = TShock.Players[joinEventArgs.Who].Name;
-            joinLeaveEmoji = Config.JoinPrefix;
-          }
           if(eventArgs is LeaveEventArgs leaveEventArgs)
-          {
             playerName = TShock.Players[leaveEventArgs.Who].Name;
-            joinLeaveEmoji = Config.LeavePrefix;
-          }
           if(!String.IsNullOrEmpty(playerName))
           {
-            Util.Log($"{playerName} {message}", Util.Severity.Info);
-            discord.Send($"**{joinLeaveEmoji} {playerName} {message}**");
+            message = message.Replace("%p%", playerName);
+            Util.Log(message, Util.Severity.Info);
+            discord.Send(message);
           }
         }
       }

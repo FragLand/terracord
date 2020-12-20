@@ -21,53 +21,51 @@ the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). This project makes us
 
 ### Discord Bot
 1. Follow the instructions [here](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)
-to create a bot and invite it to your server. Take note of the bot token, you'll need it later.
+to create a bot and invite it to your server. Make note of the bot token as you'll need it later.
 
-1. Give the bot the following server-wide permissions:
+2. Give the bot the following server-wide permissions:
 
    <details>
    <summary>Permissions</summary>
    
    | Permission | Required | Effect | Scope |
    | -- | -- | -- | -- |
-   | Read Text Channels & See Voice Channels / Read Messages | ✔ Yes | | Server / Channel |
-   | Send Messages | ✔ Yes | | Server / Channel |
-   | Read Message History | ✔ Yes | | Server / Channel |
-   | Change Nickname | ❌ No | Configuration reload (?) | Server |
-   | Embed Links | ❌ No | | Server / Channel |
-   | Manage Channel(s) | ❌ No | Allows the bot to dynamically update the channel topic with info about the Terraria server. | Server / Channel |
-   | Use External Emojis | ❌ No | | Server / Channel |
+   | Read Text Channels & See Voice Channels/Read Messages | ✔ Yes | Allows the bot to view channels and messages within a text channel | Server/Channel |
+   | Send Messages | ✔ Yes | Allows the bot to send messages in a text channel | Server/Channel |
+   | Read Message History | ✔ Yes | Allows the bot to see previous messages in a text channel | Server/Channel |
+   | Change Nickname | ❌ No | Allows the bot to change its own nickname when the configuration is reloaded | Server |
+   | Embed Links | ❌ No | Allows the bot to embed links within a text channel | Server/Channel |
+   | Manage Channel(s) | ❌ No | Allows the bot to dynamically update the channel topic with info about the Terraria server. | Server/Channel |
    
-   - **Server** scope means the permission is added to the bot's role on <kbd><kbd>Server Settings</kbd>⇒<kbd>Roles</kbd></kbd>.  
-   - **Channel** scope means the permission is added to the bot (or its role) directly in the desired text channel on
+   - **Server** scope means the permission is added to the bot's role in <kbd><kbd>Server Settings</kbd>⇒<kbd>Roles</kbd></kbd>.  
+   - **Channel** scope means the permission is added to the bot (or its role) directly in the desired text channel using
    <kbd><kbd>Edit Channel</kbd>⇒<kbd>Permissions</kbd></kbd>.  
-   - **Server / Channel** scope means the permission can either be a **Server** or **Channel** permission.  
+   - **Server/Channel** scope means the permission can either be a **Server** or **Channel** permission.  
    </details>
 
-1. Copy the ID of the desired text channel following the instructions
-[here](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) and also take
+3. Copy the ID of the desired text channel following the instructions
+[here](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) and also make
 note of it.
 
 ### TShock Plugin
 1. Copy `Terracord.dll` and its dependencies into your TShock `ServerPlugins` directory. The dependencies are the following:
 `Discord.Net.Core.dll`, `Discord.Net.Rest.dll`, `Discord.Net.WebSocket.dll`, `Newtonsoft.Json.dll`,
-`System.Collections.Immutable.dll`, and `System.Interactive.Async.dll`. They should
-be contained in any release archive.
+`System.Collections.Immutable.dll`, and `System.Interactive.Async.dll`. These files should be contained in any release archive.
 
    Ensure that the version of `Newtonsoft.Json.dll` copied to the `ServerPlugins` directory is ≥ 11.0.2. This is a required
-   dependency of Discord.Net. The instance of this DLL included with TShock 4.4.0 is older (10.0.3), and using it results in
-   not being able to establish a connection to a Discord servers.
+   dependency of Discord.Net. The instance of this DLL included with TShock 4.4.0 is older (10.0.3) and using it results in
+   the inability to establish a connection to the Discord service.
 
-1. Edit `terracord.xml` to set your bot token and Discord channel ID, both obtained in the [Discord Bot](#Discord-Bot)
-section. This file should be saved to the `tshock/Terracord` directory. Other settings in this configuration file may also be
-changed to your liking.
+2. Edit `terracord.xml` to set your bot token and Discord channel ID. The [Discord Bot](#Discord-Bot) section demonstrates how to
+obtain this pair of items. `terracord.xml` should be saved to the `tshock > Terracord` directory. Other settings in this configuration
+file may also be changed to your liking.
 
-1. Restart your TShock server to load the plugin. For review or troubleshooting purposes, `terracord.log` can be found in
-the `tshock/Terracord` directory.
-</details>
+3. Restart your TShock server to load the plugin. For review or troubleshooting purposes, `terracord.log` can be found in
+the `tshock > Terracord` directory.
 
 :warning: Unfortunately, Terracord may not work with [Mono](https://www.mono-project.com/). This is due to Discord.Net
 not supporting Mono.
+</details>
 
 <details>
 <summary>Discord Commands</summary>
@@ -79,8 +77,9 @@ not supporting Mono.
 | `serverinfo` | Display server details |
 | `uptime` | Displays plugin uptime |
 
-If a command is not on this list, and the issuing Discord user has one of the admin roles or is the bot owner (both configured
-at `terracord.xml`), the command will be forwarded to be handled by the Terraria server and other plugins.
+If a command is not in the above list and the issuing Discord user has one of the admin roles or is the bot owner (both configured
+in `terracord.xml`), the command will be forwarded onto the Terraria server. The server and any relevant plugins will handle the
+command at this point and provide output if applicable.
 </details>
 
 <details>

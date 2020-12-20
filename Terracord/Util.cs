@@ -244,7 +244,7 @@ namespace FragLand.TerracordPlugin
     /// <returns>true if message should be filtered or false otherwise</returns>
     public static bool FilterBroadcast(string message)
     {
-      string discordMessage = Config.AuthorFormat.Replace("%u%", ".+");
+      string discordMessage = Config.ChatText.Replace("%u%", ".+");
       if(Regex.IsMatch(message, $"^{discordMessage} .*$"))  // Discord message
         return true;
       if(Regex.IsMatch(message, "^.+: .*$"))                // Terraria chat message
