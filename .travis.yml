@@ -16,7 +16,7 @@ jobs:
         - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre15/TShock4.4.0_Pre15_Terraria1.4.1.2.zip
         - unzip -jq $ZIPFILE $ZIPDIR/OTAPI.dll $ZIPDIR/TerrariaServer.exe $ZIPDIR/ServerPlugins/TShockAPI.dll
         - mkdir -p ../lib
-        - mv OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll ../lib
+        - mv OTAPI.dll TerrariaServer.exe TShockAPI.dll ../lib
         - cd ..
       script:
         - msbuild /p:Configuration=Debug Terracord.sln
@@ -41,7 +41,7 @@ jobs:
         - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre15/TShock4.4.0_Pre15_Terraria1.4.1.2.zip
         - unzip -jq $ZIPFILE $ZIPDIR/OTAPI.dll $ZIPDIR/TerrariaServer.exe $ZIPDIR/ServerPlugins/TShockAPI.dll
         - mkdir -p ../lib
-        - mv OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll ../lib
+        - mv OTAPI.dll TerrariaServer.exe TShockAPI.dll ../lib
         - cd ..
       script:
         - dotnet build -c Debug -f netstandard2.0
