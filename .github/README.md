@@ -30,13 +30,13 @@ to create a bot and invite it to your server. Take note of the bot token, you'll
    
    | Permission | Required | Effect | Scope |
    | -- | -- | -- | -- |
-   | Read Text Channels & See Voice Channels / Read Messages | Yes | | Server / Channel |
-   | Send Messages | Yes | | Server / Channel |
-   | Read Message History | Yes | | Server / Channel |
-   | Change Nickname | No | Configuration reload (?) | Server |
-   | Embed Links | No | | Server / Channel |
-   | Manage Channel(s) | No | Allows the bot to dynamically update the channel topic with info about the Terraria server. | Server / Channel |
-   | Use External Emojis | No | | Server / Channel |
+   | Read Text Channels & See Voice Channels / Read Messages | ✔ Yes | | Server / Channel |
+   | Send Messages | ✔ Yes | | Server / Channel |
+   | Read Message History | ✔ Yes | | Server / Channel |
+   | Change Nickname | ❌ No | Configuration reload (?) | Server |
+   | Embed Links | ❌ No | | Server / Channel |
+   | Manage Channel(s) | ❌ No | Allows the bot to dynamically update the channel topic with info about the Terraria server. | Server / Channel |
+   | Use External Emojis | ❌ No | | Server / Channel |
    
    **Server** scope means the permission is added to the bot's role on `Server Settings > Roles`.  
    **Channel** scope means the permission is added to the bot (or its role) directly in the desired text channel on
@@ -54,20 +54,16 @@ note of it.
 `System.Collections.Immutable.dll`, and `System.Interactive.Async.dll`. They should
 be contained in any release archive.
 
-   Ensure that the version of `Newtonsoft.Json.dll` copied to the `ServerPlugins` directory is >=11.0.2. This is a required
+   Ensure that the version of `Newtonsoft.Json.dll` copied to the `ServerPlugins` directory is ≥ 11.0.2. This is a required
    dependency of Discord.Net. The instance of this DLL included with TShock 4.4.0 is older (10.0.3), and using it results in
-   not being able to establish a connection to a Discord server.
-
-   For localization support, copy any or all language directories (`de`, `en`, `ru`, etc.), each containing
-   `Terracord.resources.dll`, to the top-level directory where `TerrariaServer.exe` resides. You may then set the preferred
-   locale in `terracord.xml` to make any supported language active.
+   not being able to establish a connection to a Discord servers.
 
 1. Edit `terracord.xml` to set your bot token and Discord channel ID, both obtained in the [Discord Bot](#Discord-Bot)
 section. This file should be saved to the `tshock/Terracord` directory. Other settings in this configuration file may also be
 changed to your liking.
 
 1. Restart your TShock server to load the plugin. For review or troubleshooting purposes, `terracord.log` can be found in
-the `tshock > Terracord` directory.
+the `tshock/Terracord` directory.
 </details>
 
 :warning: Unfortunately, Terracord may not work with [Mono](https://www.mono-project.com/). This is due to Discord.Net
@@ -76,10 +72,14 @@ not supporting Mono.
 <details>
 <summary>Discord Commands</summary>
 
-- `help`
-- `playerlist`
-- `serverinfo`
-- `uptime`
+| Command | Description |
+| -- | -- |
+| `help` | Display commands list |
+| `playerlist` | Display online players |
+| `serverinfo` | Display server details |
+| `uptime` | Displays plugin uptime |
+
+If a command is not on this list, and the issuing Discord user has one of the admin roles or is the bot owner (both configured at `terracord.xml`), the command will be forwarded to be handled by the Terraria server and other plugins.
 </details>
 
 <details>
@@ -109,7 +109,7 @@ under the `lib` directory you recently created during step 4.
 install `Discord.Net.Core` and `Discord.Net.WebSocket` via NuGet. You may also attempt to right-click the solution in the
 "Solution Explorer" of Visual Studio and then left-click "Restore NuGet Packages".
 
-8. Use `Build->Build Solution` or `ctrl+shift+b` to build Terracord.
+8. Use <kbd><kbd>Build</kbd> → <kbd>Build Solution</kbd></kbd> or <kbd><kbd>CTRL</kbd> + <kbd>Shift</kbd> + <kbd>b</kbd></kbd> to build Terracord.
 
 9. If all goes well, you should have a shiny new `Terracord.dll` at the path referenced in the build output. Enjoy!
 
