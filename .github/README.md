@@ -6,47 +6,85 @@
 
 Terracord
 =========
-Terracord is a [Discord](http://discord.com/) <-> [Terraria](http://terraria.org/) bridge plugin for
-[TShock](http://tshock.co/). The plugin enables the bi-directional flow of messages between a Discord text
+Terracord is a [Discord](https://discord.com/) ↔ [Terraria](https://terraria.org/) bridge plugin for
+[TShock](https://tshock.co/). The plugin enables the bi-directional flow of messages between a Discord text
 channel and a TShock server. This project is inspired by [DiscordSRV](https://github.com/DiscordSRV/DiscordSRV)
-which is a Discord <-> [Minecraft](http://www.minecraft.net/) chat relay plugin for [PaperMC](http://papermc.io/)
-and [Spigot](http://www.spigotmc.org/).
+which is a Discord ↔ [Minecraft](http://www.minecraft.net/) chat relay plugin for [PaperMC](https://papermc.io/)
+and [Spigot](https://www.spigotmc.org/).
 
 Terracord is written in [C#](https://docs.microsoft.com/en-us/dotnet/csharp/) and is licensed under the terms of
-the [GPLv3](http://www.gnu.org/licenses/gpl-3.0.en.html). This project makes use of
+the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). This project makes use of
 [Discord.Net](https://github.com/discord-net/Discord.Net) and the [Terraria API](https://github.com/Pryaxis/TerrariaAPI-Server).
 
-### Installation
-1. Simply copy `Terracord.dll` and its dependencies into your TShock `ServerPlugins` directory. The dependencies should
-be contained in any release zip archive and includes the following files: `Discord.Net.Core.dll`, `Discord.Net.Rest.dll`,
-`Discord.Net.WebSocket.dll`, `Newtonsoft.Json.dll`, `System.Collections.Immutable.dll`, and `System.Interactive.Async.dll`.
+<details>
+<summary>Installation and Setup</summary>
 
-   Ensure that the version of `Newtonsoft.Json.dll` copied to the `ServerPlugins` directory is >=11.0.2. This is a required 
+### Discord Bot
+1. Follow the instructions [here](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)
+to create a bot and invite it to your server. Make note of the bot token as you'll need it later.
+
+2. Give the bot the following server-wide permissions:
+
+   <details>
+   <summary>Permissions</summary>
+   
+   | Permission | Required | Effect | Scope |
+   | -- | -- | -- | -- |
+   | Read Text Channels & See Voice Channels/Read Messages | ✔ Yes | Allows the bot to view channels and messages within a text channel | Server/Channel |
+   | Send Messages | ✔ Yes | Allows the bot to send messages in a text channel | Server/Channel |
+   | Read Message History | ✔ Yes | Allows the bot to see previous messages in a text channel | Server/Channel |
+   | Change Nickname | ❌ No | Allows the bot to change its own nickname when the configuration is reloaded | Server |
+   | Embed Links | ❌ No | Allows the bot to embed links within a text channel | Server/Channel |
+   | Manage Channel(s) | ❌ No | Allows the bot to dynamically update the channel topic with info about the Terraria server | Server/Channel |
+   
+   - **Server** scope means the permission is added to the bot's role in <kbd><kbd>Server Settings</kbd>⇒<kbd>Roles</kbd></kbd>.  
+   - **Channel** scope means the permission is added to the bot (or its role) directly in the desired text channel using
+   <kbd><kbd>Edit Channel</kbd>⇒<kbd>Permissions</kbd></kbd>.  
+   - **Server/Channel** scope means the permission can either be a **Server** or **Channel** permission.  
+   </details>
+
+3. Copy the ID of the desired text channel following the instructions
+[here](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) and also make
+note of it.
+
+### TShock Plugin
+1. Copy `Terracord.dll` and its dependencies into your TShock `ServerPlugins` directory. The dependencies are the following:
+`Discord.Net.Core.dll`, `Discord.Net.Rest.dll`, `Discord.Net.WebSocket.dll`, `Newtonsoft.Json.dll`,
+`System.Collections.Immutable.dll`, and `System.Interactive.Async.dll`. These files should be contained in any release archive.
+
+   Ensure that the version of `Newtonsoft.Json.dll` copied to the `ServerPlugins` directory is ≥ 11.0.2. This is a required
    dependency of Discord.Net. The instance of this DLL included with TShock 4.4.0 is older (10.0.3) and using it results in
-   not being able to establish a connection to a Discord server.
+   the inability to establish a connection to the Discord service.
 
-   For localization support, copy any or all language directories (`de`, `en`, `ru`, etc.), each containing
-   `Terracord.resources.dll`, to the top-level directory where `TerrariaServer.exe` resides. You may then set the preferred
-   locale in `terracord.xml` to make any supported language active.
+2. Edit `terracord.xml` to set your bot token and Discord channel ID. The [Discord Bot](#Discord-Bot) section demonstrates how to
+obtain this pair of items. `terracord.xml` should be saved to the `tshock > Terracord` directory. Other settings in this configuration
+file may also be changed to your liking.
 
-2. Edit `terracord.xml` to set your bot token and Discord channel ID. This file should be saved to the `tshock > Terracord`
-directory. Other settings in this configuration file may also be changed to your liking. The channel ID can be obtained by
-enabling developer mode in your Discord application and then copying the ID of the relevant text channel you want to relay
-Terraria messages to. A channel ID appears as a long string of numbers. The process is described
-[here](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-). In order
-to obtain a bot token, you will need to create a Discord bot application. The process is described
-[here](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token).
-
-3. If desired, give the Discord bot **Manage Channel** permission on the text channel it is configured to use. This is required
-to dynamically update the channel topic with information about the Terraria server.
-
-4. Restart your TShock server to load the plugin. For review or troubleshooting purposes, `terracord.log` can be found in
+3. Restart your TShock server to load the plugin. For review or troubleshooting purposes, `terracord.log` can be found in
 the `tshock > Terracord` directory.
 
 :warning: Unfortunately, Terracord may not work with [Mono](https://www.mono-project.com/). This is due to Discord.Net
 not supporting Mono.
+</details>
 
-### Building
+<details>
+<summary>Discord Commands</summary>
+
+| Command | Description |
+| -- | -- |
+| `help` | Display commands list |
+| `playerlist` | Display online players |
+| `serverinfo` | Display server details |
+| `uptime` | Displays plugin uptime |
+
+If a command is not in the above list and the issuing Discord user has one of the admin roles or is the bot owner (both configured
+in `terracord.xml`), the command will be forwarded onto the Terraria server. The server and any relevant plugins will handle the
+command at this point and provide output if applicable.
+</details>
+
+<details>
+<summary>Building</summary>
+
 #### Visual Studio
 1. Download and install [Visual Studio](https://visualstudio.microsoft.com/) if you do not have the software. The community
 edition is free and contains the essentials to build Terracord. In particular, you want the ".NET desktop development" workload.
@@ -71,7 +109,8 @@ under the `lib` directory you recently created during step 4.
 install `Discord.Net.Core` and `Discord.Net.WebSocket` via NuGet. You may also attempt to right-click the solution in the
 "Solution Explorer" of Visual Studio and then left-click "Restore NuGet Packages".
 
-8. Use `Build->Build Solution` or `ctrl+shift+b` to build Terracord.
+8. Use <kbd><kbd>Build</kbd>⇒<kbd>Build Solution</kbd></kbd> or <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>b</kbd></kbd> to
+build Terracord.
 
 9. If all goes well, you should have a shiny new `Terracord.dll` at the path referenced in the build output. Enjoy!
 
@@ -155,6 +194,7 @@ support this. Therefore, the following steps should be considered experimental.
    `msbuild /p:Configuration=<Debug|Release> Terracord.sln`
 
 8. With luck, a wild `Terracord.dll` will appear.
+</details>
 
 ### Related Projects
 [@Dids](https://github.com/Dids) has contributed a Docker image of TShock bundled with Terracord at: https://github.com/Didstopia/terraria-server
