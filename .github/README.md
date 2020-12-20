@@ -35,7 +35,7 @@ to create a bot and invite it to your server. Make note of the bot token as you'
    | Read Message History | ✔ Yes | Allows the bot to see previous messages in a text channel | Server/Channel |
    | Change Nickname | ❌ No | Allows the bot to change its own nickname when the configuration is reloaded | Server |
    | Embed Links | ❌ No | Allows the bot to embed links within a text channel | Server/Channel |
-   | Manage Channel(s) | ❌ No | Allows the bot to dynamically update the channel topic with info about the Terraria server. | Server/Channel |
+   | Manage Channel(s) | ❌ No | Allows the bot to dynamically update the channel topic with info about the Terraria server | Server/Channel |
    
    - **Server** scope means the permission is added to the bot's role in <kbd><kbd>Server Settings</kbd>⇒<kbd>Roles</kbd></kbd>.  
    - **Channel** scope means the permission is added to the bot (or its role) directly in the desired text channel using
