@@ -38,9 +38,9 @@ to create a bot and invite it to your server. Take note of the bot token, you'll
    | Manage Channel(s) | ❌ No | Allows the bot to dynamically update the channel topic with info about the Terraria server. | Server / Channel |
    | Use External Emojis | ❌ No | | Server / Channel |
    
-   **Server** scope means the permission is added to the bot's role on `Server Settings > Roles`.  
+   **Server** scope means the permission is added to the bot's role on <kbd><kbd>Server Settings</kbd>⇒<kbd>Roles</kbd></kbd>.  
    **Channel** scope means the permission is added to the bot (or its role) directly in the desired text channel on
-   `Edit Channel > Permissions`.  
+   <kbd><kbd>Edit Channel</kbd>⇒<kbd>Permissions</kbd></kbd>.  
    **Server / Channel** scope means the permission can either be a **Server** or **Channel** permission.  
    </details>
 
@@ -109,7 +109,7 @@ under the `lib` directory you recently created during step 4.
 install `Discord.Net.Core` and `Discord.Net.WebSocket` via NuGet. You may also attempt to right-click the solution in the
 "Solution Explorer" of Visual Studio and then left-click "Restore NuGet Packages".
 
-8. Use <kbd><kbd>Build</kbd> → <kbd>Build Solution</kbd></kbd> or <kbd><kbd>CTRL</kbd> + <kbd>Shift</kbd> + <kbd>b</kbd></kbd> to build Terracord.
+8. Use <kbd><kbd>Build</kbd>⇒<kbd>Build Solution</kbd></kbd> or <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>b</kbd></kbd> to build Terracord.
 
 9. If all goes well, you should have a shiny new `Terracord.dll` at the path referenced in the build output. Enjoy!
 
