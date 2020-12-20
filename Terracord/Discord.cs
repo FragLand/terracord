@@ -155,7 +155,7 @@ namespace FragLand.TerracordPlugin
       if(Config.AnnounceReconnect || connectionCounter <= 1)
       {
         Util.Log($"Relay available. Connected to Discord as {Client.CurrentUser}.", Util.Severity.Info);
-        Send(Properties.Strings.RelayAvailableString);
+        Send(Config.AvailableText);
       }
       return Task.CompletedTask;
     }
@@ -225,10 +225,12 @@ namespace FragLand.TerracordPlugin
         // Relay Discord message to Terraria players
         if(relayMessage)
         {
-          string authorFormat = Config.AuthorFormat.Replace("%u%", message.Author.Username);
+          string text = "";
+          text = Config.ChatText.Replace("%u%", message.Author.Username);
+          text = text.Replace("%m%", messageContent);
           if(Config.LogChat)
-            Util.Log($"{authorFormat} {messageContent}", Util.Severity.Info);
-          TShock.Utils.Broadcast($"{authorFormat} {messageContent}", Config.BroadcastColor[0], Config.BroadcastColor[1], Config.BroadcastColor[2]);
+            Util.Log(text, Util.Severity.Info);
+          TShock.Utils.Broadcast(text, Config.BroadcastColor[0], Config.BroadcastColor[1], Config.BroadcastColor[2]);
         }
       }
       catch(Exception e)

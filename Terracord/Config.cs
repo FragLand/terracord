@@ -47,15 +47,19 @@ namespace FragLand.TerracordPlugin
     public static bool SilenceChat { get; private set; }
     public static bool SilenceSaves { get; private set; }
     public static bool AnnounceReconnect { get; private set; }
-    public static string JoinPrefix { get; private set; }
-    public static string LeavePrefix { get; private set; }
+    public static string AvailableText { get; private set; }
+    public static string UnavailableText { get; private set; }
+    public static string JoinText { get; private set; }
+    public static string LeaveText { get; private set; }
+    public static string BroadcastText { get; private set; }
+    public static string PlayerText { get; private set; }
+    public static string ChatText { get; private set; }
     public static bool IgnoreChat { get; private set; }
     public static bool LogChat { get; private set; }
     public static int MessageLength { get; private set; }
     public static bool DebugMode { get; private set; }
     public static string LocaleString { get; private set; }
     public static CultureInfo Locale { get; private set; }
-    public static string AuthorFormat { get; private set; }
     public static string TimestampFormat { get; private set; }
     public static bool AbortOnError { get; private set; }
 
@@ -88,7 +92,7 @@ namespace FragLand.TerracordPlugin
         OwnerId = ulong.Parse(configOptions.Element("owner").Attribute("id").Value.ToString(Locale), Locale);
         CommandPrefix =  configOptions.Element("command").Attribute("prefix").Value.ToString(Locale);
         if(CommandPrefix.Length == 0 || CommandPrefix.Trim().Length == 0)
-          throw new IOException(Properties.Strings.EmptyCommandPrefixString);
+          throw new IOException("Command prefix is empty!");
         RelayCommands = bool.Parse(configOptions.Element("relay").Attribute("commands").Value.ToString(Locale));
         RemoteCommands = bool.Parse(configOptions.Element("remote").Attribute("commands").Value.ToString(Locale));
         AuthorizedRoles = configOptions.Element("authorized").Attribute("roles").Value.ToString(Locale);
@@ -99,22 +103,26 @@ namespace FragLand.TerracordPlugin
         // Populate broadcast RGB array values
         BroadcastColor = new byte[3]
         {
-          byte.Parse(configOptions.Element("broadcast").Attribute("red").Value.ToString(Locale), Locale),
-          byte.Parse(configOptions.Element("broadcast").Attribute("green").Value.ToString(Locale), Locale),
-          byte.Parse(configOptions.Element("broadcast").Attribute("blue").Value.ToString(Locale), Locale)
+          byte.Parse(configOptions.Element("color").Attribute("red").Value.ToString(Locale), Locale),
+          byte.Parse(configOptions.Element("color").Attribute("green").Value.ToString(Locale), Locale),
+          byte.Parse(configOptions.Element("color").Attribute("blue").Value.ToString(Locale), Locale)
         };
 
         SilenceBroadcasts = bool.Parse(configOptions.Element("silence").Attribute("broadcasts").Value.ToString(Locale));
         SilenceChat = bool.Parse(configOptions.Element("silence").Attribute("chat").Value.ToString(Locale));
         SilenceSaves = bool.Parse(configOptions.Element("silence").Attribute("saves").Value.ToString(Locale));
         AnnounceReconnect = bool.Parse(configOptions.Element("announce").Attribute("reconnect").Value.ToString(Locale));
-        JoinPrefix = configOptions.Element("join").Attribute("prefix").Value.ToString(Locale);
-        LeavePrefix = configOptions.Element("leave").Attribute("prefix").Value.ToString(Locale);
+        AvailableText = configOptions.Element("available").Attribute("text").Value.ToString(Locale);
+        UnavailableText = configOptions.Element("unavailable").Attribute("text").Value.ToString(Locale);
+        JoinText = configOptions.Element("join").Attribute("text").Value.ToString(Locale);
+        LeaveText = configOptions.Element("leave").Attribute("text").Value.ToString(Locale);
+        BroadcastText = configOptions.Element("broadcast").Attribute("text").Value.ToString(Locale);
+        PlayerText = configOptions.Element("player").Attribute("text").Value.ToString(Locale);
+        ChatText = configOptions.Element("chat").Attribute("text").Value.ToString(Locale);
         IgnoreChat = bool.Parse(configOptions.Element("ignore").Attribute("chat").Value.ToString(Locale));
         LogChat = bool.Parse(configOptions.Element("log").Attribute("chat").Value.ToString(Locale));
         MessageLength = int.Parse(configOptions.Element("message").Attribute("length").Value.ToString(Locale), Locale);
         DebugMode = bool.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString(Locale));
-        AuthorFormat = configOptions.Element("author").Attribute("format").Value.ToString(Locale);
         TimestampFormat = configOptions.Element("timestamp").Attribute("format").Value.ToString(Locale);
         AbortOnError = bool.Parse(configOptions.Element("exception").Attribute("abort").Value.ToString(Locale));
       }
@@ -171,14 +179,18 @@ namespace FragLand.TerracordPlugin
       Util.Log($"Silence Chat: {SilenceChat}", Util.Severity.Debug);
       Util.Log($"Silence Saves: {SilenceSaves}", Util.Severity.Debug);
       Util.Log($"Announce Reconnect: {AnnounceReconnect}", Util.Severity.Debug);
-      Util.Log($"Join Prefix: {JoinPrefix}", Util.Severity.Debug);
-      Util.Log($"Leave Prefix: {LeavePrefix}", Util.Severity.Debug);
+      Util.Log($"Available Text: {AvailableText}", Util.Severity.Debug);
+      Util.Log($"Unavailable Text: {UnavailableText}", Util.Severity.Debug);
+      Util.Log($"Join Text: {JoinText}", Util.Severity.Debug);
+      Util.Log($"Leave Text: {LeaveText}", Util.Severity.Debug);
+      Util.Log($"Broadcast Text: {BroadcastText}", Util.Severity.Debug);
+      Util.Log($"Player Text: {PlayerText}", Util.Severity.Debug);
+      Util.Log($"Chat Text: {ChatText}", Util.Severity.Debug);
       Util.Log($"Ignore Chat: {IgnoreChat}", Util.Severity.Debug);
       Util.Log($"Log Chat: {LogChat}", Util.Severity.Debug);
       Util.Log($"Message Length: {MessageLength}", Util.Severity.Debug);
       Util.Log($"Debug Mode: {DebugMode}", Util.Severity.Debug);
       Util.Log($"Locale String: {LocaleString}", Util.Severity.Debug);
-      Util.Log($"Author Format: {AuthorFormat}", Util.Severity.Debug);
       Util.Log($"Timestamp Format: {TimestampFormat}", Util.Severity.Debug);
       Util.Log($"Exception Abort: {AbortOnError}", Util.Severity.Debug);
     }
@@ -215,15 +227,25 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <!-- Topic update interval in seconds and topic to set when relay is offline -->");
         newConfigFile.WriteLine("  <topic interval=\"300\" offline=\"Relay offline\" />\n");
         newConfigFile.WriteLine("  <!-- Terraria broadcast color in RGB -->");
-        newConfigFile.WriteLine("  <broadcast red=\"255\" green=\"215\" blue=\"0\" />\n");
+        newConfigFile.WriteLine("  <color red=\"255\" green=\"215\" blue=\"0\" />\n");
         newConfigFile.WriteLine("  <!-- Toggle broadcasts, chat, and world saves displayed in Discord -->");
         newConfigFile.WriteLine("  <silence broadcasts=\"false\" chat=\"false\" saves=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Notify Discord channel of relay availability after restoring the connection -->");
         newConfigFile.WriteLine("  <announce reconnect=\"true\" />\n");
-        newConfigFile.WriteLine("  <!-- Player join event prefix/emoji displayed in Discord -->");
-        newConfigFile.WriteLine("  <join prefix=\":green_circle:\" />\n");
-        newConfigFile.WriteLine("  <!-- Player leave event prefix/emoji displayed in Discord -->");
-        newConfigFile.WriteLine("  <leave prefix=\":red_circle:\" />\n");
+        newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when the relay becomes available -->");
+        newConfigFile.WriteLine("  <available text=\"**:white_check_mark: Relay available.**\" />\n");
+        newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when the relay is shutting down -->");
+        newConfigFile.WriteLine("  <unavailable text=\"**:octagonal_sign: Relay shutting down.**\" />\n");
+        newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when a player joins the game -->");
+        newConfigFile.WriteLine("  <join text=\"**:green_circle: %p% has joined the server.**\" />\n");
+        newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when a player leaves the game -->");
+        newConfigFile.WriteLine("  <leave text=\"**:red_circle: %p% has left the server.**\" />\n");
+        newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when a broadcast is sent from the game -->");
+        newConfigFile.WriteLine("  <broadcast text=\"**:mega: Broadcast:** %m%\" />\n");
+        newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when a player chats in the game -->");
+        newConfigFile.WriteLine("  <player text=\"**&lt;%p%&gt;** %m%\" />\n");
+        newConfigFile.WriteLine("  <!-- Message sent to game when a user chats in the Discord text channel -->");
+        newConfigFile.WriteLine("  <chat text=\"&lt;%u%@Discord&gt; %m%\" />\n");
         newConfigFile.WriteLine("  <!-- Toggle Discord chat displayed in game -->");
         newConfigFile.WriteLine("  <ignore chat=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Log all chat messages -->");
@@ -234,8 +256,6 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <debug mode=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Locale -->");
         newConfigFile.WriteLine("  <locale string=\"en-US\" />\n");
-        newConfigFile.WriteLine("  <!-- Discord message author appearance in game -->");
-        newConfigFile.WriteLine("  <author format=\"&lt;%u%@Discord&gt;\" />\n");
         newConfigFile.WriteLine("  <!-- Timestamp format -->");
         newConfigFile.WriteLine("  <timestamp format=\"MM/dd/yyyy HH:mm:ss zzz\" />\n");
         newConfigFile.WriteLine("  <!-- Terminate TShock when an error is encountered -->");
