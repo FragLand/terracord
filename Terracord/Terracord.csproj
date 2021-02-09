@@ -22,6 +22,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <ApplicationIcon />
     <Win32Resource />
+    <!--<NuspecFile>Terracord.nuspec</NuspecFile>-->
     <CodeAnalysisRuleSet>Terracord.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
