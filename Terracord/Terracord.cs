@@ -156,7 +156,7 @@ namespace FragLand.TerracordPlugin
       if(Util.FilterBroadcast($"{args.Message}"))
         return;
 
-      Util.Log($"Server broadcast: {args.Message}", Util.Severity.Info);
+      Util.Log($"Server broadcast: {Util.ConvertItems(args.Message.ToString())}", Util.Severity.Info);
       discord.Send(Config.BroadcastText.Replace("%m%", args.Message.ToString()));
     }
 
@@ -185,6 +185,10 @@ namespace FragLand.TerracordPlugin
       // Attempt to convert any role/user mentions
       if(Regex.IsMatch(modifiedMessage, @"@.+"))
         modifiedMessage = Util.ConvertRoleUserMentions(modifiedMessage, discord.Client);
+
+      // Check for game items and convert them to friendly names if found
+      if(Regex.IsMatch(modifiedMessage, @"\[i(/[p|s][0-9]+)?:([0-9]+)\]"))
+        modifiedMessage = Util.ConvertItems(modifiedMessage);
 
       if(Config.LogChat)
       {

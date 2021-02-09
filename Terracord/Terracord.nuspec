@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Terracord</id>
+    <version>1.2.2</version>
+    <authors>Lloyd Dilley</authors>
+    <license type="expression">GPL-3.0-or-later</license>
+    <projectUrl>https://github.com/FragLand/terracord</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A Discord &lt;-&gt; Terraria bridge plugin for TShock</description>
+    <copyright>Copyright 2019-2021</copyright>
+    <tags>bot bridge chat Discord plugin relay Terraria TShock</tags>
+  </metadata>
+</package>

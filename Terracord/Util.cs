@@ -25,6 +25,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using TShockAPI;
 
 namespace FragLand.TerracordPlugin
 {
@@ -238,6 +239,22 @@ namespace FragLand.TerracordPlugin
     }
 
     /// <summary>
+    /// Attempts to convert Terraria item IDs to friendly names
+    /// </summary>
+    /// <param name="message">message to modify</param>
+    /// <returns>modified message</returns>
+    public static string ConvertItems(string message)
+    {
+      string modifiedMessage = message;
+      string itemPattern = @"\[i(/[p|s][0-9]+)?:([0-9]+)\]"; // matches [i:219] or [i/s4:75] (where "/s4" is an optional amount of item)
+
+      if(Regex.IsMatch(modifiedMessage, itemPattern))
+        modifiedMessage = Regex.Replace(modifiedMessage, itemPattern, m => $"**[{TShock.Utils.GetItemById(int.Parse(m.Groups[2].Value)).Name}]**", RegexOptions.IgnoreCase);
+
+      return modifiedMessage;
+    }
+
+    /// <summary>
     /// Filter broadcast message based on contents (TShock 4.4 broadcast fix)
     /// </summary>
     /// <param name="message">message to check</param>
@@ -245,9 +262,10 @@ namespace FragLand.TerracordPlugin
     public static bool FilterBroadcast(string message)
     {
       string discordMessage = Config.ChatText.Replace("%u%", ".+");
-      if(Regex.IsMatch(message, $"^{discordMessage} .*$"))  // Discord message
+      discordMessage = discordMessage.Replace("%m%", ".*");
+      if(Regex.IsMatch(message, $"^{discordMessage}$"))  // Discord message
         return true;
-      if(Regex.IsMatch(message, "^.+: .*$"))                // Terraria chat message
+      if(Regex.IsMatch(message, "^.+: .*$"))             // Terraria chat message
         return true;
       if(Config.SilenceSaves)
       {
