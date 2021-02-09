@@ -1,6 +1,6 @@
 /*
  * Terracord.cs - A Discord <-> Terraria bridge plugin for TShock
- * Copyright (C) 2019-2020 Lloyd Dilley
+ * Copyright (C) 2019-2021 Lloyd Dilley
  * http://www.frag.land/
  *
  * This program is free software; you can redistribute it and/or modify
