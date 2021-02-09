@@ -3,7 +3,7 @@
   <PropertyGroup>
     <!-- Mono on Travis CI does not support netcoreapp3.1 yet -->
     <!-- <TargetFramework>netcoreapp3.0</TargetFramework> -->
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <IsPackable>false</IsPackable>
     <Platforms>x86</Platforms>
     <Authors>Lloyd Dilley</Authors>

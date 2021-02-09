@@ -5,7 +5,8 @@
     <!-- <TargetFramework>netstandard2.0</TargetFramework> -->
     <!-- <TargetFramework>netcoreapp3.1</TargetFramework> -->
     <!-- Discord.Net 2.1.1 requires >=net46 -->
-    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
+    <!-- Discord.Net 2.3.0 requires >=net461 -->
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <Platforms>x86</Platforms>
     <Company>Frag Land</Company>
     <Version>1.2.2</Version>
@@ -13,7 +14,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/FragLand/terracord</RepositoryUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <Copyright>2019-2020</Copyright>
+    <Copyright>2019-2021</Copyright>
     <Authors>Lloyd Dilley</Authors>
     <Description>A Discord &lt;-&gt; Terraria bridge plugin for TShock</Description>
     <PackageTags>Terraria TShock plugin Discord bridge relay bot chat Mono C# .NET CSharp</PackageTags>
@@ -25,8 +26,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Core" Version="2.1.1" />
-    <PackageReference Include="Discord.Net.WebSocket" Version="2.1.1" />
+    <PackageReference Include="Discord.Net.Core" Version="2.3.0" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="2.3.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
