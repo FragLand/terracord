@@ -21,7 +21,7 @@ jobs:
       script:
         - msbuild /p:Configuration=Debug Terracord.sln
         - msbuild /p:Configuration=Debug TerracordTest/TerracordTest.csproj
-        - mono ./testrunner/xunit.runner.console.2.4.1/tools/net46/xunit.console.exe ./TerracordTest/bin/Debug/net46/TerracordTest.dll
+        - mono ./testrunner/xunit.runner.console.2.4.1/tools/net461/xunit.console.exe ./TerracordTest/bin/Debug/net461/TerracordTest.dll
       after_success:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh

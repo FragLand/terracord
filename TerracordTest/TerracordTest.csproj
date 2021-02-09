@@ -3,7 +3,7 @@
   <PropertyGroup>
     <!-- Mono on Travis CI does not support netcoreapp3.1 yet -->
     <!-- <TargetFramework>netcoreapp3.0</TargetFramework> -->
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <IsPackable>false</IsPackable>
     <Platforms>x86</Platforms>
     <Authors>Lloyd Dilley</Authors>
@@ -11,7 +11,7 @@
     <Product>TerracordTest</Product>
     <Version>1.0.2</Version>
     <Description>Terracord unit tests</Description>
-    <Copyright>2019-2020</Copyright>
+    <Copyright>2019-2021</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>http://www.frag.land/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/FragLand/terracord</RepositoryUrl>
