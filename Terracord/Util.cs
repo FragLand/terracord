@@ -25,6 +25,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using TShockAPI;
 
 namespace FragLand.TerracordPlugin
 {
@@ -233,6 +234,22 @@ namespace FragLand.TerracordPlugin
           }
         }
       }
+
+      return modifiedMessage;
+    }
+
+    /// <summary>
+    /// Attempts to convert Terraria item IDs to friendly names
+    /// </summary>
+    /// <param name="message">message to modify</param>
+    /// <returns>modified message</returns>
+    public static string ConvertItems(string message)
+    {
+      string modifiedMessage = message;
+      string itemPattern = @"\[i(/[p|s][0-9]+)?:([0-9]+)\]"; // matches [i:219] or [i/s4:75] (where "/s4" is an optional amount of item)
+
+      if(Regex.IsMatch(modifiedMessage, itemPattern))
+        modifiedMessage = Regex.Replace(modifiedMessage, itemPattern, m => $"**[{TShock.Utils.GetItemById(int.Parse(m.Groups[2].Value)).Name}]**", RegexOptions.IgnoreCase);
 
       return modifiedMessage;
     }
