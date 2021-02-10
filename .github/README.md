@@ -17,7 +17,7 @@ the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). This project makes us
 [Discord.Net](https://github.com/discord-net/Discord.Net) and the [Terraria API](https://github.com/Pryaxis/TerrariaAPI-Server).
 
 <details>
-<summary>Installation and Setup</summary>
+<summary>Installation and Configuration</summary>
 
 ### Discord Bot
 1. Follow the instructions [here](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)
@@ -49,8 +49,9 @@ note of it.
 
 ### TShock Plugin
 1. Copy `Terracord.dll` and its dependencies into your TShock `ServerPlugins` directory. The dependencies are the following:
-`Discord.Net.Core.dll`, `Discord.Net.Rest.dll`, `Discord.Net.WebSocket.dll`, `Newtonsoft.Json.dll`,
-`System.Collections.Immutable.dll`, and `System.Interactive.Async.dll`. These files should be contained in any release archive.
+`Discord.Net.Core.dll`, `Discord.Net.Rest.dll`, `Discord.Net.WebSocket.dll`, `Microsoft.Bcl.AsyncInterfaces.dll`, `Newtonsoft.Json.dll`,
+`System.Collections.Immutable.dll`, `System.Interactive.Async.dll`, and `System.Threading.Tasks.Extensions.dll`. These files should be
+contained in any release archive.
 
    Ensure that the version of `Newtonsoft.Json.dll` copied to the `ServerPlugins` directory is ≥ 11.0.2. This is a required
    dependency of Discord.Net. The instance of this DLL included with TShock 4.4.0 is older (10.0.3) and using it results in
