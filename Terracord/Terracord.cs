@@ -187,7 +187,7 @@ namespace FragLand.TerracordPlugin
         modifiedMessage = Util.ConvertRoleUserMentions(modifiedMessage, discord.Client);
 
       // Check for game items and convert them to friendly names if found
-      if(Regex.IsMatch(modifiedMessage, @"\[i(/[p|s][0-9]+)?:([0-9]+)\]"))
+      if(Regex.IsMatch(modifiedMessage, @"\[i(/p[0-9]+)?(/s[0-9]+)?:([0-9]+)\]"))
         modifiedMessage = Util.ConvertItems(modifiedMessage);
 
       if(Config.LogChat)

@@ -246,11 +246,19 @@ namespace FragLand.TerracordPlugin
     public static string ConvertItems(string message)
     {
       string modifiedMessage = message;
-      string itemPattern = @"\[i(/[p|s][0-9]+)?:([0-9]+)\]"; // matches [i:219] or [i/s4:75] (where "/s4" is an optional amount of item)
+      string itemOnlyPattern = @"\[i:([0-9]+)\]";                           // matches [i:219]   (item ID)
+      string itemPrefixPattern = @"\[i/p([0-9]+):([0-9]+)\]";               // matches [i/p8:75] ("/p" is prefix ID)
+      string itemSizePattern = @"\[i/s([0-9]+):([0-9]+)\]";                 // matches [i/s5:99] ("/s" is stack size)
+      string itemPrefixSizePattern = @"\[i/p([0-9]+)/s([0-9]+):([0-9]+)\]"; // matches [i/p7/s10:50]
 
-      if(Regex.IsMatch(modifiedMessage, itemPattern))
-        modifiedMessage = Regex.Replace(modifiedMessage, itemPattern, m => $"**[{TShock.Utils.GetItemById(int.Parse(m.Groups[2].Value)).Name}]**", RegexOptions.IgnoreCase);
-
+      if(Regex.IsMatch(modifiedMessage, itemOnlyPattern))
+        modifiedMessage = Regex.Replace(modifiedMessage, itemOnlyPattern, m => $"**[{TShock.Utils.GetItemById(int.Parse(m.Groups[1].Value)).Name}]**", RegexOptions.IgnoreCase);
+      if(Regex.IsMatch(modifiedMessage, itemPrefixPattern))
+        modifiedMessage = Regex.Replace(modifiedMessage, itemPrefixPattern, m => $"**[{TShock.Utils.GetPrefixById(int.Parse(m.Groups[1].Value))} {TShock.Utils.GetItemById(int.Parse(m.Groups[2].Value)).Name}]**", RegexOptions.IgnoreCase);
+      if(Regex.IsMatch(modifiedMessage, itemSizePattern))
+        modifiedMessage = Regex.Replace(modifiedMessage, itemSizePattern, m => $"**[{TShock.Utils.GetItemById(int.Parse(m.Groups[2].Value)).Name} ({m.Groups[1].Value})]**", RegexOptions.IgnoreCase);
+      if(Regex.IsMatch(modifiedMessage, itemPrefixSizePattern))
+        modifiedMessage = Regex.Replace(modifiedMessage, itemPrefixSizePattern, m => $"**[{TShock.Utils.GetPrefixById(int.Parse(m.Groups[1].Value))} {TShock.Utils.GetItemById(int.Parse(m.Groups[3].Value)).Name} ({m.Groups[2].Value})]**", RegexOptions.IgnoreCase);
       return modifiedMessage;
     }
 
