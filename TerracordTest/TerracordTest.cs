@@ -75,7 +75,7 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<bool>(Config.SilenceChat);
       Assert.False(Config.SilenceSaves);
       Assert.IsType<bool>(Config.SilenceSaves);
-      Assert.True(Config.AnnounceReconnect);
+      Assert.False(Config.AnnounceReconnect);
       Assert.IsType<bool>(Config.AnnounceReconnect);
       Assert.Equal("**:white_check_mark: Relay available.**", Config.AvailableText);
       Assert.IsType<string>(Config.AvailableText);

@@ -231,7 +231,7 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <!-- Toggle broadcasts, chat, and world saves displayed in Discord -->");
         newConfigFile.WriteLine("  <silence broadcasts=\"false\" chat=\"false\" saves=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Notify Discord channel of relay availability after restoring the connection -->");
-        newConfigFile.WriteLine("  <announce reconnect=\"true\" />\n");
+        newConfigFile.WriteLine("  <announce reconnect=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when the relay becomes available -->");
         newConfigFile.WriteLine("  <available text=\"**:white_check_mark: Relay available.**\" />\n");
         newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when the relay is shutting down -->");
