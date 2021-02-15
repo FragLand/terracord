@@ -259,6 +259,7 @@ namespace FragLand.TerracordPlugin
         modifiedMessage = Regex.Replace(modifiedMessage, itemSizePattern, m => $"**[{TShock.Utils.GetItemById(int.Parse(m.Groups[2].Value)).Name} ({m.Groups[1].Value})]**", RegexOptions.IgnoreCase);
       if(Regex.IsMatch(modifiedMessage, itemPrefixSizePattern))
         modifiedMessage = Regex.Replace(modifiedMessage, itemPrefixSizePattern, m => $"**[{TShock.Utils.GetPrefixById(int.Parse(m.Groups[1].Value))} {TShock.Utils.GetItemById(int.Parse(m.Groups[3].Value)).Name} ({m.Groups[2].Value})]**", RegexOptions.IgnoreCase);
+      modifiedMessage = Regex.Replace(modifiedMessage, @"\]\*{4}\[", "]** **["); // Discord bold formatting workaround
       return modifiedMessage;
     }
 

@@ -37,7 +37,7 @@
   <silence broadcasts="false" chat="false" saves="false" />
 
   <!-- Notify Discord channel of relay availability after restoring the connection -->
-  <announce reconnect="true" />
+  <announce reconnect="false" />
 
   <!-- Message sent to Discord text channel when the relay becomes available -->
   <available text="**:white_check_mark: Relay available.**" />
