@@ -73,10 +73,10 @@ not supporting Mono.
 
 | Command | Description |
 | -- | -- |
-| `help` | Display commands list |
+| `help` | Display command list |
 | `playerlist` | Display online players |
 | `serverinfo` | Display server details |
-| `uptime` | Displays plugin uptime |
+| `uptime` | Display plugin uptime |
 
 If a command is not in the above list and the issuing Discord user has one of the admin roles or is the bot owner (both configured
 in `terracord.xml`), the command will be forwarded onto the Terraria server. The server and any relevant plugins will handle the
