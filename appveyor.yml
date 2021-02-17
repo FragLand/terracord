@@ -15,7 +15,7 @@ build:
   #project: Terracord\Terracord.csproj
   verbosity: minimal
 artifacts:
-  - path: bin\$(platform)\$(configuration)\net461\Terracord.dll
+  - path: Terracord\bin\$(platform)\$(configuration)\net461\Terracord.dll
     name: Terracord-$(version)
 on_success:
   - ps: Invoke-RestMethod https://raw.githubusercontent.com/DiscordHooks/appveyor-discord-webhook/master/send.ps1 -o send.ps1
