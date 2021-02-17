@@ -16,6 +16,8 @@ Terracord is written in [C#](https://docs.microsoft.com/en-us/dotnet/csharp/) an
 the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). This project makes use of
 [Discord.Net](https://github.com/discord-net/Discord.Net) and the [Terraria API](https://github.com/Pryaxis/TerrariaAPI-Server).
 
+A DLL built from the latest source code can be found on [AppVeyor](https://ci.appveyor.com/project/ldilley/terracord/build/artifacts).
+
 <details>
 <summary>Installation and Configuration</summary>
 
@@ -44,8 +46,8 @@ to create a bot and invite it to your server. Make note of the bot token as you'
    </details>
 
 3. Copy the ID of the desired text channel following the instructions
-[here](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) and also make
-note of it.
+[here](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-). The owner ID can also be acquired using
+the same instructions. Make note of both IDs.
 
 ### TShock Plugin
 1. Copy `Terracord.dll` and its dependencies into your TShock `ServerPlugins` directory. The dependencies are the following:
@@ -57,15 +59,15 @@ contained in any release archive.
    dependency of Discord.Net. The instance of this DLL included with TShock 4.4.0 is older (10.0.3) and using it results in
    the inability to establish a connection to the Discord service.
 
-2. Edit `terracord.xml` to set your bot token and Discord channel ID. The [Discord Bot](#Discord-Bot) section demonstrates how to
-obtain this pair of items. `terracord.xml` should be saved to the `tshock > Terracord` directory. Other settings in this configuration
-file may also be changed to your liking.
+2. Edit `terracord.xml` to set your bot token, Discord channel ID, and owner ID. The [Discord Bot](#discord-bot) section demonstrates how to
+obtain these items. `terracord.xml` should be saved to the `tshock > Terracord` directory. Other settings in this configuration file may also
+be changed to your liking.
 
 3. Restart your TShock server to load the plugin. For review or troubleshooting purposes, `terracord.log` can be found in
 the `tshock > Terracord` directory.
 
 :warning: Unfortunately, Terracord may not work with [Mono](https://www.mono-project.com/). This is due to Discord.Net
-not supporting Mono.
+not supporting Mono. Building a Terracord DLL that targets `net46` or `net461` has been confirmed to work with Mono version 6.8 however.
 </details>
 
 <details>
@@ -115,7 +117,7 @@ build Terracord.
 
 9. If all goes well, you should have a shiny new `Terracord.dll` at the path referenced in the build output. Enjoy!
 
-#### .NET Core
+#### .NET Core/.NET 5
 1. Install [.NET Core SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1). .NET Core SDK 3.1.100 is known to
 successfully build Terracord. You can also [configure various Linux package managers](https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-debian10)
 to install .NET core. This has the added benefit of being able to easily update the software.
@@ -153,8 +155,9 @@ to install .NET core. This has the added benefit of being able to easily update 
 8. You should now have a `Terracord.dll`.
 
 #### Mono
-:warning: As mentioned previously, loading `Terracord.dll` with Mono may not work considering Discord.Net does not
-support this. Therefore, the following steps should be considered experimental.
+:warning: As mentioned previously, loading `Terracord.dll` with Mono may not work considering that Discord.Net does not
+support Mono. Therefore, the following steps should be considered experimental. Building a Terracord DLL that targets
+`net46` or `net461` has been confirmed to work with Mono version 6.8.
 
 1. Install Mono and NuGet. Under [Debian](http://www.debian.org/), this can be achieved via:
 
