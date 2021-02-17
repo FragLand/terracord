@@ -20,7 +20,6 @@
 
 using Discord.WebSocket;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -46,9 +45,6 @@ namespace FragLand.TerracordPlugin
       Warning = 2,
       Error = 3    // includes critical messages and exceptions
     }
-
-    // Holds common emoji to text emoticon mappings
-    public static Dictionary<string, string> EmojiDict = new Dictionary<string, string>();
 
     /// <summary>
     /// Writes a log message to terracord.log and the TShock console
@@ -318,32 +314,19 @@ namespace FragLand.TerracordPlugin
     }
 
     /// <summary>
-    /// Populates the dictionary by mapping Discord emojis to text emoticons
+    /// Converts emoticons contained in Terraria messages to Discord emojis
     /// </summary>
-    /*public static void PopulateEmojiDict()
+    /// <param name="message">message to modify</param>
+    /// <returns>modified message</returns>
+    public static string ConvertEmoticons(string message)
     {
-      EmojiDict.Add("\uD83d\uDE04", ":)");
-      EmojiDict.Add("\uD83D\uDE03", ":)");
-      EmojiDict.Add("\uD83D\uDE42", ":)");
-      EmojiDict.Add("\u2639\uFE0F", ":(");
-      EmojiDict.Add("\uD83D\uDE26", ":(");
-      EmojiDict.Add("\uD83D\uDE41", ":(");
-      EmojiDict.Add("\uD83D\uDE06", "XD");
-      EmojiDict.Add("\uD83D\uDE1B", ":P");
-      EmojiDict.Add("\uD83D\uDE1D", "XP");
-      EmojiDict.Add("\uD83D\uDE1C", ";P");
-      EmojiDict.Add("\uD83D\uDE09", ";)");
-      EmojiDict.Add("\uD83D\uDE2E", ":o");
-      EmojiDict.Add("\uD83D\uDE10", ":|");
-      EmojiDict.Add("\uD83D\uDE01", ":D");
-      EmojiDict.Add("\uD83D\uDE00", ":D");
-      EmojiDict.Add("\uD83D\uDE2C", "8D");
-      EmojiDict.Add("\uD83D\uDE20", ">:(");
-      EmojiDict.Add("\uD83D\uDE21", ">8(");
-      EmojiDict.Add("\uD83D\uDE22", ":~(");
-      EmojiDict.Add("\uD83D\uDE17", ":*");
-      EmojiDict.Add("\u2764\uFE0F", "<3");
-      EmojiDict.Add("\uD83D\uDC94", "</3");
-    }*/
+      string modifiedMessage = message;
+      foreach(var emoticon in Config.EmoDict.Keys)
+      {
+        if(modifiedMessage.Contains(emoticon))
+          modifiedMessage = modifiedMessage.Replace(emoticon, Config.EmoDict[emoticon]);
+      }
+      return modifiedMessage;
+    }
   }
 }

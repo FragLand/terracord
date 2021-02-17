@@ -9,7 +9,7 @@
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <Platforms>x86</Platforms>
     <Company>Frag Land</Company>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <PackageProjectUrl>http://www.frag.land/</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/FragLand/terracord</RepositoryUrl>
