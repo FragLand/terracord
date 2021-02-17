@@ -1,4 +1,4 @@
-version: 0.1.{build}
+version: 1.2.3.{build}
 image: Visual Studio 2019
 platform: x86
 configuration: Debug
@@ -15,8 +15,8 @@ build:
   #project: Terracord\Terracord.csproj
   verbosity: minimal
 artifacts:
-  - path: bin\$(platform)\$(configuration)\Terracord.dll
-    name: Terracord
+  - path: bin\$(platform)\$(configuration)\net461\Terracord.dll
+    name: Terracord-$(version)
 on_success:
   - ps: Invoke-RestMethod https://raw.githubusercontent.com/DiscordHooks/appveyor-discord-webhook/master/send.ps1 -o send.ps1
   - ps: ./send.ps1 success $env:WEBHOOK_URL
