@@ -19,8 +19,10 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
 using TShockAPI;
@@ -56,12 +58,14 @@ namespace FragLand.TerracordPlugin
     public static string ChatText { get; private set; }
     public static bool IgnoreChat { get; private set; }
     public static bool LogChat { get; private set; }
+    public static bool ConvertEmoticons { get; private set; }
     public static int MessageLength { get; private set; }
     public static bool DebugMode { get; private set; }
     public static string LocaleString { get; private set; }
     public static CultureInfo Locale { get; private set; }
     public static string TimestampFormat { get; private set; }
     public static bool AbortOnError { get; private set; }
+    public static Dictionary<string, string> EmoDict = new Dictionary<string, string>(); // holds emoticon to emoji mappings
 
     /// <summary>
     /// Parses the terracord.xml configuration file
@@ -121,10 +125,13 @@ namespace FragLand.TerracordPlugin
         ChatText = configOptions.Element("chat").Attribute("text").Value.ToString(Locale);
         IgnoreChat = bool.Parse(configOptions.Element("ignore").Attribute("chat").Value.ToString(Locale));
         LogChat = bool.Parse(configOptions.Element("log").Attribute("chat").Value.ToString(Locale));
+        ConvertEmoticons = bool.Parse(configOptions.Element("convert").Attribute("emoticons").Value.ToString(Locale));
         MessageLength = int.Parse(configOptions.Element("message").Attribute("length").Value.ToString(Locale), Locale);
         DebugMode = bool.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString(Locale));
         TimestampFormat = configOptions.Element("timestamp").Attribute("format").Value.ToString(Locale);
         AbortOnError = bool.Parse(configOptions.Element("exception").Attribute("abort").Value.ToString(Locale));
+        if(ConvertEmoticons)
+          EmoDict = configFile.Descendants("map").ToDictionary(m => (string)m.Attribute("emoticon"), m => (string)m.Attribute("emoji"));
       }
       catch(FileNotFoundException fnfe)
       {
@@ -188,6 +195,7 @@ namespace FragLand.TerracordPlugin
       Util.Log($"Chat Text: {ChatText}", Util.Severity.Debug);
       Util.Log($"Ignore Chat: {IgnoreChat}", Util.Severity.Debug);
       Util.Log($"Log Chat: {LogChat}", Util.Severity.Debug);
+      Util.Log($"Convert Emoticons: {ConvertEmoticons}", Util.Severity.Debug);
       Util.Log($"Message Length: {MessageLength}", Util.Severity.Debug);
       Util.Log($"Debug Mode: {DebugMode}", Util.Severity.Debug);
       Util.Log($"Locale String: {LocaleString}", Util.Severity.Debug);
@@ -206,7 +214,7 @@ namespace FragLand.TerracordPlugin
         Util.Log($"Attempting to generate {TerracordPath}terracord.xml since the file did not exist...", Util.Severity.Info);
         StreamWriter newConfigFile = new StreamWriter($"{TerracordPath}terracord.xml", false);
         newConfigFile.WriteLine("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
-        newConfigFile.WriteLine("<!-- Terracord configuration -->");
+        newConfigFile.WriteLine("<!-- Terracord configuration version 1.2.3 -->");
         newConfigFile.WriteLine("<configuration>\n");
         newConfigFile.WriteLine("  <!-- Discord bot token -->");
         newConfigFile.WriteLine("  <bot token=\"ABC\" />\n");
@@ -250,6 +258,8 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <ignore chat=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Log all chat messages -->");
         newConfigFile.WriteLine("  <log chat=\"true\" />\n");
+        newConfigFile.WriteLine("  <!-- Convert emoticons from Terraria players to emojis in Discord -->");
+        newConfigFile.WriteLine("  <convert emoticons=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Maximum length allowed in game for received Discord messages (0 = unlimited) -->");
         newConfigFile.WriteLine("  <message length=\"0\" />\n");
         newConfigFile.WriteLine("  <!-- Debug mode -->");
@@ -260,6 +270,25 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <timestamp format=\"MM/dd/yyyy HH:mm:ss zzz\" />\n");
         newConfigFile.WriteLine("  <!-- Terminate TShock when an error is encountered -->");
         newConfigFile.WriteLine("  <exception abort=\"false\" />\n");
+        newConfigFile.WriteLine("  <!-- Emoticon to emoji mappings -->");
+        newConfigFile.WriteLine("  <map emoticon=\":~(\" emoji=\":cry:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\":E\" emoji=\":nerd:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\";)\" emoji=\":wink:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\":*\" emoji=\":kissing:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\":D\" emoji=\":grinning:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\":\\\" emoji=\":confused:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\":/\" emoji=\":confused:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\"&lt;3\" emoji=\":heart:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\":o\" emoji=\":open_mouth:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\":O\" emoji=\":open_mouth:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\":)\" emoji=\":slight_smile:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\":(\" emoji=\":slight_frown:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\":|\" emoji=\":neutral_face:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\":p\" emoji=\":stuck_out_tongue:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\":P\" emoji=\":stuck_out_tongue:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\"&lt;/3\" emoji=\":broken_heart:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\";p\" emoji=\":stuck_out_tongue_winking_eye:\" />");
+        newConfigFile.WriteLine("  <map emoticon=\";P\" emoji=\":stuck_out_tongue_winking_eye:\" />\n");
         newConfigFile.WriteLine("</configuration>");
         newConfigFile.Close();
         Util.Log($"{TerracordPath}terracord.xml created successfully.", Util.Severity.Info);

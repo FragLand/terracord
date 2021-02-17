@@ -39,7 +39,7 @@ namespace FragLand.TerracordPlugin
     /// <summary>
     /// Plugin version
     /// </summary>
-    public override Version Version => new Version(1, 2, 2);
+    public override Version Version => new Version(1, 2, 3);
 
     /// <summary>
     /// Plugin author(s)
@@ -52,7 +52,7 @@ namespace FragLand.TerracordPlugin
     public override string Description => "A Discord <-> Terraria bridge plugin for TShock";
 
     // Plugin version
-    public const string PluginVersion = "1.2.2";
+    public const string PluginVersion = "1.2.3";
     // Discord bot client
     private readonly Discord discord;
     // Plugin start time
@@ -189,6 +189,10 @@ namespace FragLand.TerracordPlugin
       // Check for game items and convert them to friendly names if found
       if(Regex.IsMatch(modifiedMessage, @"\[i(/p[0-9]+)?(/s[0-9]+)?:([0-9]+)\]"))
         modifiedMessage = Util.ConvertItems(modifiedMessage);
+
+      // Convert emoticons to emojis if enabled
+      if(Config.ConvertEmoticons)
+        modifiedMessage = Util.ConvertEmoticons(modifiedMessage);
 
       if(Config.LogChat)
       {

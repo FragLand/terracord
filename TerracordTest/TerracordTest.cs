@@ -95,6 +95,8 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<bool>(Config.IgnoreChat);
       Assert.True(Config.LogChat);
       Assert.IsType<bool>(Config.LogChat);
+      Assert.False(Config.ConvertEmoticons);
+      Assert.IsType<bool>(Config.ConvertEmoticons);
       Assert.Equal("0", Config.MessageLength.ToString());
       Assert.IsType<int>(Config.MessageLength);
       Assert.False(Config.DebugMode);
