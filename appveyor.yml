@@ -14,6 +14,9 @@ build:
   # Ignore TerracordTest
   #project: Terracord\Terracord.csproj
   verbosity: minimal
+artifacts:
+  - path: bin\$(configuration)\Terracord.dll
+    name: Terracord
 on_success:
   - ps: Invoke-RestMethod https://raw.githubusercontent.com/DiscordHooks/appveyor-discord-webhook/master/send.ps1 -o send.ps1
   - ps: ./send.ps1 success $env:WEBHOOK_URL
