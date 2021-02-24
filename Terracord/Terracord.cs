@@ -245,6 +245,10 @@ namespace FragLand.TerracordPlugin
           if(!String.IsNullOrEmpty(playerName))
           {
             message = message.Replace("$player_name", playerName);
+            string status = Config.BotGame.Replace("$server_name", TShock.Config.ServerName);
+            status = status.Replace("$player_count", TShock.Utils.GetActivePlayerCount().ToString());
+            status = status.Replace("$player_slots", TShock.Config.MaxSlots.ToString());
+            Discord.UpdateBotGame(discord.Client, status).ConfigureAwait(true);
             Util.Log(message, Util.Severity.Info);
             discord.Send(message);
           }

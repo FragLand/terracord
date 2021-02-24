@@ -57,7 +57,7 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<bool>(Config.RemoteCommands);
       Assert.Equal("Administrators Moderators", Config.AuthorizedRoles);
       Assert.IsType<string>(Config.AuthorizedRoles);
-      Assert.Equal("Terraria", Config.BotGame);
+      Assert.Equal("$server_name: $player_count/$player_slots", Config.BotGame);
       Assert.IsType<string>(Config.BotGame);
       Assert.Equal("300", Config.TopicInterval.ToString());
       Assert.IsType<uint>(Config.TopicInterval);

@@ -231,7 +231,7 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <!-- List of space-separated Discord roles authorized to execute TShock commands remotely -->");
         newConfigFile.WriteLine("  <authorized roles=\"Administrators Moderators\" />\n");
         newConfigFile.WriteLine("  <!-- Discord bot game for \"playing\" status -->");
-        newConfigFile.WriteLine("  <game status=\"Terraria\" />\n");
+        newConfigFile.WriteLine("  <game status=\"$server_name: $player_count/$player_slots\" />\n");
         newConfigFile.WriteLine("  <!-- Topic update interval in seconds and topic to set when relay is offline -->");
         newConfigFile.WriteLine("  <topic interval=\"300\" offline=\"Relay offline\" />\n");
         newConfigFile.WriteLine("  <!-- Terraria broadcast color in RGB -->");

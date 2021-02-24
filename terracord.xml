@@ -25,7 +25,7 @@
   <authorized roles="Administrators Moderators" />
 
   <!-- Discord bot game for "playing" status -->
-  <game status="$server_name: $current_players/$max_players" />
+  <game status="$server_name: $player_count/$player_slots" />
 
   <!-- Topic update interval in seconds and topic to set when relay is offline -->
   <topic interval="300" offline="Relay offline" />
