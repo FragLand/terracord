@@ -63,7 +63,9 @@ namespace FragLand.TerracordPlugin
           Severity.Error => ConsoleColor.Red,
           _ => ConsoleColor.White
         };*/
+#pragma warning disable IDE0066 // convert switch statement to expression
         switch(severity)
+#pragma warning restore IDE0066 // convert switch statement to expression
         {
           case Severity.Debug:
             Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -266,8 +268,8 @@ namespace FragLand.TerracordPlugin
     /// <returns>true if message should be filtered or false otherwise</returns>
     public static bool FilterBroadcast(string message)
     {
-      string discordMessage = Config.ChatText.Replace("%u%", ".+");
-      discordMessage = discordMessage.Replace("%m%", ".*");
+      string discordMessage = Config.ChatText.Replace("$user_name", ".+");
+      discordMessage = discordMessage.Replace("$message", ".*");
       if(Regex.IsMatch(message, $"^{discordMessage}$"))  // Discord message
         return true;
       if(Regex.IsMatch(message, "^.+: .*$"))             // Terraria chat message

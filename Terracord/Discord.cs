@@ -85,7 +85,10 @@ namespace FragLand.TerracordPlugin
       try
       {
         // Set game/playing status
-        await Client.SetGameAsync(Config.BotGame).ConfigureAwait(true);
+        string status = Config.BotGame.Replace("$server_name", TShock.Config.ServerName);
+        status = status.Replace("$player_count", TShock.Utils.GetActivePlayerCount().ToString());
+        status = status.Replace("$player_slots", TShock.Config.MaxSlots.ToString());
+        await Client.SetGameAsync(status).ConfigureAwait(true);
       }
       catch(Exception e)
       {
@@ -182,7 +185,7 @@ namespace FragLand.TerracordPlugin
       // Handle commands
       if(message.Content.StartsWith(Config.CommandPrefix.ToString(Config.Locale), StringComparison.InvariantCulture) && message.Content.Length > Config.CommandPrefix.Length)
       {
-        _ = Command.CommandHandler(message.Author, channel, message.Content); // avoid blocking in MessageReceived() by using discard
+        _ = Command.CommandHandler(Client, message.Author, channel, message.Content); // avoid blocking in MessageReceived() by using discard
         if(!Config.RelayCommands)
           return false;
       }
@@ -226,8 +229,8 @@ namespace FragLand.TerracordPlugin
         if(relayMessage)
         {
           string text = "";
-          text = Config.ChatText.Replace("%u%", message.Author.Username);
-          text = text.Replace("%m%", messageContent);
+          text = Config.ChatText.Replace("$user_name", message.Author.Username);
+          text = text.Replace("$message", messageContent);
           if(Config.LogChat)
             Util.Log(text, Util.Severity.Info);
           TShock.Utils.Broadcast(text, Config.BroadcastColor[0], Config.BroadcastColor[1], Config.BroadcastColor[2]);
@@ -283,7 +286,7 @@ namespace FragLand.TerracordPlugin
       UpdateTopicRunning = true;
       while(true)
       {
-        await SetTopic($"{TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots} players online " +
+        await SetTopic($"{TShock.Config.ServerName} | {TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots} players online " +
                        $"| Server online for {Command.Uptime()} | Last update: {DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}").ConfigureAwait(true);
         try
         {
@@ -295,6 +298,16 @@ namespace FragLand.TerracordPlugin
           throw;
         }
       }
+    }
+
+    /// <summary>
+    /// Set bot playing status
+    /// </summary>
+    /// <param name="status">new bot status</param>
+    /// <returns>void</returns>
+    public static async Task UpdateBotGame(DiscordSocketClient client, string status)
+    {
+      await client.SetGameAsync(status).ConfigureAwait(true);
     }
   }
 }

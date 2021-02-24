@@ -157,7 +157,7 @@ namespace FragLand.TerracordPlugin
         return;
 
       Util.Log($"Server broadcast: {Util.ConvertItems(args.Message.ToString())}", Util.Severity.Info);
-      discord.Send(Config.BroadcastText.Replace("%m%", args.Message.ToString()));
+      discord.Send(Config.BroadcastText.Replace("$message", args.Message.ToString()));
     }
 
     /// <summary>
@@ -200,8 +200,8 @@ namespace FragLand.TerracordPlugin
         Util.Log($"{args.Player.Name} said: {modifiedMessage}", Util.Severity.Info);
       }
       //discord.Send($"**<{TShock.Players[args.Who].Name}>** {modifiedMessage}");
-      string text = Config.PlayerText.Replace("%p%", args.Player.Name);
-      text = text.Replace("%m%", modifiedMessage);
+      string text = Config.PlayerText.Replace("$player_name", args.Player.Name);
+      text = text.Replace("$message", modifiedMessage);
       discord.Send(text);
     }
 
@@ -238,13 +238,24 @@ namespace FragLand.TerracordPlugin
         if(eventArgs != null)
         {
           string playerName = null;
+          int playerCount = TShock.Utils.GetActivePlayerCount();
           if(eventArgs is JoinEventArgs joinEventArgs)
+          {
             playerName = TShock.Players[joinEventArgs.Who].Name;
+            playerCount += 1; // needed since server active player count does not increment until OnJoin() event method returns
+          }
           if(eventArgs is LeaveEventArgs leaveEventArgs)
+          {
             playerName = TShock.Players[leaveEventArgs.Who].Name;
+            playerCount -= 1; // needed since server active player count does not decrement until OnLeave() event method returns
+          }
           if(!String.IsNullOrEmpty(playerName))
           {
-            message = message.Replace("%p%", playerName);
+            message = message.Replace("$player_name", playerName);
+            string status = Config.BotGame.Replace("$server_name", TShock.Config.ServerName);
+            status = status.Replace("$player_count", playerCount.ToString());
+            status = status.Replace("$player_slots", TShock.Config.MaxSlots.ToString());
+            Discord.UpdateBotGame(discord.Client, status).ConfigureAwait(true);
             Util.Log(message, Util.Severity.Info);
             discord.Send(message);
           }

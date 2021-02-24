@@ -25,7 +25,7 @@
   <authorized roles="Administrators Moderators" />
 
   <!-- Discord bot game for "playing" status -->
-  <game status="Terraria" />
+  <game status="$server_name: $player_count/$player_slots" />
 
   <!-- Topic update interval in seconds and topic to set when relay is offline -->
   <topic interval="300" offline="Relay offline" />
@@ -40,25 +40,25 @@
   <announce reconnect="false" />
 
   <!-- Message sent to Discord text channel when the relay becomes available -->
-  <available text="**:white_check_mark: Relay available.**" />
+  <available text="**:white_check_mark: Relay online.**" />
 
   <!-- Message sent to Discord text channel when the relay is shutting down -->
-  <unavailable text="**:octagonal_sign: Relay shutting down.**" />
+  <unavailable text="**:octagonal_sign: Relay offline.**" />
 
   <!-- Message sent to Discord text channel when a player joins the game -->
-  <join text="**:green_circle: %p% has joined the server.**" />
+  <join text="**:green_circle: $player_name has joined the server.**" />
 
   <!-- Message sent to Discord text channel when a player leaves the game -->
-  <leave text="**:red_circle: %p% has left the server.**" />
+  <leave text="**:red_circle: $player_name has left the server.**" />
 
   <!-- Message sent to Discord text channel when a broadcast is sent from the game -->
-  <broadcast text="**:mega: Broadcast:** %m%" />
+  <broadcast text="**:mega: Broadcast:** $message" />
 
   <!-- Message sent to Discord text channel when a player chats in the game -->
-  <player text="**&lt;%p%&gt;** %m%" />
+  <player text="**&lt;$player_name&gt;** $message" />
 
   <!-- Message sent to game when a user chats in the Discord text channel -->
-  <chat text="&lt;%u%@Discord&gt; %m%" />
+  <chat text="&lt;$user_name@Discord&gt; $message" />
 
   <!-- Toggle Discord chat displayed in game -->
   <ignore chat="false" />
