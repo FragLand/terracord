@@ -63,7 +63,7 @@ namespace FragLand.TerracordPlugin
         await CommandResponse(channel, "Uptime", Uptime()).ConfigureAwait(true);
       else if(command.StartsWith("setgame", StringComparison.OrdinalIgnoreCase))
       {
-        string status = Regex.Replace(command, "setgame", "", RegexOptions.IgnoreCase);
+        string status = Regex.Replace(command, "setgame ", "", RegexOptions.IgnoreCase);
         await CommandResponse(channel, "Set Game", $"**New game status set to:** `{status}`").ConfigureAwait(true);
         await Discord.UpdateBotGame(client, status).ConfigureAwait(true);
       }
