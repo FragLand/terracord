@@ -62,7 +62,11 @@ namespace FragLand.TerracordPlugin
       else if(command.Equals("uptime", StringComparison.OrdinalIgnoreCase))
         await CommandResponse(channel, "Uptime", Uptime()).ConfigureAwait(true);
       else if(command.StartsWith("setgame", StringComparison.OrdinalIgnoreCase))
-        await Discord.UpdateBotGame(client, Regex.Replace(command, "setgame", "", RegexOptions.IgnoreCase)).ConfigureAwait(true);
+      {
+        string status = Regex.Replace(command, "setgame", "", RegexOptions.IgnoreCase);
+        await CommandResponse(channel, "Set Game", $"New game status set to: {status}").ConfigureAwait(true);
+        await Discord.UpdateBotGame(client, status).ConfigureAwait(true);
+      }
       else // let TShock attempt to handle the command
       {
         if(Config.RemoteCommands)
