@@ -238,15 +238,22 @@ namespace FragLand.TerracordPlugin
         if(eventArgs != null)
         {
           string playerName = null;
+          int playerCount = TShock.Utils.GetActivePlayerCount();
           if(eventArgs is JoinEventArgs joinEventArgs)
+          {
             playerName = TShock.Players[joinEventArgs.Who].Name;
+            playerCount += 1; // needed since server active player count does not increment until OnJoin() event method returns
+          }
           if(eventArgs is LeaveEventArgs leaveEventArgs)
+          {
             playerName = TShock.Players[leaveEventArgs.Who].Name;
+            playerCount -= 1; // needed since server active player count does not decrement until OnLeave() event method returns
+          }
           if(!String.IsNullOrEmpty(playerName))
           {
             message = message.Replace("$player_name", playerName);
             string status = Config.BotGame.Replace("$server_name", TShock.Config.ServerName);
-            status = status.Replace("$player_count", TShock.Utils.GetActivePlayerCount().ToString());
+            status = status.Replace("$player_count", playerCount.ToString());
             status = status.Replace("$player_slots", TShock.Config.MaxSlots.ToString());
             Discord.UpdateBotGame(discord.Client, status).ConfigureAwait(true);
             Util.Log(message, Util.Severity.Info);
