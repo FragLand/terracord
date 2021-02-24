@@ -78,6 +78,7 @@ not supporting Mono. Building a Terracord DLL that targets `net46` or `net461` h
 | `help` | Display command list |
 | `playerlist` | Display online players |
 | `serverinfo` | Display server details |
+| `setgame [status]` | Set Discord bot game/playing status |
 | `uptime` | Display plugin uptime |
 
 If a command is not in the above list and the issuing Discord user has one of the admin roles or is the bot owner (both configured

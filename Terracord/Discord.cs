@@ -182,7 +182,7 @@ namespace FragLand.TerracordPlugin
       // Handle commands
       if(message.Content.StartsWith(Config.CommandPrefix.ToString(Config.Locale), StringComparison.InvariantCulture) && message.Content.Length > Config.CommandPrefix.Length)
       {
-        _ = Command.CommandHandler(message.Author, channel, message.Content); // avoid blocking in MessageReceived() by using discard
+        _ = Command.CommandHandler(Client, message.Author, channel, message.Content); // avoid blocking in MessageReceived() by using discard
         if(!Config.RelayCommands)
           return false;
       }
@@ -295,6 +295,16 @@ namespace FragLand.TerracordPlugin
           throw;
         }
       }
+    }
+
+    /// <summary>
+    /// Set bot playing status
+    /// </summary>
+    /// <param name="status">new bot status</param>
+    /// <returns>void</returns>
+    public static async Task UpdateBotGame(DiscordSocketClient client, string status)
+    {
+      await client.SetGameAsync(status).ConfigureAwait(true);
     }
   }
 }

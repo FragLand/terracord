@@ -63,7 +63,9 @@ namespace FragLand.TerracordPlugin
           Severity.Error => ConsoleColor.Red,
           _ => ConsoleColor.White
         };*/
+#pragma warning disable IDE0066 // convert switch statement to expression
         switch(severity)
+#pragma warning restore IDE0066 // convert switch statement to expression
         {
           case Severity.Debug:
             Console.ForegroundColor = ConsoleColor.DarkGray;

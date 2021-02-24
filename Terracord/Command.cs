@@ -22,6 +22,7 @@ using Discord;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TShockAPI;
 
@@ -47,7 +48,7 @@ namespace FragLand.TerracordPlugin
     /// <param name="channel">Discord text channel</param>
     /// <param name="command">command sent by a Discord user</param>
     /// <returns>void</returns>
-    public static async Task CommandHandler(SocketUser user, IMessageChannel channel, string command)
+    public static async Task CommandHandler(DiscordSocketClient client, SocketUser user, IMessageChannel channel, string command)
     {
       command = command.Substring(Config.CommandPrefix.Length).TrimStart(); // remove command prefix
       Util.Log($"Command sent: {command}", Util.Severity.Info);
@@ -60,6 +61,8 @@ namespace FragLand.TerracordPlugin
         await CommandResponse(channel, "Server Information", ServerInfo()).ConfigureAwait(true);
       else if(command.Equals("uptime", StringComparison.OrdinalIgnoreCase))
         await CommandResponse(channel, "Uptime", Uptime()).ConfigureAwait(true);
+      else if(command.StartsWith("setgame", StringComparison.OrdinalIgnoreCase))
+        await Discord.UpdateBotGame(client, Regex.Replace(command, "setgame", "", RegexOptions.IgnoreCase)).ConfigureAwait(true);
       else // let TShock attempt to handle the command
       {
         if(Config.RemoteCommands)
@@ -105,10 +108,11 @@ namespace FragLand.TerracordPlugin
     public static string Help()
     {
       string commandList = "__**Commands**__\n" +
-                           "**help**       - Display command list\n" +
-                           "**playerlist** - Display online players\n" +
-                           "**serverinfo** - Display server details\n" +
-                           "**uptime**     - Display plugin uptime\n\n";
+                           "**help**             - Display command list\n" +
+                           "**playerlist**       - Display online players\n" +
+                           "**serverinfo**       - Display server details\n" +
+                           "**setgame [status]** - Set bot game/playing status\n" +
+                           "**uptime**           - Display plugin uptime\n\n";
       return commandList;
     }
 
