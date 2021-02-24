@@ -226,8 +226,8 @@ namespace FragLand.TerracordPlugin
         if(relayMessage)
         {
           string text = "";
-          text = Config.ChatText.Replace("%u%", message.Author.Username);
-          text = text.Replace("%m%", messageContent);
+          text = Config.ChatText.Replace("$user_name", message.Author.Username);
+          text = text.Replace("$message", messageContent);
           if(Config.LogChat)
             Util.Log(text, Util.Severity.Info);
           TShock.Utils.Broadcast(text, Config.BroadcastColor[0], Config.BroadcastColor[1], Config.BroadcastColor[2]);
