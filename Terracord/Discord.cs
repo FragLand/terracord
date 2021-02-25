@@ -286,8 +286,12 @@ namespace FragLand.TerracordPlugin
       UpdateTopicRunning = true;
       while(true)
       {
-        await SetTopic($"{TShock.Config.ServerName} | {TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots} players online " +
-                       $"| Server online for {Command.Uptime()} | Last update: {DateTime.Now.ToString(Config.TimestampFormat, Config.Locale)}").ConfigureAwait(true);
+        string topic = Config.OnlineTopic.Replace("$server_name", TShock.Config.ServerName);
+        topic = topic.Replace("$player_count", TShock.Utils.GetActivePlayerCount().ToString());
+        topic = topic.Replace("$player_slots", TShock.Config.MaxSlots.ToString());
+        topic = topic.Replace("$uptime", Command.Uptime());
+        topic = topic.Replace("$current_time", DateTime.Now.ToString(Config.TimestampFormat, Config.Locale));
+        await SetTopic(topic).ConfigureAwait(true);
         try
         {
           await Task.Delay(Convert.ToInt32(Config.TopicInterval * 1000)).ConfigureAwait(true); // seconds to milliseconds

@@ -44,6 +44,7 @@ namespace FragLand.TerracordPlugin
     public static string BotGame { get; private set; }
     public static uint TopicInterval { get; private set; }
     public static string OfflineTopic { get; private set; }
+    public static string OnlineTopic { get; private set; }
     public static byte[] BroadcastColor { get; private set; }
     public static bool SilenceBroadcasts { get; private set; }
     public static bool SilenceChat { get; private set; }
@@ -58,13 +59,13 @@ namespace FragLand.TerracordPlugin
     public static string ChatText { get; private set; }
     public static bool IgnoreChat { get; private set; }
     public static bool LogChat { get; private set; }
-    public static bool ConvertEmoticons { get; private set; }
     public static int MessageLength { get; private set; }
     public static bool DebugMode { get; private set; }
     public static string LocaleString { get; private set; }
     public static CultureInfo Locale { get; private set; }
     public static string TimestampFormat { get; private set; }
     public static bool AbortOnError { get; private set; }
+    public static bool ConvertEmoticons { get; private set; }
     public static Dictionary<string, string> EmoDict = new Dictionary<string, string>(); // holds emoticon to emoji mappings
 
     /// <summary>
@@ -103,6 +104,7 @@ namespace FragLand.TerracordPlugin
         BotGame = configOptions.Element("game").Attribute("status").Value.ToString(Locale);
         TopicInterval = uint.Parse(configOptions.Element("topic").Attribute("interval").Value.ToString(Locale), Locale);
         OfflineTopic = configOptions.Element("topic").Attribute("offline").Value.ToString(Locale);
+        OnlineTopic = configOptions.Element("topic").Attribute("online").Value.ToString(Locale);
 
         // Populate broadcast RGB array values
         BroadcastColor = new byte[3]
@@ -125,11 +127,11 @@ namespace FragLand.TerracordPlugin
         ChatText = configOptions.Element("chat").Attribute("text").Value.ToString(Locale);
         IgnoreChat = bool.Parse(configOptions.Element("ignore").Attribute("chat").Value.ToString(Locale));
         LogChat = bool.Parse(configOptions.Element("log").Attribute("chat").Value.ToString(Locale));
-        ConvertEmoticons = bool.Parse(configOptions.Element("convert").Attribute("emoticons").Value.ToString(Locale));
         MessageLength = int.Parse(configOptions.Element("message").Attribute("length").Value.ToString(Locale), Locale);
         DebugMode = bool.Parse(configOptions.Element("debug").Attribute("mode").Value.ToString(Locale));
         TimestampFormat = configOptions.Element("timestamp").Attribute("format").Value.ToString(Locale);
         AbortOnError = bool.Parse(configOptions.Element("exception").Attribute("abort").Value.ToString(Locale));
+        ConvertEmoticons = bool.Parse(configOptions.Element("convert").Attribute("emoticons").Value.ToString(Locale));
         if(ConvertEmoticons)
           EmoDict = configFile.Descendants("map").ToDictionary(m => (string)m.Attribute("emoticon"), m => (string)m.Attribute("emoji"));
       }
@@ -181,6 +183,7 @@ namespace FragLand.TerracordPlugin
       Util.Log($"Bot Game: {BotGame}", Util.Severity.Debug);
       Util.Log($"Topic Interval: {TopicInterval}", Util.Severity.Debug);
       Util.Log($"Offline Topic: {OfflineTopic}", Util.Severity.Debug);
+      Util.Log($"Online Topic: {OnlineTopic}", Util.Severity.Debug);
       Util.Log($"Broadcast Color (RGB): {BroadcastColor[0]}, {BroadcastColor[1]}, {BroadcastColor[2]}", Util.Severity.Debug);
       Util.Log($"Silence Broadcasts: {SilenceBroadcasts}", Util.Severity.Debug);
       Util.Log($"Silence Chat: {SilenceChat}", Util.Severity.Debug);
@@ -233,7 +236,7 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <!-- Discord bot game for \"playing\" status -->");
         newConfigFile.WriteLine("  <game status=\"$server_name: $player_count/$player_slots\" />\n");
         newConfigFile.WriteLine("  <!-- Topic update interval in seconds and topic to set when relay is offline -->");
-        newConfigFile.WriteLine("  <topic interval=\"300\" offline=\"Relay offline\" />\n");
+        newConfigFile.WriteLine("  <topic interval=\"300\" offline=\"Relay offline\" online=\"$server_name | $player_count/$player_slots players online | Server online for $uptime | Last update: $current_time\" />\n");
         newConfigFile.WriteLine("  <!-- Terraria broadcast color in RGB -->");
         newConfigFile.WriteLine("  <color red=\"255\" green=\"215\" blue=\"0\" />\n");
         newConfigFile.WriteLine("  <!-- Toggle broadcasts, chat, and world saves displayed in Discord -->");
@@ -258,8 +261,6 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <ignore chat=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Log all chat messages -->");
         newConfigFile.WriteLine("  <log chat=\"true\" />\n");
-        newConfigFile.WriteLine("  <!-- Convert emoticons from Terraria players to emojis in Discord -->");
-        newConfigFile.WriteLine("  <convert emoticons=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Maximum length allowed in game for received Discord messages (0 = unlimited) -->");
         newConfigFile.WriteLine("  <message length=\"0\" />\n");
         newConfigFile.WriteLine("  <!-- Debug mode -->");
@@ -270,6 +271,8 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <timestamp format=\"MM/dd/yyyy HH:mm:ss zzz\" />\n");
         newConfigFile.WriteLine("  <!-- Terminate TShock when an error is encountered -->");
         newConfigFile.WriteLine("  <exception abort=\"false\" />\n");
+        newConfigFile.WriteLine("  <!-- Convert emoticons from Terraria players to emojis in Discord -->");
+        newConfigFile.WriteLine("  <convert emoticons=\"false\" />\n");
         newConfigFile.WriteLine("  <!-- Emoticon to emoji mappings -->");
         newConfigFile.WriteLine("  <map emoticon=\":~(\" emoji=\":cry:\" />");
         newConfigFile.WriteLine("  <map emoticon=\":E\" emoji=\":nerd:\" />");
