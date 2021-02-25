@@ -63,6 +63,8 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<uint>(Config.TopicInterval);
       Assert.Equal("Relay offline", Config.OfflineTopic);
       Assert.IsType<string>(Config.OfflineTopic);
+      Assert.Equal("$server_name | $player_count/$player_slots players online | Server online for $uptime | Last update: $current_time", Config.OnlineTopic);
+      Assert.IsType<string>(Config.OnlineTopic);
       Assert.Equal("255", Config.BroadcastColor[0].ToString());
       Assert.IsType<byte>(Config.BroadcastColor[0]);
       Assert.Equal("215", Config.BroadcastColor[1].ToString());
@@ -95,8 +97,6 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<bool>(Config.IgnoreChat);
       Assert.True(Config.LogChat);
       Assert.IsType<bool>(Config.LogChat);
-      Assert.False(Config.ConvertEmoticons);
-      Assert.IsType<bool>(Config.ConvertEmoticons);
       Assert.Equal("0", Config.MessageLength.ToString());
       Assert.IsType<int>(Config.MessageLength);
       Assert.False(Config.DebugMode);
@@ -107,6 +107,8 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<string>(Config.TimestampFormat);
       Assert.False(Config.AbortOnError);
       Assert.IsType<bool>(Config.AbortOnError);
+      Assert.False(Config.ConvertEmoticons);
+      Assert.IsType<bool>(Config.ConvertEmoticons);
     }
   }
 }

@@ -28,7 +28,7 @@
   <game status="$server_name: $player_count/$player_slots" />
 
   <!-- Topic update interval in seconds and topic to set when relay is offline -->
-  <topic interval="300" offline="Relay offline" />
+  <topic interval="300" offline="Relay offline" online="$server_name | $player_count/$player_slots players online | Server online for $uptime | Last update: $current_time" />
 
   <!-- Terraria broadcast color in RGB -->
   <color red="255" green="215" blue="0" />
@@ -66,9 +66,6 @@
   <!-- Log all chat messages -->
   <log chat="true" />
 
-  <!-- Convert emoticons from Terraria players to emojis in Discord -->
-  <convert emoticons="false" />
-
   <!-- Maximum length allowed in game for received Discord messages (0 = unlimited) -->
   <message length="0" />
 
@@ -83,6 +80,9 @@
 
   <!-- Terminate TShock when an error is encountered -->
   <exception abort="false" />
+
+  <!-- Convert emoticons from Terraria players to emojis in Discord -->
+  <convert emoticons="false" />
 
   <!-- Emoticon to emoji mappings -->
   <map emoticon=":~(" emoji=":cry:" />
