@@ -6,10 +6,10 @@
     <!-- <TargetFramework>netcoreapp3.1</TargetFramework> -->
     <!-- Discord.Net 2.1.1 requires >=net46 -->
     <!-- Discord.Net 2.3.0 requires >=net461 -->
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
     <Platforms>x86</Platforms>
     <Company>Frag Land</Company>
-    <Version>1.2.3</Version>
+    <Version>1.3.0</Version>
     <PackageProjectUrl>http://www.frag.land/</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/FragLand/terracord</RepositoryUrl>

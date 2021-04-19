@@ -89,7 +89,7 @@ namespace FragLand.TerracordPlugin
       {
         TerracordPlayer terracordPlayer = new TerracordPlayer(user.Username){Group = new SuperAdminGroup()};
         //if(Commands.HandleCommand(TSPlayer.Server, $"{TShock.Config.CommandSpecifier}{command}"))
-        if(Commands.HandleCommand(terracordPlayer, $"{TShock.Config.CommandSpecifier}{command}"))
+        if(Commands.HandleCommand(terracordPlayer, $"{TShock.Config.Settings.CommandSpecifier}{command}"))
         {
           foreach(string commandOutput in terracordPlayer.Output)
             await CommandResponse(channel, "Command Status", $"Command output: {commandOutput}", Color.Green).ConfigureAwait(true);
@@ -126,7 +126,7 @@ namespace FragLand.TerracordPlugin
     /// <returns>player count and list of players</returns>
     public static string PlayerList()
     {
-      string playerList = $"{TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots}\n\n";
+      string playerList = $"{TShock.Utils.GetActivePlayerCount()}/{TShock.Config.Settings.MaxSlots}\n\n";
       //foreach(var player in TShock.Utils.GetPlayers(false))
       //  playerList += $"{player.Name}\n";
       foreach(TSPlayer player in TShock.Players)
@@ -143,8 +143,8 @@ namespace FragLand.TerracordPlugin
     /// <returns>server information</returns>
     public static string ServerInfo()
     {
-      return $"**Server Name:** {TShock.Config.ServerName}\n" +
-             $"**Players:** {TShock.Utils.GetActivePlayerCount()}/{TShock.Config.MaxSlots}\n" +
+      return $"**Server Name:** {TShock.Config.Settings.ServerName}\n" +
+             $"**Players:** {TShock.Utils.GetActivePlayerCount()}/{TShock.Config.Settings.MaxSlots}\n" +
              $"**TShock Version:** {TShock.VersionNum}";
     }
 
