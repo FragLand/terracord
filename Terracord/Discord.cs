@@ -85,9 +85,9 @@ namespace FragLand.TerracordPlugin
       try
       {
         // Set game/playing status
-        string status = Config.BotGame.Replace("$server_name", TShock.Config.ServerName);
+        string status = Config.BotGame.Replace("$server_name", TShock.Config.Settings.ServerName);
         status = status.Replace("$player_count", TShock.Utils.GetActivePlayerCount().ToString());
-        status = status.Replace("$player_slots", TShock.Config.MaxSlots.ToString());
+        status = status.Replace("$player_slots", TShock.Config.Settings.MaxSlots.ToString());
         await Client.SetGameAsync(status).ConfigureAwait(true);
       }
       catch(Exception e)
@@ -286,9 +286,9 @@ namespace FragLand.TerracordPlugin
       UpdateTopicRunning = true;
       while(true)
       {
-        string topic = Config.OnlineTopic.Replace("$server_name", TShock.Config.ServerName);
+        string topic = Config.OnlineTopic.Replace("$server_name", TShock.Config.Settings.ServerName);
         topic = topic.Replace("$player_count", TShock.Utils.GetActivePlayerCount().ToString());
-        topic = topic.Replace("$player_slots", TShock.Config.MaxSlots.ToString());
+        topic = topic.Replace("$player_slots", TShock.Config.Settings.MaxSlots.ToString());
         topic = topic.Replace("$uptime", Command.Uptime());
         topic = topic.Replace("$current_time", DateTime.Now.ToString(Config.TimestampFormat, Config.Locale));
         await SetTopic(topic).ConfigureAwait(true);

@@ -39,7 +39,7 @@ namespace FragLand.TerracordPlugin
     /// <summary>
     /// Plugin version
     /// </summary>
-    public override Version Version => new Version(1, 2, 3);
+    public override Version Version => new Version(1, 3, 0);
 
     /// <summary>
     /// Plugin author(s)
@@ -52,7 +52,7 @@ namespace FragLand.TerracordPlugin
     public override string Description => "A Discord <-> Terraria bridge plugin for TShock";
 
     // Plugin version
-    public const string PluginVersion = "1.2.3";
+    public const string PluginVersion = "1.3.0";
     // Discord bot client
     private readonly Discord discord;
     // Plugin start time
@@ -252,9 +252,9 @@ namespace FragLand.TerracordPlugin
           if(!String.IsNullOrEmpty(playerName))
           {
             message = message.Replace("$player_name", playerName);
-            string status = Config.BotGame.Replace("$server_name", TShock.Config.ServerName);
+            string status = Config.BotGame.Replace("$server_name", TShock.Config.Settings.ServerName);
             status = status.Replace("$player_count", playerCount.ToString());
-            status = status.Replace("$player_slots", TShock.Config.MaxSlots.ToString());
+            status = status.Replace("$player_slots", TShock.Config.Settings.MaxSlots.ToString());
             Discord.UpdateBotGame(discord.Client, status).ConfigureAwait(true);
             Util.Log(message, Util.Severity.Info);
             discord.Send(message);

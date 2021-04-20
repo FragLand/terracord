@@ -5,10 +5,10 @@ configuration: Debug
 before_build:
   - nuget restore
   - SET TEMPDIR=temp
-  - SET ZIPFILE=TShock4.4.0_Pre15_Terraria1.4.1.2.zip
+  - SET ZIPFILE=TShock.4.5.1.Terraria.1.4.2.1.zip
   - md %TEMPDIR%
   - cd %TEMPDIR%
-  - curl -fsSLJo %ZIPFILE% https://github.com/Pryaxis/TShock/releases/download/v4.4.0-pre15/TShock4.4.0_Pre15_Terraria1.4.1.2.zip
+  - curl -fsSLJo %ZIPFILE% https://github.com/Pryaxis/TShock/releases/download/v4.5.1/TShock.4.5.1.Terraria.1.4.2.1.zip
   - 7z e %ZIPFILE% -o..\lib\ OTAPI.dll TerrariaServer.exe TShockAPI.dll -r
 build:
   # Ignore TerracordTest
