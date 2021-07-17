@@ -254,7 +254,7 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when a broadcast is sent from the game -->");
         newConfigFile.WriteLine("  <broadcast text=\"**:mega: Broadcast:** $message\" />\n");
         newConfigFile.WriteLine("  <!-- Message sent to Discord text channel when a player chats in the game -->");
-        newConfigFile.WriteLine("  <player text=\"**&lt;$player_name&gt;** $message\" />\n");
+        newConfigFile.WriteLine("  <player text=\"**[$group_name]&lt;$player_name&gt;** $message\" />\n");
         newConfigFile.WriteLine("  <!-- Message sent to game when a user chats in the Discord text channel -->");
         newConfigFile.WriteLine("  <chat text=\"&lt;$user_name@Discord&gt; $message\" />\n");
         newConfigFile.WriteLine("  <!-- Toggle Discord chat displayed in game -->");

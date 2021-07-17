@@ -201,6 +201,7 @@ namespace FragLand.TerracordPlugin
       }
       //discord.Send($"**<{TShock.Players[args.Who].Name}>** {modifiedMessage}");
       string text = Config.PlayerText.Replace("$player_name", args.Player.Name);
+      text = text.Replace("$group_name", args.Player.Group.Name);
       text = text.Replace("$message", modifiedMessage);
       discord.Send(text);
     }
