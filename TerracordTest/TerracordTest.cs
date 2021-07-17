@@ -89,7 +89,7 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<string>(Config.LeaveText);
       Assert.Equal("**:mega: Broadcast:** $message", Config.BroadcastText);
       Assert.IsType<string>(Config.BroadcastText);
-      Assert.Equal("**<$player_name>** $message", Config.PlayerText);
+      Assert.Equal("**[$group_name]<$player_name>** $message", Config.PlayerText);
       Assert.IsType<string>(Config.PlayerText);
       Assert.Equal("<$user_name@Discord> $message", Config.ChatText);
       Assert.IsType<string>(Config.ChatText);

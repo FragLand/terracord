@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!-- Terracord configuration version 1.3.0 -->
+<!-- Terracord configuration version 1.3.1 -->
 <configuration>
 
   <!-- Discord bot token -->
@@ -55,7 +55,7 @@
   <broadcast text="**:mega: Broadcast:** $message" />
 
   <!-- Message sent to Discord text channel when a player chats in the game -->
-  <player text="**&lt;$player_name&gt;** $message" />
+  <player text="**[$group_name]&lt;$player_name&gt;** $message" />
 
   <!-- Message sent to game when a user chats in the Discord text channel -->
   <chat text="&lt;$user_name@Discord&gt; $message" />
