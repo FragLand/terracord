@@ -190,7 +190,7 @@ namespace FragLand.TerracordPlugin
     public static string ConvertChannelMentions(string message, DiscordSocketClient discordClient)
     {
       string modifiedMessage = message;
-      string channelPattern = @"#.+";
+      string channelPattern = @"#[^\s]+";
 
       var guilds = discordClient.Guilds;
       if(Regex.IsMatch(modifiedMessage, channelPattern))
@@ -198,7 +198,8 @@ namespace FragLand.TerracordPlugin
         foreach(var guild in guilds)
         {
           foreach(var channel in guild.TextChannels)
-            modifiedMessage = Regex.Replace(Regex.Escape(modifiedMessage), $"#{channel.Name}", channel.Mention, RegexOptions.IgnoreCase);
+            //modifiedMessage = Regex.Replace(Regex.Escape(modifiedMessage), $"#{channel.Name}", channel.Mention, RegexOptions.IgnoreCase);
+            modifiedMessage = Regex.Replace(modifiedMessage, $"#{channel.Name}", channel.Mention, RegexOptions.IgnoreCase);
         }
       }
 
