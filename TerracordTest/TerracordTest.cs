@@ -57,13 +57,13 @@ namespace FragLand.TerracordPluginTests
       Assert.IsType<bool>(Config.RemoteCommands);
       Assert.Equal("Administrators Moderators", Config.AuthorizedRoles);
       Assert.IsType<string>(Config.AuthorizedRoles);
-      Assert.Equal("$server_name: $player_count/$player_slots", Config.BotGame);
+      Assert.Equal("$server_name: $world_name: $player_count/$player_slots", Config.BotGame);
       Assert.IsType<string>(Config.BotGame);
       Assert.Equal("300", Config.TopicInterval.ToString());
       Assert.IsType<uint>(Config.TopicInterval);
       Assert.Equal("Relay offline", Config.OfflineTopic);
       Assert.IsType<string>(Config.OfflineTopic);
-      Assert.Equal("$server_name | $player_count/$player_slots players online | Server online for $uptime | Last update: $current_time", Config.OnlineTopic);
+      Assert.Equal("$server_name: $world_name | $player_count/$player_slots players online | Server online for $uptime | Last update: $current_time", Config.OnlineTopic);
       Assert.IsType<string>(Config.OnlineTopic);
       Assert.Equal("255", Config.BroadcastColor[0].ToString());
       Assert.IsType<byte>(Config.BroadcastColor[0]);

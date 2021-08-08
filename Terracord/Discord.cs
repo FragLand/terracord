@@ -86,6 +86,7 @@ namespace FragLand.TerracordPlugin
       {
         // Set game/playing status
         string status = Config.BotGame.Replace("$server_name", TShock.Config.Settings.ServerName);
+        status = status.Replace("$world_name", Terraria.Main.worldName);
         status = status.Replace("$player_count", TShock.Utils.GetActivePlayerCount().ToString());
         status = status.Replace("$player_slots", TShock.Config.Settings.MaxSlots.ToString());
         await Client.SetGameAsync(status).ConfigureAwait(true);
@@ -287,6 +288,7 @@ namespace FragLand.TerracordPlugin
       while(true)
       {
         string topic = Config.OnlineTopic.Replace("$server_name", TShock.Config.Settings.ServerName);
+        topic = topic.Replace("$world_name", Terraria.Main.worldName);
         topic = topic.Replace("$player_count", TShock.Utils.GetActivePlayerCount().ToString());
         topic = topic.Replace("$player_slots", TShock.Config.Settings.MaxSlots.ToString());
         topic = topic.Replace("$uptime", Command.Uptime());

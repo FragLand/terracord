@@ -1,14 +1,14 @@
-version: 1.2.3.{build}
+version: 1.3.1.{build}
 image: Visual Studio 2019
 platform: x86
 configuration: Debug
 before_build:
   - nuget restore
   - SET TEMPDIR=temp
-  - SET ZIPFILE=TShock.4.5.1.Terraria.1.4.2.1.zip
+  - SET ZIPFILE=TShock4.5.5_Terraria_1.4.2.3.zip
   - md %TEMPDIR%
   - cd %TEMPDIR%
-  - curl -fsSLJo %ZIPFILE% https://github.com/Pryaxis/TShock/releases/download/v4.5.1/TShock.4.5.1.Terraria.1.4.2.1.zip
+  - curl -fsSLJo %ZIPFILE% https://github.com/Pryaxis/TShock/releases/download/v4.5.5/TShock4.5.5_Terraria_1.4.2.3.zip
   - 7z e %ZIPFILE% -o..\lib\ OTAPI.dll TerrariaServer.exe TShockAPI.dll -r
 build:
   # Ignore TerracordTest
