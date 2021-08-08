@@ -217,7 +217,7 @@ namespace FragLand.TerracordPlugin
         Util.Log($"Attempting to generate {TerracordPath}terracord.xml since the file did not exist...", Util.Severity.Info);
         StreamWriter newConfigFile = new StreamWriter($"{TerracordPath}terracord.xml", false);
         newConfigFile.WriteLine("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
-        newConfigFile.WriteLine("<!-- Terracord configuration version 1.2.3 -->");
+        newConfigFile.WriteLine("<!-- Terracord configuration version 1.3.1 -->");
         newConfigFile.WriteLine("<configuration>\n");
         newConfigFile.WriteLine("  <!-- Discord bot token -->");
         newConfigFile.WriteLine("  <bot token=\"ABC\" />\n");
@@ -234,9 +234,9 @@ namespace FragLand.TerracordPlugin
         newConfigFile.WriteLine("  <!-- List of space-separated Discord roles authorized to execute TShock commands remotely -->");
         newConfigFile.WriteLine("  <authorized roles=\"Administrators Moderators\" />\n");
         newConfigFile.WriteLine("  <!-- Discord bot game for \"playing\" status -->");
-        newConfigFile.WriteLine("  <game status=\"$server_name: $player_count/$player_slots\" />\n");
+        newConfigFile.WriteLine("  <game status=\"$server_name: $world_name: $player_count/$player_slots\" />\n");
         newConfigFile.WriteLine("  <!-- Topic update interval in seconds and topic to set when relay is offline -->");
-        newConfigFile.WriteLine("  <topic interval=\"300\" offline=\"Relay offline\" online=\"$server_name | $player_count/$player_slots players online | Server online for $uptime | Last update: $current_time\" />\n");
+        newConfigFile.WriteLine("  <topic interval=\"300\" offline=\"Relay offline\" online=\"$server_name: $world_name | $player_count/$player_slots players online | Server online for $uptime | Last update: $current_time\" />\n");
         newConfigFile.WriteLine("  <!-- Terraria broadcast color in RGB -->");
         newConfigFile.WriteLine("  <color red=\"255\" green=\"215\" blue=\"0\" />\n");
         newConfigFile.WriteLine("  <!-- Toggle broadcasts, chat, and world saves displayed in Discord -->");
