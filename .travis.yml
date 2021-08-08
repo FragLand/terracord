@@ -10,10 +10,10 @@ jobs:
         - nuget install xunit.runner.console -Version 2.4.1 -OutputDirectory testrunner
         - TMPDIR=tmp
         - mkdir $TMPDIR
-        - ZIPFILE=TShock.4.5.1.Terraria.1.4.2.1.zip
+        - ZIPFILE=TShock4.5.5_Terraria_1.4.2.3.zip
         #- ZIPDIR=TShock.4.5.1.Terraria.1.4.2.1
         - cd $TMPDIR
-        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.5.1/TShock.4.5.1.Terraria.1.4.2.1.zip
+        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.5.5/TShock4.5.5_Terraria_1.4.2.3.zip
         #- unzip -jq $ZIPFILE $ZIPDIR/OTAPI.dll $ZIPDIR/TerrariaServer.exe $ZIPDIR/ServerPlugins/TShockAPI.dll
         - unzip -jq $ZIPFILE OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll
         - mkdir -p ../lib
@@ -36,10 +36,10 @@ jobs:
         - dotnet restore
         - TMPDIR=tmp
         - mkdir $TMPDIR
-        - ZIPFILE=TShock.4.5.1.Terraria.1.4.2.1.zip
+        - ZIPFILE=TShock4.5.5_Terraria_1.4.2.3.zip
         #- ZIPDIR=TShock.4.5.1.Terraria.1.4.2.1
         - cd $TMPDIR
-        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.5.1/TShock.4.5.1.Terraria.1.4.2.1.zip
+        - curl -fsSLJo $ZIPFILE https://github.com/Pryaxis/TShock/releases/download/v4.5.5/TShock4.5.5_Terraria_1.4.2.3.zip
         #- unzip -jq $ZIPFILE $ZIPDIR/OTAPI.dll $ZIPDIR/TerrariaServer.exe $ZIPDIR/ServerPlugins/TShockAPI.dll
         - unzip -jq $ZIPFILE OTAPI.dll TerrariaServer.exe ServerPlugins/TShockAPI.dll
         - mkdir -p ../lib
