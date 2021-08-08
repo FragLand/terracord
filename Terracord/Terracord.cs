@@ -39,7 +39,7 @@ namespace FragLand.TerracordPlugin
     /// <summary>
     /// Plugin version
     /// </summary>
-    public override Version Version => new Version(1, 3, 0);
+    public override Version Version => new Version(1, 3, 1);
 
     /// <summary>
     /// Plugin author(s)
@@ -52,7 +52,7 @@ namespace FragLand.TerracordPlugin
     public override string Description => "A Discord <-> Terraria bridge plugin for TShock";
 
     // Plugin version
-    public const string PluginVersion = "1.3.0";
+    public const string PluginVersion = "1.3.1";
     // Discord bot client
     private readonly Discord discord;
     // Plugin start time
