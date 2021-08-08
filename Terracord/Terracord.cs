@@ -254,6 +254,7 @@ namespace FragLand.TerracordPlugin
           {
             message = message.Replace("$player_name", playerName);
             string status = Config.BotGame.Replace("$server_name", TShock.Config.Settings.ServerName);
+            status = status.Replace("$world_name", Terraria.Main.worldName);
             status = status.Replace("$player_count", playerCount.ToString());
             status = status.Replace("$player_slots", TShock.Config.Settings.MaxSlots.ToString());
             Discord.UpdateBotGame(discord.Client, status).ConfigureAwait(true);

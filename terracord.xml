@@ -25,10 +25,10 @@
   <authorized roles="Administrators Moderators" />
 
   <!-- Discord bot game for "playing" status -->
-  <game status="$server_name: $player_count/$player_slots" />
+  <game status="$server_name: $world_name: $player_count/$player_slots" />
 
   <!-- Topic update interval in seconds and topics to set when relay is offline and online -->
-  <topic interval="300" offline="Relay offline" online="$server_name | $player_count/$player_slots players online | Server online for $uptime | Last update: $current_time" />
+  <topic interval="300" offline="Relay offline" online="$server_name: $world_name | $player_count/$player_slots players online | Server online for $uptime | Last update: $current_time" />
 
   <!-- Terraria broadcast color in RGB -->
   <color red="255" green="215" blue="0" />
