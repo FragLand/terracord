@@ -1,7 +1,11 @@
+⚠️ **This project is no longer maintained.**
+
+<!--
 [![AppVeyor build status](https://img.shields.io/appveyor/ci/ldilley/terracord?label=AppVeyor%20build%20status)](https://ci.appveyor.com/project/ldilley/terracord)
 [![Travis CI build status](https://img.shields.io/travis/com/FragLand/terracord?label=Travis%20CI%20build%20status)](https://travis-ci.com/FragLand/terracord)
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/FragLand/terracord?label=Code%20Climate%20maintainability)](https://codeclimate.com/github/FragLand/terracord/maintainability)
 [![CodeFactor grade](https://img.shields.io/codefactor/grade/github/FragLand/terracord?label=CodeFactor%20quality)](https://www.codefactor.io/repository/github/fragland/terracord)
+-->
 
 Terracord
 =========
