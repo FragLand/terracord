@@ -2,7 +2,6 @@
 [![Travis CI build status](https://img.shields.io/travis/com/FragLand/terracord?label=Travis%20CI%20build%20status)](https://travis-ci.com/FragLand/terracord)
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/FragLand/terracord?label=Code%20Climate%20maintainability)](https://codeclimate.com/github/FragLand/terracord/maintainability)
 [![CodeFactor grade](https://img.shields.io/codefactor/grade/github/FragLand/terracord?label=CodeFactor%20quality)](https://www.codefactor.io/repository/github/fragland/terracord)
-[![Discord](https://img.shields.io/discord/540333638479380487?label=Discord)](https://discord.frag.land/)
 
 Terracord
 =========
@@ -206,7 +205,6 @@ support Mono. Therefore, the following steps should be considered experimental. 
 
 ### Contributing and Support
 Feel free to [submit an issue](https://github.com/FragLand/terracord/issues/new) if you require assistance or would like to
-make a feature request. You are also welcome to join our Discord server at https://discord.frag.land/. Any contributions such
-as plugin testing and pull requests are appreciated. Please see the
+make a feature request. Any contributions such as plugin testing and pull requests are appreciated. Please see the
 [fork and pull guide](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork)
 for direction if you are not certain how to submit a pull request.
