@@ -23,13 +23,6 @@ jobs:
         - msbuild /p:Configuration=Debug Terracord.sln
         - msbuild /p:Configuration=Debug TerracordTest/TerracordTest.csproj
         - mono ./testrunner/xunit.runner.console.2.4.1/tools/net461/xunit.console.exe ./TerracordTest/bin/Debug/net461/TerracordTest.dll
-      after_success:
-        - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-        - chmod +x send.sh
-        - ./send.sh success $WEBHOOK_URL
-      after_failure:
-        - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-        - chmod +x send.sh
     - dotnet: 3.1.100
       mono: none
       install:
@@ -47,11 +40,3 @@ jobs:
         - cd ..
       script:
         - dotnet build -c Debug -f netstandard2.0
-      after_success:
-        - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-        - chmod +x send.sh
-        - ./send.sh success $WEBHOOK_URL
-      after_failure:
-        - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-        - chmod +x send.sh
-        - ./send.sh failure $WEBHOOK_URL

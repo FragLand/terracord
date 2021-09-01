@@ -10,4 +10,3 @@
 ## Reporting a Vulnerability
 
 Please report any security vulnerabilities discovered in Terracord using the [issue tracker](https://github.com/FragLand/terracord/issues/new).
-You may also notify us via [Discord](https://discord.frag.land/).
